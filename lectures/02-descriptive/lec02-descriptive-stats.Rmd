@@ -1,0 +1,71 @@
+---
+title: ".b[Subject]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra,
+       tidyverse, sjPlot, extrafont, mathjaxr, ggforce, furrr, kable, kableExtra)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+```
+
+
+
+# Overview
+
+---
+
+
+# Topic
+
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Subject
+
+
+---
+
+
+
+layout: false
+class: inverse, middle
+
+# Next time: 
+
+
+---
+exclude: true
