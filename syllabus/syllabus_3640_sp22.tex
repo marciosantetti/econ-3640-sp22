@@ -1,0 +1,653 @@
+\documentclass[11pt,]{article}
+\usepackage[margin=1in]{geometry}
+\newcommand*{\authorfont}{\fontfamily{phv}\selectfont}
+\usepackage[]{mathpazo}
+\usepackage{abstract}
+\renewcommand{\abstractname}{}    % clear the title
+\renewcommand{\absnamepos}{empty} % originally center
+\newcommand{\blankline}{\quad\pagebreak[2]}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{longtable,booktabs}
+
+\usepackage{parskip}
+\usepackage{titlesec}
+\titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{6pt plus 2pt minus 2pt}
+\titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{6pt plus 2pt minus 2pt}
+
+\titleformat*{\subsubsection}{\normalsize\itshape}
+
+\usepackage{titling}
+\setlength{\droptitle}{-.25cm}
+
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{6pt plus 2pt minus 1pt}
+%\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lastpage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.0pt}
+\lhead{}
+\chead{}
+\rhead{\footnotesize \textbf{ECON 3640--001: PROBABILITY \& STATISTICAL
+INFERENCE} -- Spring 2022}
+\lfoot{}
+\cfoot{\small \thepage/\pageref*{LastPage}}
+\rfoot{}
+
+\fancypagestyle{firststyle}
+{
+\renewcommand{\headrulewidth}{0pt}%
+   \fancyhf{}
+   \fancyfoot[C]{\small \thepage/\pageref*{LastPage}}
+}
+
+%\def\labelitemi{--}
+%\usepackage{enumitem}
+%\setitemize[0]{leftmargin=25pt}
+%\setenumerate[0]{leftmargin=25pt}
+
+
+
+
+\makeatletter
+\@ifpackageloaded{hyperref}{}{%
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+}
+\@ifpackageloaded{color}{
+    \PassOptionsToPackage{usenames,dvipsnames}{color}
+}{%
+    \usepackage[usenames,dvipsnames]{color}
+}
+\makeatother
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+             pdfkeywords = {},
+            pdftitle={\textbf{ECON 3640--001: PROBABILITY \& STATISTICAL
+INFERENCE}},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=blue,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+
+\setcounter{secnumdepth}{0}
+
+\usepackage{longtable}
+
+
+
+
+\usepackage{setspace}
+
+\title{\textbf{ECON 3640--001: PROBABILITY \& STATISTICAL INFERENCE}}
+\date{Spring 2022}
+
+
+\begin{document}
+
+		\maketitle
+	
+
+		\thispagestyle{firststyle}
+
+%	\thispagestyle{empty}
+
+
+  	\noindent \begin{tabular*}{\textwidth}{ @{\extracolsep{\fill}} lr @{\extracolsep{\fill}}}
+
+  \hline
+  \\
+
+
+
+\textbf{Instructor}: Marcio
+Santetti & \textbf{E-mail}: \texttt{\href{mailto:marcio.santetti@utah.edu}{\nolinkurl{marcio.santetti@utah.edu}}}\\
+\textbf{Office Hours}: Before or after class, or by
+appointment  &  \textbf{Time}: TuTh, 2:00PM--3:20PM\\
+\textbf{Web}: \href{http://utah.instructure.com/courses/767112}{\tt utah.instructure.com/courses/767112}  & \textbf{Place}: AEB
+330\\
+	&  \\
+	\hline
+	\end{tabular*}
+
+\vspace{2mm}
+
+
+
+\hypertarget{overview}{%
+\section{Overview}\label{overview}}
+
+\textbf{\emph{Important}}: For guidelines and practical recommendations
+concerning COVID-19, please constantly check out
+\href{https://coronavirus.utah.edu/}{\texttt{https://coronavirus.utah.edu/}}.
+
+This is an applied course. Beyond introducing students to the most
+important descriptive, probabilistic, and inferential tools from both
+classical (frequentist) and Bayesian approaches, everyone will have the
+opportunity to apply these concepts to several different data sets and
+research questions.
+
+\vspace{.2cm}
+
+\hypertarget{main-references}{%
+\section{Main References}\label{main-references}}
+
+In addition to lecture notes, that come from several references, other
+readings will be posted on Canvas.
+
+\bigskip
+
+\textbf{Recommended textbooks}:
+
+\begin{itemize}
+\item
+  G. Keller, \emph{Statistics for Management and Economics}, 10th
+  edition, South-Western/Cengage, 2014.
+\item
+  A. Johnson, M. Ott, and M. Dogucu. \emph{Bayes Rules! An Introduction
+  to Applied Bayesian Modeling}, CRC Press, 2022.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Available online at
+    \href{https://www.bayesrulesbook.com/}{\texttt{https://www.bayesrulesbook.com/}}.
+  \end{itemize}
+\end{itemize}
+
+\bigskip
+
+\textbf{Additional References} (optional):
+
+\begin{itemize}
+\item
+  J. Blitzstein and J. Hwang. \emph{Introduction to Probability},
+  2\(^{nd}\) edition, Chapman \& Hall/CRC Texts in Statistical Science,
+  2019.
+\item
+  J. Albert and J. Hu. \emph{Probability and Bayesian Modeling}, CRC
+  Press, 2020.
+\end{itemize}
+
+\bigskip
+
+\hypertarget{software-requirements}{%
+\section{Software Requirements}\label{software-requirements}}
+
+\vspace{.3cm}
+
+Our classes will always have \emph{theoretical} and \emph{applied}
+components. The latter will be done using \(\textsf{R}\), an open-source
+and completely \emph{free} statistical/programming language. In applied
+lectures, I use the \(\textsf{R}\)Studio IDE (Integrated Development
+Environment), also freely available. However, students are welcome to
+use the platform they prefer.
+
+In addition, having a spreadsheet editor (e.g., Excel) is strongly
+recommended. University of Utah students should have free access to
+Microsoft Office programs through
+\href{https://o365cloud.utah.edu/}{\texttt{Office\ 365}}.
+
+No previous knowlegde in \(\textsf{R}\) is required. The course will
+guide students through every step in the applied lectures.
+
+\begin{itemize}
+\tightlist
+\item
+  Download \(\textsf{R}\):
+  \href{https://cloud.r-project.org/}{\texttt{https://cloud.r-project.org/}}
+\item
+  Download \(\textsf{R}\)Studio:
+  \href{https://rstudio.com/products/rstudio/}{\texttt{https://rstudio.com/products/rstudio/}}
+\end{itemize}
+
+\bigskip
+
+\hypertarget{prerequisites}{%
+\section{Prerequisites}\label{prerequisites}}
+
+\vspace{.1cm}
+
+College algebra, ECON 2010 and ECON 2020.
+
+\hypertarget{course-outcomes}{%
+\section{Course Outcomes}\label{course-outcomes}}
+
+At the completion of this course, you will be able to:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Comfortably use \(\textsf{R}\) to perform basic statistical analyses;
+\item
+  Manipulate and extract relevant information from diverse data sets;
+\item
+  Perform statistical inference from both classical and Bayesian
+  approaches;
+\item
+  Critically assess the most common tools in Statistics.
+\end{enumerate}
+
+\hypertarget{assignments-exams-and-grading}{%
+\section{Assignments, Exams, and
+Grading}\label{assignments-exams-and-grading}}
+
+\begin{itemize}
+\item
+  \textbf{Class participation}: In the absence of symptoms and contact
+  with potentially infected individuals, attendance is a crucial part of
+  the course.
+\item
+  \textbf{Problem Sets}: Whenever enough content is seen in class, a new
+  problem set will be uploaded to our Canvas course page. Students are
+  \emph{not} required to turn these in, so they can take their own time
+  to complete them. The instructor will upload the answer keys two days
+  before each exam. Thus, do not rely on waiting for the answer sheets
+  to prepare for exams.
+\item
+  \textbf{Applied research project} (30\%): Since this is an applied
+  course, students will be asked to select a data set of their interest
+  and perform statistical analyses on it. Projects may involve thorough
+  descriptive work, inferential analyses, etc. We will have several
+  checkpoints throughout the semester to track everyone's progress. The
+  project must be between 8 and 10 pages, double-spaced. All necessary
+  assistance will be provided by the instructor upon students' requests.
+\item
+  \textbf{Midterm exam} (30\%): The midterm exam will ask theoretical
+  and applied questions on descriptive statistics and some probability
+  concepts.
+\item
+  \textbf{Final exam} (40\%): The Final exam is comprehensive, covering
+  all studied topics. In principle, the final exam will also be
+  take-home. As we get closer, new procedures may be adopted by the
+  University. We will discuss an appropriate window allowing every
+  student to have time to complete the exams.
+\end{itemize}
+
+\textbf{\emph{Important note 1}}: Exams will strongly reflect the
+content studies and practiced in class.
+
+\textbf{\emph{Important note 2}}: For \emph{any} assignment, if an
+answer contains a direct ``Copy+Paste'' from the lecture notes, or if it
+is copied from someone else's work, \textbf{no credit will be given}.
+Read more in the \emph{Academic Dishonesty} section, on page 5.
+
+\textbf{\emph{Important note 3}}: Throughout the semester, several
+opportunities for \textbf{extra credit} will be made available both in
+class and on Canvas.
+
+\hypertarget{important-dates}{%
+\section{Important Dates}\label{important-dates}}
+
+\vspace{.3cm}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Classes begin}: Jan 10
+\item
+  \textbf{Last day to add/drop classes}: Jan 21
+\item
+  \textbf{Martin Luther King Jr.~Day holiday}: Jan 17
+\item
+  \textbf{Presidents Day holiday}: Feb 21
+\item
+  \textbf{Midterm Exam}: Feb 10
+\item
+  \textbf{Last day to withdraw from classes}: Mar 4
+\item
+  \textbf{Spring Break}:Mar 6--13
+\item
+  \textbf{Final Exam}: May 3, time TBA
+\end{itemize}
+
+\hypertarget{letter-grade-distribution}{%
+\section{Letter Grade Distribution}\label{letter-grade-distribution}}
+
+\vspace{.2cm}
+
+\begin{longtable}[]{@{}lc@{}}
+\toprule
+\textbf{\emph{Performance}} & \textbf{\emph{Letter Grade}} \\
+\midrule
+\endhead
+Excellent, superior performance & A (93-100\%), A- (90-92.9\%) \\
+Good performance & B+ (87-89.9\%), B (83-86.9\%), B- (80-82.9\%) \\
+Standard performance & C+ (77-79.9\%), C (73-76.9\%), C- (70-72.9\%) \\
+Substandard performance & D+ (67-69.9\%), D (63-66.9\%), D-
+(60-62.9\%) \\
+Unsatisfactory performance & E (0-59.9\%) \\
+\bottomrule
+\end{longtable}
+
+\vspace{.5cm}
+
+\hypertarget{class-policies}{%
+\section{Class Policies}\label{class-policies}}
+
+\vspace{.3cm}
+
+You can expect me to:
+
+\begin{itemize}
+\item
+  Ask exam questions reflecting what has been studied in class and
+  viewed in questions from Problem Sets;
+\item
+  Grade and provide feedback on assignments and exams within two weeks
+  from the due date;
+\item
+  Reply to emails/messages within 24 hours during the week and within 48
+  hours on weekends and holidays;
+\item
+  Provide time for office hours as stated on page 1, where students can
+  ask any question and talk about any issues/concerns relative to our
+  course;
+\item
+  Ignore emails asking me to raise grades by the end of the semester.
+\end{itemize}
+
+I expect students to:
+
+\begin{itemize}
+\item
+  Come to class in time;
+\item
+  Check out Announcements and new content updates as soon as possible;
+\item
+  Take the exams on the scheduled dates. No make-up exams will be
+  allowed;
+\item
+  Respectfully participate in in-class discussions and activities;
+\item
+  Immediately notify me in the event of an emergency that prevents you
+  from doing an exam or completing the course;
+\item
+  Ask questions if any expectations or assignments are unclear.
+\end{itemize}
+
+\hypertarget{tentative-course-schedule}{%
+\section{Tentative Course Schedule}\label{tentative-course-schedule}}
+
+\vspace{.3cm}
+
+\begin{itemize}
+\item
+  \textbf{Week 1}: Course overview and introduction.
+\item
+  \textbf{Week 2}: Descriptive Statistics I.
+\item
+  \textbf{Week 3}: Descriptive Statistics II.
+\item
+  \textbf{Week 4}: Probability Theory I.
+\item
+  \textbf{Week 5}: Probability Theory II.
+\item
+  \textbf{Week 6}: Bayesian Estimation I.
+\item
+  \textbf{Week 7}: Bayesian Estimation II.
+\item
+  \textbf{Week 8}: Frequentist Statistics I.
+\item
+  \textbf{Week 9}: Frequentist Statistics II.
+\item
+  \textbf{Week 10}: Hypothesis Testing I.
+\item
+  \textbf{Week 11}: Hypothesis Testing II.
+\item
+  \textbf{Week 12}: Case Studies I.
+\item
+  \textbf{Week 13}: Case Studies II.
+\item
+  \textbf{Week 14}: Open for adjustments.\footnote{This week is open for
+    adjustments, in case we need to review some week's content or
+    assignment.}
+\item
+  \textbf{Week 15}: Course wrap-up and review.
+\end{itemize}
+
+\vspace{1cm}
+
+\hypertarget{important-note}{%
+\section{Important Note}\label{important-note}}
+
+\vspace{.3cm}
+
+This syllabus is meant to serve as an outline and guide for our course.
+Please note that I may modify it with reasonable notice to you. I may
+also modify the Course Schedule to accommodate the needs of our class.
+Any changes will be announced in class and posted on Canvas under
+\emph{Announcements}.
+
+\hypertarget{institutional-policies-and-procedures}{%
+\section{Institutional Policies and
+Procedures}\label{institutional-policies-and-procedures}}
+
+\vspace{.2cm}
+
+\hypertarget{faculty-and-student-responsibilities}{%
+\subsection{Faculty and Student
+Responsibilities}\label{faculty-and-student-responsibilities}}
+
+All students are expected to maintain professional behavior in the
+classroom setting, according to the Student Code, spelled out in the
+Student Handbook. Students have specific rights in the classroom as
+detailed in Article III of the Code. The Code also specifies proscribed
+conduct (Article XI) that involves cheating on tests, plagiarism, and/or
+collusion, as well as fraud, theft, etc. Students should read the Code
+carefully and know they are responsible for the content. According to
+Faculty Rules and Regulations, it is the faculty responsibility to
+enforce responsible classroom behaviors, beginning with verbal warnings
+and progressing to dismissal from class and failing grade. Students have
+the right to appeal such action to the Student Behavior Committee.
+``Faculty . . . must strive in the classroom to maintain a climate
+conducive to thinking and learn- ing.'' PPM 8-12.3, B.
+
+``Students have a right to support and assistance from the University in
+maintaining a climate conducive to thinking and learning.'' PPM 8-10,
+II. A.
+
+\hypertarget{wellness-statement}{%
+\subsection{Wellness Statement}\label{wellness-statement}}
+
+Personal concerns such as stress, anxiety, relationship difficulties,
+depression, cross-cultural differences, etc., can interfere with a
+students ability to succeed and thrive at the University of Utah. For
+helpful resources contact the Center for Student Wellness:
+\href{www.wellness.utah.edu}{\texttt{www.wellness.utah.edu}},
+801-581-7776.
+
+\hypertarget{student-names-personal-pronouns}{%
+\subsection{Student Names \& Personal
+Pronouns}\label{student-names-personal-pronouns}}
+
+Class rosters are provided to the instructor with the students legal
+name as well as ``Preferred first name'' (if previously entered by you
+in the student profile section of your CIS account). While CIS refers to
+this as merely a preference, I will honor you by referring to you with
+the name and pronoun that feels best for you in class, on papers, exams,
+group projects, etc. Please advise me of any name or pronoun changes
+(and update CIS) so I can help create a learning environment in which
+you, your name, and your pronoun will be respected.
+
+\hypertarget{academic-dishonesty}{%
+\subsection{Academic Dishonesty}\label{academic-dishonesty}}
+
+The instructor of this course will take appropriate actions in response
+to Academic Dishonesty, as defined the Universitys Student Code. Acts of
+academic dishonesty include but are not limited to:
+
+\begin{itemize}
+\item
+  Cheating: using, attempting to use, or providing others with any
+  unauthorized assistance in taking quizzes, tests, examinations, or in
+  any other academic exercise or activity. Unauthorized assistance
+  includes:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Working in a group when the instructor has designated that the quiz,
+    test, examination, or any other academic exercise or activity be
+    done individually;
+  \item
+    Depending on the aid of sources beyond those authorized by the
+    instructor in writing papers, preparing reports, solving problems,
+    or carrying out other assignments;
+  \item
+    Substituting for another student, or permitting another student to
+    substitute for oneself, in taking an examination or preparing
+    academic work;
+  \item
+    Acquiring tests or other academic material belonging to a faculty
+    member, staff member, or another student without express permission;
+  \item
+    Continuing to write after time has been called on a quiz, test,
+    examination, or any other academic exercise or activity;
+  \item
+    Submitting substantially the same work for credit in more than one
+    class, except with prior approval of the instructor; or engaging in
+    any form of research fraud.
+  \end{itemize}
+\item
+  Falsification: altering or fabricating any information or citation in
+  an academic exercise or activity.
+\item
+  Plagiarism: representing, by paraphrase or direct quotation, the
+  published or unpublished work of another person as ones own in any
+  academic exercise or activity without full and clear acknowledgment.
+  It also includes using materials prepared by another person or by an
+  agency engaged in the sale of term papers or other academic materials.
+\end{itemize}
+
+\hypertarget{sexual-harassment}{%
+\subsection{Sexual Harassment}\label{sexual-harassment}}
+
+Title IX of the Education Amendments of 1972 prohibits sex
+discrimination against any participant in an educational program or
+activity that receives federal funds. The act is intended to eliminate
+sex discrimination in education. Title IX covers discrimination in
+programs, admissions, activities, and student-to-student sexual
+harassment. It is the policy of the University of Utah to maintain an
+academic and work environment free of sexual harassment for students,
+faculty, staff and participants. A claim under this policy may be
+brought by any faculty, staff member, student or participant based on
+the conduct of any University employee or student that is related to or
+in the course of University business. A claim may also be brought by an
+administrator acting on behalf of the University. The Office of Equal
+Opportunity and Affirmative Action (OEO/AA) will handle all alleged
+sexual harassment matters pursuant to the Procedures set forth in Policy
+5-210.
+
+Any student, staff, faculty member, or participant in university
+services or activities who believes that there is or has been sexual
+harassment should contact any of the following:
+
+\begin{itemize}
+\tightlist
+\item
+  the cognizant academic chair of the department or the dean of the
+  college within which the conduct occurred;
+
+  \begin{itemize}
+  \tightlist
+  \item
+    the immediate supervisor or director of the operational unit within
+    which the conduct occurred;
+  \item
+    the Human Resources Division (Address: 420 Wakara Way, Suite 105,
+    Salt Lake City, Utah 84108; Phone: 801-581-2169; TDD: 801-585-9070);
+  \item
+    directors or deans of Student Affairs and Services (Associate Dean -
+    SW 108; Phone: 801-581- 8828);
+  \item
+    or the Office of Equal Opportunity and Affirmative Action (201 South
+    Presidents Circle, John Park Building, Room 135, Salt Lake City,
+    Utah 84112; Phone/TDD: 801-581-8365).
+  \end{itemize}
+\end{itemize}
+
+Once informed, the supervisor, chair or dean shall consult with OEO/AA.
+Similarly, OEO/AA shall advise as appropriate the cognizant dean, staff
+director or administrator of any complaints of sexual harassment OEO/AA
+receives concerning a member of the faculty, staff or student body.
+
+\hypertarget{withdrawal-policy-and-i-grade}{%
+\subsection{Withdrawal Policy and ``I''
+Grade}\label{withdrawal-policy-and-i-grade}}
+
+Failure to withdraw from school results in a E or EU grade being
+recorded in all classes. Students may officially withdraw (\emph{W})
+from a class or all classes after the drop deadline through the midpoint
+of a course. A \emph{W} grade is recorded on the transcript and
+appropriate tuition/fees are assessed. The grade of \emph{W} is not used
+in calculating the students GPA.
+
+An Incomplete grade can be given for work not completed due to
+circumstances beyond your control. You must be passing the course and
+have completed at least 80\% of the required coursework. Arrangements
+must be made between you and the instructor concerning the completion of
+the work. You may not retake a course without paying tuition. If you
+attend class during a subsequent term, in an effort to complete the
+coursework, you must register for the course. Once the work has been
+completed, the instructor submits the grade to the Registrars Office.
+The \emph{I} grade will change to an \emph{E} if a new grade is not
+reported within one year. A written agreement between you and the
+instructor may specify the grade to be given if the work is not
+completed within one year. Copies of the agreement are kept by the
+instructor and the academic department.
+
+\hypertarget{americans-with-disabilities-act-ada-statement}{%
+\subsection{Americans with Disabilities Act (ADA)
+Statement}\label{americans-with-disabilities-act-ada-statement}}
+
+The University of Utah seeks to provide equal access to its programs,
+services and activities for people with disabilities. If you will need
+accommodations in the class, reasonable prior notice needs to be given
+to the Center for Disability Services, 162 Olpin Union Building,
+581-5020 (V/TDD). CDS will work with you and the instructor to make
+arrangements for accommodations. All written information in this course
+can be made available in alternative format with prior notification to
+the Center for Disability Services.
+
+Additionally, the University endeavors to provide reasonable
+accommodations and to ensure equal access to qualified persons with
+disabilities. Inquiries concerning perceived discrimination or requests
+for disability accommodations may be referred to the University's Title
+IX/ADA/Section 504 Coordinator: Director, Office of Equal Opportunity
+and Affirmative Action, 201 South Presidents Circle, Rm. 135, Salt Lake
+City, UT, 84112. 801-581-8365 (voice/tdd), 801-585-5746 (fax).
+\href{www.oeo.utah.edu}{\texttt{www.oeo.utah.edu}}.
+
+
+
+
+\end{document}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+%  \null
+%  \vskip 2em%
+%  \begin{center}%
+  \let \footnote \thanks
+    {\fontsize{18}{20}\selectfont\raggedright  \setlength{\parindent}{0pt} \@title \par}%
+}
+%\fi
+\makeatother

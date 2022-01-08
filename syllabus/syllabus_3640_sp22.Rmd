@@ -1,0 +1,369 @@
+---
+output: 
+  pdf_document:
+    keep_tex: true
+    latex_engine: pdflatex
+    template: syllabus_template.tex
+geometry: margin=1in
+fancy: true   
+fontfamily: mathpazo
+fontsize: 11pt
+linkcolor: blue
+citecolor: blue
+urlcolor: blue
+
+title: "**ECON 3640--001: PROBABILITY & STATISTICAL INFERENCE**"
+date: "Spring 2022"
+
+instructor: "Marcio Santetti"
+email: "marcio.santetti@utah.edu"
+officehours: "Before or after class, or by appointment"
+time: "TuTh, 2:00PM--3:20PM"
+web: "utah.instructure.com/courses/767112"
+place: "AEB 330"
+
+---
+
+```{r include = FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
+
+
+
+# Overview
+
+***Important***: For guidelines and practical recommendations concerning COVID-19, please constantly check out [`https://coronavirus.utah.edu/`](https://coronavirus.utah.edu/).
+
+
+This is an applied course. Beyond introducing students to the most important descriptive, probabilistic, and inferential tools from both classical (frequentist) and Bayesian approaches, everyone will have the opportunity to apply these concepts to several different data sets and research questions.
+
+
+\vspace{.2cm}
+
+
+
+
+# Main References
+
+
+In addition to lecture notes, that come from several references, other readings will be posted on Canvas.
+
+\bigskip
+
+**Recommended textbooks**:
+
+  - G. Keller, *Statistics for Management and Economics*, 10th edition, South-Western/Cengage, 2014.
+
+  - A. Johnson, M. Ott, and M. Dogucu. *Bayes Rules! An Introduction to Applied Bayesian Modeling*, CRC Press, 2022.
+  
+    - Available online at [`https://www.bayesrulesbook.com/`](https://www.bayesrulesbook.com/).
+    
+
+    
+\bigskip
+
+
+
+**Additional References** (optional):
+
+  - J. Blitzstein and J. Hwang. *Introduction to Probability*, 2$^{nd}$ edition, Chapman & Hall/CRC Texts in Statistical Science, 2019.
+  
+  - J. Albert and J. Hu. *Probability and Bayesian Modeling*, CRC Press, 2020. 
+  
+\bigskip
+  
+
+# Software Requirements
+
+\vspace{.3cm}
+
+Our classes will always have *theoretical* and *applied* components. The latter will be done using $\textsf{R}$, an open-source and completely *free* statistical/programming language. In applied lectures, I use the $\textsf{R}$Studio IDE (Integrated Development Environment), also freely available. However, students are welcome to use the platform they prefer. 
+
+In addition, having a spreadsheet editor (e.g., Excel) is strongly recommended. University of Utah students should have free access to Microsoft Office programs through [`Office 365`](https://o365cloud.utah.edu/).
+
+No previous knowlegde in $\textsf{R}$ is required. The course will guide students through every step in the applied lectures.
+
+- Download $\textsf{R}$: [`https://cloud.r-project.org/`](https://cloud.r-project.org/)
+- Download $\textsf{R}$Studio: [`https://rstudio.com/products/rstudio/`](https://rstudio.com/products/rstudio/)
+
+
+
+\bigskip
+
+# Prerequisites
+
+\vspace{.1cm}
+
+College algebra, ECON 2010 and ECON 2020.
+
+
+# Course Outcomes
+
+
+
+At the completion of this course, you will be able to:
+
+1. Comfortably use $\textsf{R}$ to perform basic statistical analyses;
+
+2. Manipulate and extract relevant information from diverse data sets;
+
+3. Perform statistical inference from both classical and Bayesian approaches;
+
+4. Critically assess the most common tools in Statistics.
+
+
+# Assignments, Exams, and Grading 
+
+
+- **Class participation**: In the absence of symptoms and contact with potentially infected individuals, attendance is a crucial part of the course.
+
+- **Problem Sets**: Whenever enough content is seen in class, a new problem set will be uploaded to our Canvas course page. Students are *not* required to turn these in, so they can take their own time to complete them. The instructor will upload the answer keys two days before each exam. Thus, do not rely on waiting for the answer sheets to prepare for exams.
+
+- **Applied research project** (30\%): Since this is an applied course, students will be asked to select a data set of their interest and perform statistical analyses on it. Projects may involve thorough descriptive work, inferential analyses, etc. We will have several checkpoints throughout the semester to track everyone's progress. The project must be between 8 and 10 pages, double-spaced. All necessary assistance will be provided by the instructor upon students' requests.
+
+- **Midterm exam** (30\%): The midterm exam will ask theoretical and applied questions on descriptive statistics and some probability concepts.
+
+- **Final exam** (40\%): The Final exam is comprehensive, covering all studied topics. In principle, the final exam will also be take-home. As we get closer, new procedures may be adopted by the University. We will discuss an appropriate window allowing every student to have time to complete the exams.
+
+***Important note 1***: Exams will strongly reflect the content studies and practiced in class.
+
+***Important note 2***: For *any* assignment, if an answer contains a direct "Copy+Paste" from the lecture notes, or if it is copied from someone else's work, **no credit will be given**. Read more in the *Academic Dishonesty* section, on page 5.
+
+***Important note 3***: Throughout the semester, several opportunities for **extra credit** will be made available both in class and on Canvas.
+
+
+# Important Dates
+
+\vspace{.3cm}
+
+- **Classes begin**: Jan 10
+- **Last day to add/drop classes**: Jan 21
+- **Martin Luther King Jr. Day holiday**: Jan 17
+- **Presidents Day holiday**: Feb 21
+- **Midterm Exam**: Feb 10
+- **Last day to withdraw from classes**: Mar 4
+- **Spring Break**:Mar 6--13
+- **Final Exam**: May 3, time TBA
+
+
+
+
+# Letter Grade Distribution
+
+\vspace{.2cm}
+
+
+***Performance***                                   ***Letter Grade***
+-------------------------------        -----------------------------------------------
+Excellent, superior performance                 A (93-100\%), A- (90-92.9\%)
+Good performance                        B+ (87-89.9\%), B (83-86.9\%), B- (80-82.9\%)
+Standard performance                    C+ (77-79.9\%), C (73-76.9\%), C- (70-72.9\%)
+Substandard performance                 D+ (67-69.9\%), D (63-66.9\%), D- (60-62.9\%)
+Unsatisfactory performance                            E (0-59.9\%)
+----------- -------------------        -----------------------------------------------
+
+\vspace{.5cm}
+
+
+
+# Class Policies
+
+\vspace{.3cm}
+
+You can expect me to:
+
+- Ask exam questions reflecting what has been studied in class and viewed in questions from Problem Sets;
+
+- Grade and provide feedback on assignments and exams within two weeks from the due date;
+
+- Reply to emails/messages within 24 hours during the week and within 48 hours on weekends and holidays;
+
+- Provide time for office hours as stated on page 1, where students can ask any question and talk about any issues/concerns relative to our course;
+
+- Ignore emails asking me to raise grades by the end of the semester.
+
+
+I expect students to:
+
+- Come to class in time;
+
+- Check out Announcements and new content updates as soon as possible;
+
+- Take the exams on the scheduled dates. No make-up exams will be allowed;
+
+- Respectfully participate in in-class discussions and activities;
+
+- Immediately notify me in the event of an emergency that prevents you from doing an exam or completing the course;
+
+- Ask questions if any expectations or assignments are unclear.
+
+
+# Tentative Course Schedule
+
+\vspace{.3cm}
+
+- **Week 1**: Course overview and introduction.
+
+- **Week 2**: Descriptive Statistics I.
+
+- **Week 3**: Descriptive Statistics II.
+
+- **Week 4**: Probability Theory I.
+
+- **Week 5**: Probability Theory II.
+
+- **Week 6**: Bayesian Estimation I.
+
+- **Week 7**: Bayesian Estimation II.
+
+- **Week 8**: Frequentist Statistics I.
+
+- **Week 9**: Frequentist Statistics II.
+
+- **Week 10**: Hypothesis Testing I.
+
+- **Week 11**: Hypothesis Testing II.
+
+- **Week 12**: Case Studies I.
+
+- **Week 13**: Case Studies II.
+
+- **Week 14**: Open for adjustments.^[This week is open for adjustments, in case we need to review some week's content or assignment.]
+
+- **Week 15**: Course wrap-up and review.
+
+
+\vspace{1cm}
+
+
+# Important Note
+
+\vspace{.3cm}
+
+This syllabus is meant to serve as an outline and guide for our course. Please note that I may modify it with reasonable notice to you. I may also modify the Course Schedule to accommodate the needs of our class. Any changes will be announced in class and posted on Canvas under *Announcements*.
+
+
+
+# Institutional Policies and Procedures
+
+\vspace{.2cm}
+
+## Faculty and Student Responsibilities
+
+All students are expected to maintain professional behavior in the classroom setting, according to
+the Student Code, spelled out in the Student Handbook.  Students have specific rights in the classroom as detailed in Article III of the Code.  The Code also specifies proscribed conduct (Article XI)
+that involves cheating on tests, plagiarism, and/or collusion, as well as fraud, theft, etc.  Students
+should read the Code carefully and know they are responsible for the content.  According to Faculty
+Rules and Regulations, it is the faculty responsibility to enforce responsible classroom behaviors,
+beginning with verbal warnings and progressing to dismissal from class and failing grade.  Students
+have the right to appeal such action to the Student Behavior Committee.
+"Faculty .  .  .  must strive in the classroom to maintain a climate conducive to thinking and learn-
+ing."  PPM 8-12.3, B.
+
+"Students  have  a  right  to  support  and  assistance  from  the  University  in  maintaining  a  climate
+conducive to thinking and learning." PPM 8-10, II. A.
+
+## Wellness Statement
+
+Personal concerns such as stress, anxiety, relationship difficulties, depression, cross-cultural differences, etc., can interfere with a students ability to succeed and thrive at the University of Utah.  For
+helpful resources contact the Center for Student Wellness: [`www.wellness.utah.edu`](www.wellness.utah.edu), 801-581-7776.
+
+
+## Student Names \& Personal Pronouns
+
+Class rosters are provided to the instructor with the students legal name as well as "Preferred first
+name"  (if  previously  entered  by  you  in  the  student  profile  section  of  your  CIS  account). While
+CIS refers to this as merely a preference, I will honor you by referring to you with the name and
+pronoun that feels best for you in class, on papers, exams, group projects, etc.  Please advise me
+of any name or pronoun changes (and update CIS) so I can help create a learning environment in
+which you, your name, and your pronoun will be respected.
+
+
+
+## Academic Dishonesty
+
+The instructor of this course will take appropriate actions in response to Academic Dishonesty, as
+defined the Universitys Student Code.  Acts of academic dishonesty include but are not limited to:
+
+- Cheating:  using, attempting to use, or providing others with any unauthorized assistance in
+	taking quizzes, tests, examinations, or in any other academic exercise or activity.  Unauthorized assistance includes:
+    - Working in a group when the instructor has designated that the quiz, test, examination,
+	or any other academic exercise or activity be done individually;
+    - Depending on the aid of sources beyond those authorized by the instructor in writing
+	papers, preparing reports, solving problems, or carrying out other assignments;
+    - Substituting for another student, or permitting another student to substitute for oneself,
+	in taking an examination or preparing academic work;
+    - Acquiring tests or other academic material belonging to a faculty member, staff member,
+	or another student without express permission;
+    - Continuing to write after time has been called on a quiz, test, examination, or any other
+	academic exercise or activity;
+    - Submitting substantially the same work for credit in more than one class, except with
+	prior approval of the instructor; or engaging in any form of research fraud.
+
+- Falsification:  altering or fabricating any information or citation in an academic exercise or
+	activity.
+
+- Plagiarism:  representing,  by  paraphrase  or  direct  quotation,  the  published  or  unpublished
+	work  of  another  person  as  ones  own  in  any  academic  exercise  or  activity  without  full  and
+	clear acknowledgment.  It also includes using materials prepared by another person or by an
+	agency engaged in the sale of term papers or other academic materials.
+
+## Sexual Harassment 
+
+Title  IX  of  the  Education  Amendments  of  1972  prohibits  sex  discrimination  against  any  participant  in  an  educational  program  or  activity  that  receives  federal  funds.   The  act  is  intended  to
+eliminate sex discrimination in education.  Title IX covers discrimination in programs, admissions,
+activities, and student-to-student sexual harassment.  It is the policy of the University of Utah to
+maintain an academic and work environment free of sexual harassment for students, faculty, staff
+and participants.  A claim under this policy may be brought by any faculty, staff member, student
+or participant based on the conduct of any University employee or student that is related to or
+in the course of University business.  A claim may also be brought by an administrator acting on
+behalf of the University.  The Office of Equal Opportunity and Affirmative Action (OEO/AA) will
+handle all alleged sexual harassment matters pursuant to the Procedures set forth in Policy 5-210.
+
+Any student, staff, faculty member, or participant in university services or activities who believes
+that there is or has been sexual harassment should contact any of the following:
+
+- the cognizant academic chair of the department or the dean of the college within which the
+	conduct occurred;
+	- the immediate supervisor or director of the operational unit within which the conduct occurred;
+	- the Human Resources Division (Address:  420 Wakara Way, Suite 105, Salt Lake City, Utah
+	84108; Phone:  801-581-2169; TDD: 801-585-9070);
+	- directors or deans of Student Affairs and Services (Associate Dean - SW 108; Phone:  801-581-
+	8828);
+	- or the Office of Equal Opportunity and Affirmative Action (201 South Presidents Circle, John
+	Park Building, Room 135, Salt Lake City, Utah 84112; Phone/TDD: 801-581-8365).
+	
+Once  informed,  the  supervisor,  chair  or  dean  shall  consult  with  OEO/AA.  Similarly,  OEO/AA
+shall advise as appropriate the cognizant dean, staff director or administrator of any complaints of
+sexual harassment OEO/AA receives concerning a member of the faculty, staff or student body.
+
+## Withdrawal Policy and "I" Grade
+
+Failure to withdraw from school results in a E or EU grade being recorded in all classes.
+Students may officially withdraw (*W*) from a class or all classes after the drop deadline through
+the midpoint of a course.  A *W* grade is recorded on the transcript and appropriate tuition/fees are
+assessed.  The grade of *W* is not used in calculating the students GPA.
+
+An Incomplete grade can be given for work not completed due to circumstances beyond your control.  You must be passing the course and have completed at least 80\% of the required coursework. Arrangements  must  be  made  between  you  and  the  instructor  concerning  the  completion  of  the
+work.  You may not retake a course without paying tuition.  If you attend class during a subsequent
+term, in an effort to complete the coursework, you must register for the course.  Once the work has
+been completed, the instructor submits the grade to the Registrars Office.  The *I* grade will change
+to an *E* if a new grade is not reported within one year.  A written agreement between you and the
+instructor may specify the grade to be given if the work is not completed within one year.  Copies
+of the agreement are kept by the instructor and the academic department.
+
+## Americans with Disabilities Act (ADA) Statement
+
+The University of Utah seeks to provide equal access to its programs,  services and activities for
+people with disabilities.  If you will need accommodations in the class, reasonable prior notice needs
+to be given to the Center for Disability Services, 162 Olpin Union Building, 581-5020 (V/TDD).
+CDS will work with you and the instructor to make arrangements for accommodations.  All written
+information in this course can be made available in alternative format with prior notification to the
+Center for Disability Services.
+
+Additionally, the University endeavors to provide reasonable accommodations and to ensure equal
+access to qualified persons with disabilities.  Inquiries concerning perceived discrimination or requests  for  disability  accommodations  may  be  referred  to  the  University's  Title  IX/ADA/Section
+504 Coordinator:  Director, Office of Equal Opportunity and Affirmative Action, 201 South Presidents Circle, Rm. 135, Salt Lake City, UT, 84112.  801-581-8365 (voice/tdd), 801-585-5746 (fax).
+[`www.oeo.utah.edu`](www.oeo.utah.edu).
