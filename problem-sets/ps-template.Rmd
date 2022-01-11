@@ -1,0 +1,32 @@
+---
+title: "**ECON 3640--001: Probability & Statistical Inference**"
+subtitle: "**Problem Set #**"
+author: "Marcio Santetti | Spring 2022"
+header-includes:
+   - \usepackage[default]{sourcesanspro}
+   - \usepackage[T1]{fontenc}
+mainfont: SourceSansPro
+fontsize: 11pt
+output:
+  pdf_document
+---
+
+\hrulefill
+
+\vspace{.5cm}
+
+**Instructions**: 
+
+
+---
+
+# Problem 1 
+
+
+
+
+
+\bigskip
+
+
+# Problem 2
