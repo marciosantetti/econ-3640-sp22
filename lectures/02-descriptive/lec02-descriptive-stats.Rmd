@@ -1,5 +1,5 @@
 ---
-title: ".b[Subject]"
+title: ".b[Descriptive Statistics, pt. I]"
 subtitle: ".b[ECON 3640--001]"
 author: "Marcio Santetti"
 date: "Spring 2022"
@@ -18,8 +18,7 @@ class: inverse, middle
 ```{r Setup, include = F}
 options(htmltools.dir.version = FALSE)
 library(pacman)
-p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra,
-       tidyverse, sjPlot, extrafont, mathjaxr, ggforce, furrr, kable, kableExtra)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kable, kableExtra, wooldridge, hrbrthemes, scales, ggeasy)
 
 
 
@@ -39,12 +38,20 @@ opts_chunk$set(
 
 
 
-# Overview
+# Motivation
 
 ---
 
 
-# Topic
+# Getting to know our data
+
+<br><br><br>
+
+Before any complex operations, we need to .hi[know our data].
+
+--
+
+Such previous assessment may .hi-blue[not] appear in a final work (e.g., a *report*, a *paper*, a *project*), but is the .hi[first step] of any data analysis procedure.
 
 
 
@@ -54,8 +61,278 @@ opts_chunk$set(
 layout: false
 class: inverse, middle
 
-# Subject
+# Some key statistical concepts
 
+
+---
+
+# Key statistical concepts
+
+<br>
+
+Two of the *most important* statistical concepts:
+
+--
+
+- .hi[Population]: a group of *all* items of interest to a statistics practitioner.
+
+  - A descriptive measure of a population is called a .red[*parameter*].
+  
+
+--
+
+<br>
+
+- .hi-blue[Sample]: A *set* of data drawn from the studied population.
+
+  - A descriptive measure of a sample is called a .blue[*statistic*].
+  
+  - It is used to make *inferences* about population parameters.
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Types of data and information
+
+
+---
+
+# Types of data and information
+
+<br><br>
+
+In Statistics, a .hi[variable] is a characteristic of a population or sample.
+
+--
+
+<br>
+
+3 main .hi-blue[types] of data in Statistics:
+
+  - *Interval* data;
+  
+  - *Nominal* data;
+  
+  - *Ordinal* data.
+  
+
+---
+
+# Types of data and information
+
+<br><br>
+
+.hi[Interval data ]is also known as *quantitative* or *numerical* data.
+  
+  - Examples?
+
+--
+
+.hi[Nominal data] comprehends *qualitative* or *categorical* variables.
+
+  - Ordering *does not* matter.
+  
+  - Examples?
+  
+--
+
+For .hi[ordinal data], ordering *does* matter.
+
+  - Examples?
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Graphical statistical techniques
+
+
+---
+
+# Graphical statistical techniques
+
+<br><br><br>
+
+Sometimes, a *table* describing nominal (or ordinal) data may not be the best option to catch a reader’s eye.
+
+--
+
+Therefore, some graphical techniques can be useful, such as the .hi-blue[bar] and the .hi-blue[pie] charts.
+
+
+---
+
+
+# Graphical statistical techniques
+
+A .hi-slate[bar chart] is useful to illustrate an .red[*absolute frequency*], i.e., the total number of observations fitting a given category in a data set.
+
+--
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5}
+
+font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
+
+titles <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-20/netflix_titles.csv')
+
+
+titles %>% 
+  filter(type == "Movie") %>% 
+  count(rating, sort=TRUE) %>%
+  filter(! rating %in% c(NA, "TV-Y7-FV", "UR", "NC-17")) %>% 
+  ggplot() + geom_col(aes(y = fct_reorder(rating, n), x = n), fill = "steelblue4") +
+  theme_ipsum_rc() +
+  labs(x = '# Movies', y = "Ratings",
+       title = 'Netflix movies by category') +
+  scale_x_comma() +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+
+---
+
+# Graphical statistical techniques
+
+If, on the other hand, we want to illustrate .red[*relative frequencies*], i.e., the percentage with which each category appears in the data set, a .hi-slate[pie chart] is the best option.
+
+--
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5}
+
+titles %>% 
+  count(type, sort = TRUE) %>% 
+  mutate(share = round(n/sum(n)*100, 2)) %>% 
+  ggplot(aes(x="", y = n, fill = type)) + 
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+  easy_remove_x_axis() +
+  easy_remove_y_axis() +
+  labs(title = "Netflix catalog by type") +
+  theme(text = element_text(family = "Roboto Condensed")) +
+  geom_text(aes(label = paste0(share, "%")), position = position_stack(vjust=0.5),
+            color=c("white", "black")) +
+  viridis::scale_fill_viridis(discrete = TRUE, option = "D") +
+  easy_add_legend_title("Movie or TV Show?") +
+  easy_plot_legend_size(11) +
+  easy_plot_title_size(17)
+
+```
+---
+
+# Graphical statistical techniques
+
+<br>
+
+Moving on to .hi[interval data], one of the most common ways of presenting it is through a .hi-slate[histogram].
+
+--
+
+<br>
+
+To construct a histogram, the easiest way to start is by following a .red[*recipe*]:
+
+1. Find the data set’s *lowest* and the *highest* values;
+
+2. Define the appropriate intervals (*bin size*), and the number of *observations* contained in each interval;
+
+3. Draw *each* bin next to each other.
+
+
+
+
+---
+
+# Graphical statistical techniques
+
+An example:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5}
+
+
+titles %>% 
+  filter(type == "Movie") %>% 
+  separate(duration, c("duration_mins", "B")) %>% 
+  mutate(duration_mins = as.integer(duration_mins)) %>% 
+  ggplot() + 
+  geom_histogram(aes(duration_mins), bins = 12, color = "white", fill = "lightcoral") +
+  theme_ipsum_rc() +
+  labs(title = "Netflix movie lengths in minutes", y = "Count", x = "Minutes") +
+  easy_x_axis_title_size(12) +
+  easy_y_axis_title_size(12)
+
+
+```
+
+
+---
+
+# Graphical statistical techniques
+
+<br><br><br>
+
+Suppose that we want to visually describe the relationship between .hi-blue[two] interval variables.
+
+--
+
+The technique to be used is the .hi-slate[scatter diagram].
+
+--
+
+To draw a scatter plot, we must define an .red[*independent*] (explanatory) and a .red[*dependent*] (explained) variable.
+
+---
+
+# Graphical statistical techniques
+
+Example 1:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5.5}
+
+data("sleep75")
+
+sleep75 %>% as_tibble() %>% 
+  ggplot(aes(y = sleep, x = worknrm)) +
+  geom_point(size = 2, color = "brown1", alpha = 0.7) +
+  labs(x = "Minutes worked per week", y = "Minutes slept per week",
+       title = "Sleeping vs. working time") +
+  theme_ipsum_rc() +
+  easy_x_axis_title_size(12) +
+  easy_y_axis_title_size(12)
+
+```
+
+
+---
+
+# Graphical statistical techniques
+
+Example 2:
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5.5}
+
+data("wage2")
+
+wage2 %>% as_tibble() %>% 
+  ggplot(aes(y = wage, x = hours)) +
+  geom_point(size = 2, color = "brown1", alpha = 0.7) +
+  labs(x = "Hours worked per week", y = "Monthy earnings",
+       title = "Wage vs. hours worked") +
+  theme_ipsum_rc() +
+  easy_x_axis_title_size(12) +
+  easy_y_axis_title_size(12)
+
+
+
+```
 
 ---
 
@@ -64,7 +341,7 @@ class: inverse, middle
 layout: false
 class: inverse, middle
 
-# Next time: 
+# Next time: Statistical measures
 
 
 ---
