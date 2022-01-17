@@ -1,0 +1,616 @@
+---
+title: ".b[Descriptive Statistics, pt. II]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+```
+
+
+
+# Motivation
+
+---
+
+
+# Another way of describing our data
+
+<br><br>
+
+Last time, we started the process of knowing our data better by looking at .hi[visual] descriptive techniques.
+
+--
+
+Another way of describing complex sets of data is through .hi-blue[descriptive numerical techniques].
+
+--
+
+These techniques are divided in .hi-slate[two] main categories:
+
+  - Measures of .red[*central location*];
+  
+  - Measures of .red[*variability*].
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Measures of central location
+
+---
+
+# Measures of central location
+
+Among the .hi-blue[most popular] measures of central location, we will study the following:
+
+  1. *Mean*;
+  
+  2. *Median*;
+  
+  3. *Mode.*
+  
+---
+  
+
+# Measures of central location
+
+Among the most popular measures of central location, we will study the following:
+
+  1. *Mean*:
+  
+The arithmetic mean, also known as the *average*, is simply the .red[sum] of all observations in a data set, divided by the .red[total number of observations].
+
+--
+
+.pull-left[
+
+- .hi-blue[Population mean] (&mu;):
+
+$$
+\begin{aligned}
+\mu= \dfrac{\displaystyle\sum_{i=1}^{N}x_{i}}{N}
+\end{aligned}
+$$
+
+]
+
+--
+
+.pull-right[
+
+- .hi-blue[Sample mean] $(\bar{x})$:
+
+
+$$
+\begin{aligned}
+\bar{x}= \dfrac{\displaystyle\sum_{i=1}^{n}x_{i}}{n}
+\end{aligned}
+$$
+
+
+]
+
+---
+
+# Measures of central location
+
+  1. *Mean*:
+
+.pull-left[
+
+- .hi-blue[Population mean] (&mu;):
+
+$$
+\begin{aligned}
+\mu= \dfrac{\displaystyle\sum_{i=1}^{N}x_{i}}{N}
+\end{aligned}
+$$
+
+where the numerator is the sum of each observation contained in the data set $(x_i)$, from the first $(i=1)$ until the $N^{th}$ data point. The denominator is the total population size $(N)$, i.e., the total number of observations within this population.
+
+]
+
+--
+
+.pull-right[
+
+- .hi-blue[Sample mean] $(\bar{x})$:
+
+
+$$
+\begin{aligned}
+\bar{x}= \dfrac{\displaystyle\sum_{i=1}^{n}x_{i}}{n}
+\end{aligned}
+$$
+
+where $n$ is the *sample* size. 
+
+<br>
+
+*Notice the difference in notation when referring to sample and population measures.*
+
+
+]
+
+---
+
+# Measures of central location
+
+Among the most popular measures of central location, we will study the following:
+
+  1. *Mean*;
+  
+  2. *Median*:
+  
+To calculate the .hi[median], we need to place all observations *in order* (it does not matter whether ascending or descending). 
+
+--
+
+The observation that lies in the .hi-blue[middle] is the median.
+
+--
+
+It serves for both population and sample medians.
+
+---
+
+
+# Measures of central location
+
+Among the most popular measures of central location, we will study the following:
+
+  1. *Mean*;
+  
+  2. *Median*;
+  
+  3. *Mode*:
+  
+The .hi[mode] of a data set is (are) the observation(s) that occur(s) with the *highest frequency*. 
+
+--
+
+It works in the same way with populations and samples.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Measures of variability
+
+
+
+---
+
+# Measures of variability
+
+Up until now, we were interested in information about the central location of a data set.
+
+--
+
+However, these measures do not tell us anything about .hi-slate[how spread out], or how .hi-slate[concentrated] are the data.
+
+--
+
+.pull-left[
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 4, fig.width=5}
+data <- tibble(
+  set = rnorm(10000, mean=5, sd=3),
+  set2 = rnorm(10000, mean=5, sd=5)
+)
+
+
+data %>% ggplot() +
+  geom_density(aes(x = set, y = ..density..), fill = "#67dfc4", alpha = 0.5) +
+  geom_density(aes(x = set2, y = ..density..), fill = "#b6134a", alpha = 0.6) +
+  labs(x = 'Values', y = 'Density', title = "Same mean, different variances") +
+  theme_ipsum_rc()
+```
+
+]
+
+--
+
+.pull-right[
+
+<br>
+
+To address this issue, we will study the following: 
+
+  1. *Range*;
+  
+  2. *Variance*;
+  
+  3. *Standard deviation*.
+  
+]
+
+
+---
+
+# Measures of variability
+
+<br><br>
+
+To address the variability issue, we will study the following: 
+
+  1. *Range*:
+  
+
+<br>
+
+The .hi[range] of a data set is simply its *largest* observation minus the *smallest.*
+
+---
+
+# Measures of variability
+
+
+To address the variability issue, we will study the following: 
+
+  1. *Range*;
+  
+  2. *Variance*:
+  
+
+The .hi[variance] is the average of the *squared deviations* of each observation within a data set from its mean.
+
+--
+
+.pull-left[
+
+- .hi-blue[Population variance] (&sigma;<sup>2</sup>):
+
+$$
+\begin{aligned}
+\sigma_{x}^2 = \dfrac{\displaystyle\sum_{i=1}^{N}(x_{i}-\mu)^2}{N}
+\end{aligned}
+$$
+
+]
+
+--
+
+.pull-right[
+
+- .hi-blue[Sample variance] (*s*<sup>2</sup>):
+
+
+$$
+\begin{aligned}
+s_{x}^2 = \dfrac{\displaystyle\sum_{i=1}^{n}(x_{i}-\bar{x})^2}{n-1} 
+\end{aligned}
+$$
+
+
+]
+
+---
+
+# Measures of variability
+
+<br><br><br>
+
+An .red[*alternative*] formula for the sample variance, *s*<sup>2</sup>:
+
+<br>
+
+$$
+\begin{aligned}
+s_{x}^2 =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}^2 - \dfrac{\bigg(\displaystyle\sum_{i=1}^{n}x_{i}\bigg)^2}{n} \Bigg]
+\end{aligned}
+$$
+
+---
+
+# Measures of variability
+
+
+To address the variability issue, we will study the following: 
+
+  1. *Range*;
+  
+  2. *Variance*;
+  
+  3. *Standard deviation*:
+  
+
+<br>
+
+The .hi[standard deviation] is simply the *squared root* of the variance.
+
+--
+
+.pull-left[
+
+- .hi-blue[Population standard deviation] (&sigma;):
+
+$$
+\begin{aligned}
+\sigma_{x} = \sqrt{\sigma_x^{2}}
+\end{aligned}
+$$
+
+]
+
+
+
+.pull-right[
+
+- .hi-blue[Sample standard deviation] (*s*):
+
+
+$$
+\begin{aligned}
+s_{x} = \sqrt{s_x^{2}}
+\end{aligned}
+$$
+
+
+]
+
+
+---
+
+# Measures of variability
+
+The .hi[intuition] behind the variance and standard deviation measures:
+
+<br>
+
+> .note[The idea behind the variance and the standard deviation as measures of
+spread is as follows: the deviations (*x*<sub>i</sub> - <span style="text-decoration:overline">*x*</span>) display the spread of the values *x*<sub>i</sub>
+about their mean <span style="text-decoration:overline">*x*</span>. Some of these deviations will be positive and some negative
+because some of the observations fall on each side of the mean. In fact, the
+sum of the deviations of the observations from their mean will always be zero.
+Squaring the deviations makes them all positive, so that observations far from
+the mean in either direction have large positive squared deviations. The variance
+is the average squared deviation. Therefore, *s*<sup>2</sup> and *s* will be large if the
+observations are widely spread about their mean, and small if the observations
+are all close to the mean.] 
+
+.right[
+(Moore, McCabe, and Craig, 2009, p. 41)
+]
+
+
+---
+
+
+
+layout: false
+class: inverse, middle
+
+# Measures of relative standing
+
+
+---
+
+# Measures of relative standing
+
+
+Measures of .hi-slate[relative standing] are designed to provide information about the *position* of particular values, relative to the entire data set.
+
+--
+
+The .hi[median] can also be interpreted as one of these measures, since it locates the *central point* of a data set, relative to its entirety. 
+
+--
+
+Let us see other measures in more detail:
+
+  - .hi-blue[Percentile]: the *p*<sup>th</sup> percentile is the value for which *p* percent are *less* than that value. 
+    
+    - And *(100 − p)%* are *above* that value.
+    
+--
+    
+  - .hi-blue[Quartile]: the 25<sup>th</sup>, 50<sup>th</sup>, and 75<sup>th</sup> percentiles are called *quartiles.* 
+  
+    - Any guesses about what the 50<sup>th</sup> percentile is equal to?
+    
+    
+---
+
+# Measures of relative standing
+
+
+In order to .hi[locate] a specific percentile within a data set, it may not always be straightforward to do so. 
+
+--
+
+The following formula helps:
+
+<br>
+
+$$
+\begin{aligned}
+L_{p} = (n+1)\dfrac{p}{100}
+\end{aligned}
+$$
+
+<br>
+
+where *n* is the sample size, and *p* is the percentile we would like to find.
+
+---
+
+# Measures of relative standing
+
+<br>
+
+The .hi-slate[interquartile range] (*IQR*) is obtained by subtracting the *third* from the *first* quartile (Q<sub>3</sub> − Q<sub>1</sub>). 
+
+--
+
+<br> 
+
+It measures the *spread* of the middle 50% of observations. 
+
+  - Large values will mean that Q<sub>1</sub> and Q<sub>3</sub> are far apart, indicating *high variability* (spread) in the data set.
+  
+  
+---
+
+# Measures of relative standing
+
+<br>
+
+A *visual* tool that helps the statistics practitioner on measures of relative standing is the .hi[box plot] (*aka* box & whiskers plot).
+
+--
+
+.pull-left[
+
+It shows .hi-slate[5] statistics:
+
+
+
+1. The *minimum* value;
+
+2. The *maximum* value;
+
+3. And the first, second, and third *quartiles* (Q<sub>1</sub>, Q<sub>2</sub>, and Q<sub>3</sub>).
+
+]
+
+--
+
+.pull-right[
+
+
+
+The .hi-slate[3] main steps to construct a box plot are the following:
+
+1. Place the observations in *ascending* order;
+
+2. Separate *maximum* and *minimum* observations;
+
+3. Identify the 3 *quartiles* (Q<sub>1</sub>, Q<sub>2</sub>, and Q<sub>3</sub>).
+
+]
+
+---
+
+# Measures of relative standing
+
+In a data set, we may sometimes find .hi[unusally] *large* or *small* values.
+
+--
+
+Such values are called .hi-blue[outliers].
+
+--
+
+They may appear due to wrong entrances in data spreadsheets, processing errors, or because the data set actually contains unusual observations.
+
+--
+
+That being said, *how* to identify outliers in a data set?
+
+--
+
+
+There are a few techniques, and the one we will cover in this course is by using information used for *box plots*, as well as the *interquartile range*.
+
+--
+
+.pull-left[
+
+A data point is an *outlier* if it is .hi-blue[smaller] than
+
+$$
+\begin{aligned}
+Q_1 - 1.5(Q_3 - Q_1)
+\end{aligned}
+$$
+
+]
+
+--
+
+.pull-right[
+
+A data point is an *outlier* if it is .hi-blue[greater] than
+
+$$
+\begin{aligned}
+Q_3 + 1.5(Q_3 - Q_1)
+\end{aligned}
+$$
+
+]
+
+
+---
+
+# Measures of relative standing
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 6}
+
+titles <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-20/netflix_titles.csv')
+
+titles %>% 
+  filter(type == "Movie",
+         ! rating %in% NA) %>% 
+  separate(duration, c("duration_mins", "B")) %>% 
+  mutate(duration_mins = as.integer(duration_mins),
+         rating = fct_reorder(rating, duration_mins)) %>% 
+  ggplot(aes(x = duration_mins, y = rating)) +
+  geom_boxplot() +
+  theme_ipsum_rc() +
+  labs(x = "Duration (mins)",
+       y = "Movie Ratings",
+       title = "Netflix movie durations (in minutes) by category") +
+  easy_x_axis_title_size(12) +
+  easy_y_axis_title_size(12) +
+  scale_x_continuous(breaks = seq(0,350,50))
+  
+```
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Descriptive Statistics in .mono[R]
+
+
+---
+exclude: true
