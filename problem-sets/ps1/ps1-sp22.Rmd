@@ -1,0 +1,76 @@
+---
+title: "**ECON 3640--001: Probability & Statistical Inference**"
+subtitle: "**Problem Set 1**"
+author: "Marcio Santetti | Spring 2022"
+header-includes:
+   - \usepackage[default]{sourcesanspro}
+   - \usepackage[T1]{fontenc}
+mainfont: SourceSansPro
+fontsize: 11pt
+output:
+  pdf_document
+---
+
+\hrulefill
+
+\vspace{.5cm}
+
+**Instructions**: Moving average problem.
+
+
+---
+
+# Problem 1 
+
+
+With your own words, define and give an example of each of the following statistical terms.
+
+\bigskip
+
+(a) Population;
+
+(b) Sample;
+
+(c) Parameter;
+
+(d) Statistic.
+
+
+
+\bigskip
+
+
+# Problem 2
+
+A student received the following letter grades on the 14 quizzes she took during a semester: *A, A-, B+, A-, A, C, A, A, A-, B, B+, C, A*, and *A*.
+
+\bigskip
+
+(a) What is the *type* of these data? Explain.
+
+(b) Use your best judgment to *illustrate* these data.
+
+\newpage
+
+# Problem 3
+
+A 
+sample of 12 people was asked how much change they had in their pockets and wallets. The responses (in cents) were:
+
+\begin{center}
+52 25 15 0 104 44 60 30 33 81 40 5
+\end{center}
+\bigskip
+
+(a) Determine the *mean*, *median* and *mode* for these data. Show your calculations.
+
+(b) Determine the first, second, and third *quartiles* of these data.
+
+(c) Compute the *variance* and *standard deviation* for these data. Show your calculations.
+
+(d) Draw a *box plot* for these data.
+
+\bigskip
+
+# Problem 4
+

@@ -14,8 +14,8 @@ titles <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesda
 
 data <- tibble(
   
-  set1 <- rnorm(10000, mean=5, sd=3),
-  set2 <- rnorm(10000, mean=5, sd=5) 
+  set1 = rnorm(10000, mean=5, sd=3),
+  set2 = rnorm(10000, mean=5, sd=5) 
   
 )
 

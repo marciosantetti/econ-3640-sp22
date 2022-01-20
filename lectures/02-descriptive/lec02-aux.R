@@ -5,6 +5,7 @@ library(tidytuesdayR)
 library(hrbrthemes)
 library(showtext)
 library(scales)
+library(myriad)
 
 
 
@@ -25,6 +26,9 @@ titles %>%
   easy_x_axis_title_size(13) +
   easy_y_axis_title_size(13)
 
+
+sysfonts::font_add(family = "Myriad Pro SemiCondensed", regular = "Myriad Pro/Myriad Pro SemiCondensed.otf")
+sysfonts::font_add(family = "Myriad Pro Regular", regular = "Myriad Pro/Myriad Pro Regular.ttf")
 
 titles %>% 
   count(type, sort = TRUE) %>% 
@@ -79,3 +83,62 @@ wage2 %>% as_tibble() %>%
   theme_ipsum_rc() +
   easy_x_axis_title_size(12) +
   easy_y_axis_title_size(12)
+
+
+####
+
+
+titles_pie <- titles %>% 
+  count(type, sort = TRUE) %>% 
+  mutate(share = round(n/sum(n)*100, 2))
+
+
+with(titles_pie, 
+     pie(share, labels = paste0(type, sep = ": ", share, "%"),
+    col = c("brown", "red"),
+    radius = 1, 
+    density = 30))
+
+
+
+######
+
+states <- tibble(
+  state = c(rep("Utah", 2), rep("California", 4), 
+            rep("Ohio",2), rep("Other", 3), "Pennsylvania", rep("Illinois",2), rep("Florida",2))
+)
+
+
+
+
+states %>% 
+  count(state, sort = TRUE) %>% 
+  mutate(state = fct_reorder(state, n)) %>% 
+  ggplot() +
+  geom_col(aes(x = n, y = state))
+
+
+states_ok <- states %>% 
+  count(state, sort = TRUE) %>% 
+  mutate(state = fct_reorder(state, n)) %>% 
+  mutate(share_state = 100*n/sum(n))
+
+
+states_2 %>% 
+  mutate(state = fct_reorder(state, n_students, .desc=TRUE)) %>% 
+  ggplot() +
+  geom_col(aes(x = n_students, y = state))
+
+
+with(states_ok,
+     pie(n, labels = paste0(state, sep = ": ", share_state, "%"),
+         col = c("#000000", "#773c3c", "#d02525", "#e69138", "#dfb283", "#4d942f", "#d31515"),
+         radius = 1, 
+         density = 30,
+         main = "A pie chart",
+         family = "Fira Sans"))
+
+
+
+
+####
