@@ -12,7 +12,7 @@ ECON 3640-001: Probability &amp; Statistical Inference (Spring 2022), taught by 
 
 
 
-## Lecture slides & Code
+## Lecture slides
 
 Note: Slides created with the `xaringan` *R* package, with templates mainly inspired by [Ed Rubin](https://github.com/edrubin)'s notes.
 
@@ -25,3 +25,12 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 **Lecture 2: Descriptive Statistics I**
 
    - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/02-descriptive/lec02-descriptive-stats.html#1)
+
+**Lecture 3: Descriptive Statistics II**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/03-descriptive-2/lec03-descriptive-2.html)
+
+
+
+## R Code
+
