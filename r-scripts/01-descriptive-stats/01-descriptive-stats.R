@@ -59,6 +59,8 @@ majors %>%
 
 #-----
 
+## Choosing theme_ipsum as the default plotting theme:
+
 theme_set(theme_ipsum())
 
 majors %>% 
@@ -109,8 +111,7 @@ with(states_pie,
          density = 30,
          labels = paste0(state, ": ", share_state, "%"),
          col = c("#000000", "#773c3c", "#d02525", "#e69138", "#dfb283", "#4d942f", "#d31515"),
-         main = "A pie chart",
-         family = "Myriad Pro"))
+         main = "A pie chart"))
 
 
 
@@ -129,7 +130,8 @@ with(coffee_pie,
          radius = 1, 
          density = 30,
          labels = paste0(answer, ": ", round(pct,2), "%"),
-         col = c("#000000", "#773c3c")
+         col = c("#000000", "#773c3c"),
+         main = "Coffe drinkers?"
          ))
 
 
@@ -142,30 +144,35 @@ netflix <- read_csv("netflix.csv")
 netflix %>% 
   ggplot(aes(x = release_year, fill = type)) +
   scale_fill_wsj() +
-  geom_histogram(bins = 30, color = "white") +
-  theme_ipsum_rc()
+  geom_histogram(bins = 30, color = "white") 
+
+
+## We can store plots created with ggplot2 in R objects, as below:
 
 
 p1 <- netflix %>% 
   filter(type == "Movie") %>% 
   ggplot(aes(x = release_year)) +
   geom_histogram(fill = "black", color = "white") +
-  theme_ipsum_rc()
+  labs(title = "Netflix movies: release years")
 
 p2 <- netflix %>% 
   filter(type == "TV Show") %>% 
   ggplot(aes(x = release_year)) +
-  geom_histogram(fill = "black", color = "white") +
-  theme_ipsum_rc()
+  geom_histogram(fill = "firebrick", color = "white") +
+  labs(title = "Netflix TV shows: release years")
 
-p1 / p2
+
+p1 / p2 ## using the 'patchwork' poackage.
+
+
+## Another option is using "facet_wrap," as below:
 
 netflix %>% 
   ggplot(aes(release_year, fill = type)) +
   scale_fill_ft() +
   geom_histogram(color = "white") +
-  facet_wrap(~ type, ncol = 1, scales = "free_y") +
-  theme_ipsum() 
+  facet_wrap(~ type, ncol = 1, scales = "free_y") 
 
 
 
@@ -175,8 +182,7 @@ majors %>%
   group_by(Major_category) %>% 
   filter(!is.na(ShareWomen)) %>%
   ggplot(aes(x = ShareWomen, y = Unemployment_rate)) +
-  geom_point(color = "#a83d3d", alpha = 0.7) +
-  theme_ipsum_rc()
+  geom_point(color = "#a83d3d", alpha = 0.7) 
 
 
 
@@ -185,8 +191,8 @@ majors %>%
 netflix %>% 
   filter(type == "Movie",
          ! rating %in% NA) %>% 
-  separate(duration, c("duration_mins", "B")) %>% 
-  mutate(duration_mins = as.integer(duration_mins),
+  separate(duration, c("duration_mins", "just minutes")) %>% ## separating the "duration" column.
+  mutate(duration_mins = as.integer(duration_mins), ## transforming "mins" into an integer value.
          rating = fct_reorder(rating, duration_mins)) %>% 
   ggplot(aes(x = duration_mins, y = rating)) +
   geom_boxplot(color = "firebrick") +
@@ -196,4 +202,5 @@ netflix %>%
   easy_x_axis_title_size(12) +
   easy_y_axis_title_size(12) +
   scale_x_continuous(breaks = seq(0,350,50))
+
 
