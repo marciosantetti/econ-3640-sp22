@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Descriptive Statistics, pt. III]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec04-descriptive-3_files/header-attrs/header-attrs.js"></script>
+    <link href="lec04-descriptive-3_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec04-descriptive-3_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec04-descriptive-3_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Descriptive Statistics, pt. III]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+---
+
+# The road so far
+
+So far, our descriptive measures (e.g., *mean, median, variance, standard deviation*) suit well our purposes when describing a .hi[unique] variable.
+
+--
+
+These measures are also known as .hi-blue[univariate] descriptive techniques.
+
+--
+
+Whenever our goal is to describe a possible .red[*relationship/association*] between two variables, we need to study additional descriptive techniques.
+
+--
+
+These are known as .hi-slate[bivariate] descriptive measures.
+
+--
+
+We will study the three main techniques:
+
+  - *Covariance*;
+  - *Correlation*;
+  - The *coefficient of determination*.
+  
+---
+
+layout: false
+class: inverse, middle
+
+# Bivariate descriptive techniques
+
+---
+
+# Bivariate descriptive techniques
+
+&lt;img src="lec04-descriptive-3_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Bivariate descriptive techniques
+
+&lt;img src="lec04-descriptive-3_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Bivariate descriptive techniques
+
+
+&lt;img src="lec04-descriptive-3_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Bivariate descriptive techniques
+
+Let us start with the .hi[covariance].
+
+--
+
+The covariance gives two pieces of information about the .red[*association*] between two variables (say, *x* and *y*): the .hi-blue[nature] and the .hi-blue[strength] of this relationship.
+
+--
+
+&lt;br&gt;
+
+.pull-left[
+
+- .hi-blue[Population covariance] (&amp;sigma;&lt;sub&gt;xy&lt;/sub&gt;):
+
+$$
+`\begin{aligned}
+\sigma_{xy} = \dfrac{\displaystyle\sum_{i=1}^{N}(x_{i}-\mu_{x})(y_{i}-\mu_{y})}{N}
+\end{aligned}`
+$$
+
+
+]
+
+.pull-right[
+
+- .hi-blue[Sample covariance] (*s*&lt;sub&gt;xy&lt;/sub&gt;):
+
+$$
+`\begin{aligned}
+s_{xy} = \dfrac{\displaystyle\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})}{n-1}
+\end{aligned}`
+$$
+
+
+]
+
+
+
+
+
+---
+
+# Bivariate descriptive techniques
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+An .hi[alternative] formula for the *sample covariance*:
+
+$$
+`\begin{aligned}
+s_{xy} =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}y_{i} - \dfrac{\displaystyle\sum_{i=1}^{n}x_{i}\displaystyle\sum_{i=1}^{n}y_{i}}{n} \Bigg]
+\end{aligned}`
+$$
+---
+
+# Bivariate descriptive techniques
+
+
+```r
+data("smoke")                   # data from the "wooldridge" package.
+
+
+smoke &lt;- smoke %&gt;% as_tibble()  # transforming it into a tibble.
+
+smoke_filtered &lt;- smoke %&gt;% 
+  filter(cigs &gt; 0)              # what is this piece of code doing?
+
+smoke_filtered %&gt;% 
+  select(cigs, cigpric, educ, age) %&gt;% 
+  head()
+```
+
+```
+#&gt; # A tibble: 6 × 4
+#&gt;    cigs cigpric  educ   age
+#&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+#&gt; 1     3    57.7  12      58
+#&gt; 2    10    57.9  13.5    27
+#&gt; 3    20    60.3  12      24
+#&gt; 4    30    57.9  10      71
+#&gt; 5    20    60.1  12      29
+#&gt; 6    30    60.7  12      34
+```
+
+---
+
+# Bivariate descriptive techniques
+
+Data from [`Mullahy (1997)`](https://direct.mit.edu/rest/article-abstract/79/4/586/57029/Instrumental-Variable-Estimation-of-Count-Data):
+
+
+```r
+smoke_filtered %&gt;% 
+  summarize(covariance_cigpric_cigs = cov(cigpric, cigs))
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   covariance_cigpric_cigs
+#&gt;                     &lt;dbl&gt;
+*#&gt; 1                    1.75
+```
+
+
+```r
+smoke_filtered %&gt;% 
+  summarize(covariance_educ_cigs = cov(educ, cigs))
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   covariance_educ_cigs
+#&gt;                  &lt;dbl&gt;
+*#&gt; 1                 5.43
+```
+
+---
+
+# Bivariate descriptive techniques
+
+&lt;img src="lec04-descriptive-3_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Bivariate descriptive techniques
+
+&lt;img src="lec04-descriptive-3_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Bivariate descriptive techniques
+
+Now, to the .hi[correlation coefficient].
+
+--
+
+The coefficient of correlation is .red[*more specific*] than the covariance.
+
+--
+
+The correlation coefficient implies a .hi-slate[linear relationship] between *x* and *y*. 
+
+--
+
+Therefore, in case the shape from a *scatter diagram* does not predict a .hi[linear] relationship between the two variables, using the correlation may not be the best measure.
+
+--
+
+&lt;br&gt;
+
+.pull-left[
+
+- .hi-blue[Population correlation] (&amp;rho;):
+
+$$
+`\begin{aligned}
+\rho = \dfrac{\sigma_{xy}}{\sigma_{x}\sigma_{y}}
+\end{aligned}`
+$$
+
+]
+
+.pull-right[
+
+- .hi-blue[Sample correlation] (*r*):
+$$
+`\begin{aligned}
+r = \dfrac{s_{xy}}{s_{x}s_{y}}
+\end{aligned}`
+$$
+
+]
+
+
+---
+
+# Bivariate descriptive techniques
+
+The correlation formula relates the covariance between *x* and *y*, divided by the interaction between their respective standard deviations.
+
+--
+
+One .hi-blue[advantage] of this coefficient relative to the covariance is that it lies between .b[-1] and .b[+1].
+
+--
+
+&lt;br&gt;
+
+  - *r = -1* &amp;#8658; *negative*, perfect linear relationship between *x* and *y*;
+  
+  - *r = +1* &amp;#8658; *positive*, perfect linear relationship between *x* and *y*;
+  
+  - *r = 0* &amp;#8658; *no* linear relationship between *x* and *y*;
+
+
+
+---
+
+# Bivariate descriptive techniques
+
+Data from [`Mullahy (1997)`](https://direct.mit.edu/rest/article-abstract/79/4/586/57029/Instrumental-Variable-Estimation-of-Count-Data):
+
+
+```r
+smoke_filtered %&gt;% 
+  summarize(correlation_cigpric_cigs = cor(cigpric, cigs))
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   correlation_cigpric_cigs
+#&gt;                      &lt;dbl&gt;
+*#&gt; 1                   0.0271
+```
+
+
+```r
+smoke_filtered %&gt;% 
+  summarize(correlation_educ_cigs = cor(educ, cigs))
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   correlation_educ_cigs
+#&gt;                   &lt;dbl&gt;
+*#&gt; 1                 0.156
+```
+
+
+
+---
+
+# Bivariate descriptive techniques
+
+Lastly, the .hi[coefficient of determination].
+
+--
+
+It is more widely known as the *R*&lt;sup&gt;2&lt;/sup&gt; *coefficient.*
+
+--
+
+Given the *limitations* of the coefficient of correlation to precisely interpret values other
+than 0, -1, and +1, the coefficient of determination, *R*&lt;sup&gt;2&lt;/sup&gt;, can be .hi[precisely] interpreted.
+
+--
+
+&lt;br&gt;
+
+It is obtained by simply .hi-blue[squaring] the correlation coefficient (for either population or sample measures).
+
+---
+
+# Bivariate descriptive techniques
+
+
+```r
+smoke_filtered %&gt;% 
+  summarize(R2_cigpric_cigs = cor(cigpric, cigs)^2 * 100)
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   R2_cigpric_cigs
+#&gt;             &lt;dbl&gt;
+*#&gt; 1          0.0733
+```
+
+
+```r
+smoke_filtered %&gt;% 
+  summarize(R2_educ_cigs = cor(educ, cigs)^2 * 100)
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   R2_educ_cigs
+#&gt;          &lt;dbl&gt;
+*#&gt; 1         2.45
+```
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Data collection &amp; sampling
+
+---
+
+# Data collection &amp; sampling
+
+At this day and age, .hi[data availability] is part of our reality.
+
+--
+
+*But where do data come from?*
+
+&lt;br&gt;
+
+--
+
+There are plenty of data collecting methods, and we will investigate *three* of them:
+
+  1. Direct observation;
+  
+  2. Experimental methods;
+  
+  3. Surveys.
+  
+
+
+
+
+---
+
+# Data collection &amp; sampling
+
+.hi[Direct observation], as the name suggests, is the *simplest* method possible for collecting data.
+
+--
+
+&lt;br&gt;
+
+The .hi[experimental method] involves a random selection of subjects (individuals exposed to a treatment), with the sample being divided into two groups:
+
+  - The .hi-slate[control] group (*does not* take the treatment),
+  - The .hi-slate[treatment] group (*does* take the treatment).
+  
+
+--
+
+&lt;br&gt;
+
+Who has never been asked to participate in a .hi[survey]?
+
+---
+
+# Data collection &amp; sampling
+
+Statistics is not free from .red[*mistakes*], either voluntary or involuntary.
+
+--
+
+These can be summarized into two categories: 
+
+  - *sampling* and
+  - *nonsampling* errors.
+  
+--
+
+.hi[Sampling] errors are discrepancies between sample statistics and population parameters, due to observations collected in the sample.
+
+  - Increasing the sample size (*n*) may help!
+
+--
+
+.hi[Nonsampling] errors are more serious than the previous category, since increasing the sample size will hardly solve the problem.
+
+  - Selection *bias*!
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Descriptive Statistics in .mono[R], part II
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

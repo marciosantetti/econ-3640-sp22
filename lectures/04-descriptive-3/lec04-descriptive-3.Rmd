@@ -1,0 +1,495 @@
+---
+title: ".b[Descriptive Statistics, pt. III]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+---
+
+# The road so far
+
+So far, our descriptive measures (e.g., *mean, median, variance, standard deviation*) suit well our purposes when describing a .hi[unique] variable.
+
+--
+
+These measures are also known as .hi-blue[univariate] descriptive techniques.
+
+--
+
+Whenever our goal is to describe a possible .red[*relationship/association*] between two variables, we need to study additional descriptive techniques.
+
+--
+
+These are known as .hi-slate[bivariate] descriptive measures.
+
+--
+
+We will study the three main techniques:
+
+  - *Covariance*;
+  - *Correlation*;
+  - The *coefficient of determination*.
+  
+---
+
+layout: false
+class: inverse, middle
+
+# Bivariate descriptive techniques
+
+---
+
+# Bivariate descriptive techniques
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5}
+
+theme_set(theme_ipsum_rc())
+
+data("hprice3")
+
+
+df <- hprice3 %>% as_tibble()
+
+
+df %>% 
+  ggplot(aes(x = rooms, y = price)) +
+  geom_point(color = "#3c6e91", alpha = 0.6) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(x = "Number of rooms",
+       y = "Selling price ($)",
+       title = "House prices vs. number of rooms") +
+  easy_y_axis_title_size(12) +
+  easy_x_axis_title_size(12)
+
+
+
+
+```
+
+
+---
+
+# Bivariate descriptive techniques
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5}
+
+df %>% 
+  filter(! area > 5000) %>% 
+  ggplot(aes(x = area, y = price)) +
+  geom_point(color = "#dd2cc6", alpha = 0.6) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_x_continuous(labels = comma) +
+  labs(x = "Square footage",
+       y = "Selling price ($)",
+       title = "House prices vs. square footage") +
+  easy_y_axis_title_size(12) +
+  easy_x_axis_title_size(12)
+
+```
+
+
+---
+
+# Bivariate descriptive techniques
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, dev='svg', fig.height = 5}
+
+df %>% 
+  ggplot(aes(y = land, x = nbh)) +
+  geom_point(color = "#af8914", alpha = 0.6) +
+  scale_y_continuous(labels = comma) +
+  labs(x = "Neighborhood rating",
+       y = "Lot square footage",
+       title = "Lot square footage vs. neighborhood evaluations") +
+  easy_y_axis_title_size(12) +
+  easy_x_axis_title_size(12)
+
+```
+
+---
+
+# Bivariate descriptive techniques
+
+Let us start with the .hi[covariance].
+
+--
+
+The covariance gives two pieces of information about the .red[*association*] between two variables (say, *x* and *y*): the .hi-blue[nature] and the .hi-blue[strength] of this relationship.
+
+--
+
+<br>
+
+.pull-left[
+
+- .hi-blue[Population covariance] (&sigma;<sub>xy</sub>):
+
+$$
+\begin{aligned}
+\sigma_{xy} = \dfrac{\displaystyle\sum_{i=1}^{N}(x_{i}-\mu_{x})(y_{i}-\mu_{y})}{N}
+\end{aligned}
+$$
+
+
+]
+
+.pull-right[
+
+- .hi-blue[Sample covariance] (*s*<sub>xy</sub>):
+
+$$
+\begin{aligned}
+s_{xy} = \dfrac{\displaystyle\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})}{n-1}
+\end{aligned}
+$$
+
+
+]
+
+
+
+
+
+---
+
+# Bivariate descriptive techniques
+
+<br><br><br>
+
+An .hi[alternative] formula for the *sample covariance*:
+
+$$
+\begin{aligned}
+s_{xy} =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}y_{i} - \dfrac{\displaystyle\sum_{i=1}^{n}x_{i}\displaystyle\sum_{i=1}^{n}y_{i}}{n} \Bigg]
+\end{aligned}
+$$
+---
+
+# Bivariate descriptive techniques
+
+```{r}
+data("smoke")                   # data from the "wooldridge" package.
+
+
+smoke <- smoke %>% as_tibble()  # transforming it into a tibble.
+
+smoke_filtered <- smoke %>% 
+  filter(cigs > 0)              # what is this piece of code doing?
+
+smoke_filtered %>% 
+  select(cigs, cigpric, educ, age) %>% 
+  head()
+
+```
+
+---
+
+# Bivariate descriptive techniques
+
+Data from [`Mullahy (1997)`](https://direct.mit.edu/rest/article-abstract/79/4/586/57029/Instrumental-Variable-Estimation-of-Count-Data):
+
+```{r, highlight.output=4}
+smoke_filtered %>% 
+  summarize(covariance_cigpric_cigs = cov(cigpric, cigs))
+
+```
+
+```{r, highlight.output=4}
+smoke_filtered %>% 
+  summarize(covariance_educ_cigs = cov(educ, cigs))
+
+```
+
+---
+
+# Bivariate descriptive techniques
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, dev='svg', fig.height=5}
+
+p1 <- smoke_filtered %>% 
+  ggplot(aes(x = cigpric, y = cigs)) +
+  geom_point(color = "#6e549a", alpha = 0.6) +
+  labs(x = "Cigarette pack price (cents per pack)",
+       y = "Number of cigarettes smoked per day",
+       title = "Cigarette consumption vs. state price") +
+  easy_y_axis_title_size(12) +
+  easy_x_axis_title_size(12)
+
+p2 <- smoke_filtered %>% 
+  ggplot(aes(x = educ, y = cigs)) +
+  geom_point(color = "#77ac97", alpha = 0.6) +
+  labs(x = "Schooling (in years)",
+       y = "Number of cigarettes smoked per day",
+       title = "Cigarette consumption vs. schooling") +
+  easy_y_axis_title_size(12) +
+  easy_x_axis_title_size(12)
+
+p1 
+
+```
+
+---
+
+# Bivariate descriptive techniques
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, dev='svg', fig.height=5}
+p2
+```
+
+
+---
+
+# Bivariate descriptive techniques
+
+Now, to the .hi[correlation coefficient].
+
+--
+
+The coefficient of correlation is .red[*more specific*] than the covariance.
+
+--
+
+The correlation coefficient implies a .hi-slate[linear relationship] between *x* and *y*. 
+
+--
+
+Therefore, in case the shape from a *scatter diagram* does not predict a .hi[linear] relationship between the two variables, using the correlation may not be the best measure.
+
+--
+
+<br>
+
+.pull-left[
+
+- .hi-blue[Population correlation] (&rho;):
+
+$$
+\begin{aligned}
+\rho = \dfrac{\sigma_{xy}}{\sigma_{x}\sigma_{y}}
+\end{aligned}
+$$
+
+]
+
+.pull-right[
+
+- .hi-blue[Sample correlation] (*r*):
+$$
+\begin{aligned}
+r = \dfrac{s_{xy}}{s_{x}s_{y}}
+\end{aligned}
+$$
+
+]
+
+
+---
+
+# Bivariate descriptive techniques
+
+The correlation formula relates the covariance between *x* and *y*, divided by the interaction between their respective standard deviations.
+
+--
+
+One .hi-blue[advantage] of this coefficient relative to the covariance is that it lies between .b[-1] and .b[+1].
+
+--
+
+<br>
+
+  - *r = -1* &#8658; *negative*, perfect linear relationship between *x* and *y*;
+  
+  - *r = +1* &#8658; *positive*, perfect linear relationship between *x* and *y*;
+  
+  - *r = 0* &#8658; *no* linear relationship between *x* and *y*;
+
+
+
+---
+
+# Bivariate descriptive techniques
+
+Data from [`Mullahy (1997)`](https://direct.mit.edu/rest/article-abstract/79/4/586/57029/Instrumental-Variable-Estimation-of-Count-Data):
+
+```{r, highlight.output=4}
+smoke_filtered %>% 
+  summarize(correlation_cigpric_cigs = cor(cigpric, cigs))
+
+```
+
+```{r, highlight.output=4}
+smoke_filtered %>% 
+  summarize(correlation_educ_cigs = cor(educ, cigs))
+
+```
+
+
+
+---
+
+# Bivariate descriptive techniques
+
+Lastly, the .hi[coefficient of determination].
+
+--
+
+It is more widely known as the *R*<sup>2</sup> *coefficient.*
+
+--
+
+Given the *limitations* of the coefficient of correlation to precisely interpret values other
+than 0, -1, and +1, the coefficient of determination, *R*<sup>2</sup>, can be .hi[precisely] interpreted.
+
+--
+
+<br>
+
+It is obtained by simply .hi-blue[squaring] the correlation coefficient (for either population or sample measures).
+
+---
+
+# Bivariate descriptive techniques
+
+```{r, highlight.output=4}
+smoke_filtered %>% 
+  summarize(R2_cigpric_cigs = cor(cigpric, cigs)^2 * 100)
+
+```
+
+```{r, highlight.output=4}
+smoke_filtered %>% 
+  summarize(R2_educ_cigs = cor(educ, cigs)^2 * 100)
+
+```
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Data collection & sampling
+
+---
+
+# Data collection & sampling
+
+At this day and age, .hi[data availability] is part of our reality.
+
+--
+
+*But where do data come from?*
+
+<br>
+
+--
+
+There are plenty of data collecting methods, and we will investigate *three* of them:
+
+  1. Direct observation;
+  
+  2. Experimental methods;
+  
+  3. Surveys.
+  
+
+
+
+
+---
+
+# Data collection & sampling
+
+.hi[Direct observation], as the name suggests, is the *simplest* method possible for collecting data.
+
+--
+
+<br>
+
+The .hi[experimental method] involves a random selection of subjects (individuals exposed to a treatment), with the sample being divided into two groups:
+
+  - The .hi-slate[control] group (*does not* take the treatment),
+  - The .hi-slate[treatment] group (*does* take the treatment).
+  
+
+--
+
+<br>
+
+Who has never been asked to participate in a .hi[survey]?
+
+---
+
+# Data collection & sampling
+
+Statistics is not free from .red[*mistakes*], either voluntary or involuntary.
+
+--
+
+These can be summarized into two categories: 
+
+  - *sampling* and
+  - *nonsampling* errors.
+  
+--
+
+.hi[Sampling] errors are discrepancies between sample statistics and population parameters, due to observations collected in the sample.
+
+  - Increasing the sample size (*n*) may help!
+
+--
+
+.hi[Nonsampling] errors are more serious than the previous category, since increasing the sample size will hardly solve the problem.
+
+  - Selection *bias*!
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Descriptive Statistics in .mono[R], part II
+
+
+---
+exclude: true

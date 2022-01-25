@@ -1,31 +1,28 @@
 ---
-title: "**ECON 3640--001: Probability & Statistical Inference**"
-subtitle: "**Problem Set 1**"
-author: "Marcio Santetti | Spring 2022"
-header-includes:
-   - \usepackage[default]{sourcesanspro}
-   - \usepackage[T1]{fontenc}
-mainfont: SourceSansPro
-fontsize: 11pt
+title: ".b[ECON 3640--001]"
+subtitle: ".hi[Problem Set 1]"
+author: ".b[Marcio Santetti] <br> Spring 2022"
 output:
-  pdf_document
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'a-css.css']
+    # self_contained: true
+    nature:
+      ratio: '8.5:11'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+layout: true
+class: clear
 ---
 
-\hrulefill
+## Problem 1
 
-\vspace{.5cm}
-
-**Instructions**: Moving average problem.
-
-
----
-
-# Problem 1 
-
+<br>
 
 With your own words, define and give an example of each of the following statistical terms.
 
-\bigskip
+
 
 (a) Population;
 
@@ -36,31 +33,29 @@ With your own words, define and give an example of each of the following statist
 (d) Statistic.
 
 
+## Problem 2
 
-\bigskip
-
-
-# Problem 2
+<br>
 
 A student received the following letter grades on the 14 quizzes she took during a semester: *A, A-, B+, A-, A, C, A, A, A-, B, B+, C, A*, and *A*.
 
-\bigskip
 
-(a) What is the *type* of these data? Explain.
+(a) What is the .mono[type] of these data? Explain.
 
 (b) Use your best judgment to *illustrate* these data.
 
-\newpage
+## Problem 3
 
-# Problem 3
+<br>
 
-A 
-sample of 12 people was asked how much change they had in their pockets and wallets. The responses (in cents) were:
+A sample of 12 people was asked how much change they had in their pockets and wallets. The responses (in cents) were:
 
-\begin{center}
+.center[
+
 52 25 15 0 104 44 60 30 33 81 40 5
-\end{center}
-\bigskip
+]
+
+
 
 (a) Determine the *mean*, *median* and *mode* for these data. Show your calculations.
 
@@ -70,7 +65,103 @@ sample of 12 people was asked how much change they had in their pockets and wall
 
 (d) Draw a *box plot* for these data.
 
-\bigskip
+---
+class:clear
 
-# Problem 4
+## Problem 4
 
+<br>
+
+From the `wooldridge` package, load the `mroz` data set. The data come from [`Mroz (1987)`](https://econpapers.repec.org/article/ecmemetrp/v_3a55_3ay_3a1987_3ai_3a4_3ap_3a765-99.htm). Just as with any data set from this package, its documentation contains all variable names and descriptions. Simply google "wooldridge R package" and you will find it.
+
+First, transform it into a `tibble`. Just follow the code below:
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 5}
+library(tidyverse)
+library(wooldridge)
+
+data("mroz")
+
+mroz_tibble <- mroz %>% as_tibble()
+
+```
+
+Then, answer the following questions:
+
+(a) What is the mode (i.e., most frequent) educational attainment&#8212; in years &#8212;in this sample?
+
+(b) Select the first five rows of this data set and manually compute the covariance, correlation coefficient, and coefficient of determination (*R*<sup>2</sup>) between educational attainment (`educ`) and hourly earnings (`wage`). Interpret these results. **Hint**: `head(5)`.
+
+(c) Use the most appropriate visual descriptive technique to illustrate the association between the two variables from part (b). Do not forget to make your plot informative to a wide audience (i.e., label your axes and give it a nice title).
+
+
+## Problem 5
+
+<br>
+
+Still using the `mroz` data set, run the following:
+
+```{r}
+mroz_tibble %>% 
+  select(inlf, hours, huswage) %>% 
+  head()
+```
+
+---
+class:clear
+
+Notice that the `inlf` variable is defined here as an integer (`int`), but what it is actually doing is serving as a *binary* indicator, which equals 1 if the woman interviewed is in the labor force, and 0 if not. Thus, if we want to use this variable for the upcoming plot, we should transform it into a factor (`fct`) class object.
+
+Just do the following:
+
+```{r}
+mroz_tibble <- mroz_tibble %>% 
+  mutate(inlf = as_factor(inlf))
+```
+
+
+and check out whether the variable is now a factor. The `as_factor()` function is part of the `tidyverse`.
+
+(a) Draw a histogram of husband wages (`huswage`), comparing the difference between whether the interviewee is in the labor force or not. **Hint**: you may either use the `fill` argument within the `aes()` environment, or use the `facet_wrap()` function to do that. Interpret your results.
+
+(b) In this sample, how many interviewees are in the labor force? How many aren't?
+
+(c) From your answer to part (b), illustrate the relative frequencies (i.e., %) for each case either with a bar or pie chart.
+
+## Problem 6
+
+<br>
+
+```{r, include=FALSE, echo=FALSE, message=FALSE}
+covid_cases <- read_csv("covid-cases-22.csv")
+```
+
+
+During these pandemic times, you have probably come across the `moving average` term. It simply consists of calculating a mean that is adjusted over a specified time window. For instance, a 7-day moving (or rolling) average computes the mean value of a variable over the previous 7 days, and it gets adjusted as time moves on.
+
+This application allows us to smooth out short-term oscillations in a data set. Applying this in .mono[R] is very simple, and we'll get there soon.
+
+(a) First, import the `covid-cases-22.csv` data set into your .mono[R] environment. Call it `covid_cases`.
+
+(b) Now, we need to convert the `period` column into a `date` object. It will be imported as a character (`chr`). You need to use the [`lubridate`](https://lubridate.tidyverse.org/) package, specifically built to deal with dates and times. Check out the code below:
+
+```{r, message=FALSE}
+library(lubridate) # make sure to have it installed first.
+
+covid_cases <- covid_cases %>% 
+  mutate(period = mdy(period))
+```
+
+The `mdy` function simply converts a character string defined by `d`ay-`m`onth-`y`ear into a `date` object.
+
+(c) Find out how to plot the `new_cases` variable over time using `ggplot2`.
+
+(d) To calculate moving averages, one may use the `RcppRoll` package. Its `roll_mean()` function does the job. So, create a new column in your data set, called `new_cases_ma`, defined by the 14-day moving average for the `new_cases` series. You will use the `roll_mean()` function and 3 arguments: `n`, which is the number of days you want your moving-average window to be; `align`, which you will set equal to "right"; and `fill`, which you will set to `NA`. The latter guarantees that the first values (for which you will not be able to calculate the moving average) will be filled out with `NA` values.
+
+(e) Lastly, plot this new variable from part (d) over time and compare it with your plot from part (c).
+
+
+
+
+---
+exclude:true
