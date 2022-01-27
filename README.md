@@ -30,7 +30,13 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/03-descriptive-2/lec03-descriptive-2.html)
 
+**Lecture 4: Descriptive Statistics III**
 
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/04-descriptive-3/lec04-descriptive-3.html)
 
 ## R Code
+
+1. [Descriptive Statistics (data wrangling & plotting)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/01-descriptive-stats/01-descriptive-stats.R)
+
+2. [Descriptive Statistics (summary statistics)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/02-descriptive-stats-2/02-descriptive_stats-2.R)
 
