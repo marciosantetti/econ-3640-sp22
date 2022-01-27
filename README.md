@@ -38,3 +38,5 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
 1. [Descriptive Statistics (data wrangling & plotting)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/01-descriptive-stats/01-descriptive-stats.R)
 
+2. [Descriptive Statistics (summary statistics)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/02-descriptive-stats-2/02-descriptive_stats-2.R)
+
