@@ -27,6 +27,7 @@ library(patchwork)
 library(ggeasy)
 
 
+
 #==============================================================================#
 
 
@@ -65,7 +66,7 @@ theme_set(theme_ipsum())
 
 majors %>% 
   group_by(Major_category) %>% 
-  filter(!is.na(ShareWomen)) %>% 
+  filter(!is.na(ShareWomen)) %>% # "filter" function filters by row.
   summarize(mean = mean(ShareWomen)) %>% 
   arrange(desc(mean)) %>% 
   ggplot(aes(x = mean, y = fct_reorder(Major_category, mean))) +
@@ -79,6 +80,7 @@ states <- tibble(
   state = c(rep("Utah", 2), rep("California", 4), 
             rep("Ohio",2), rep("Other", 3), "Pennsylvania", rep("Illinois",2), rep("Florida",2))
 )
+
 
 
 states %>% 
@@ -109,7 +111,7 @@ with(states_pie,
      pie(n,
          radius = 1, 
          density = 30,
-         labels = paste0(state, ": ", share_state, "%"),
+         labels = paste0(state,": ", share_state, "%"),
          col = c("#000000", "#773c3c", "#d02525", "#e69138", "#dfb283", "#4d942f", "#d31515"),
          main = "A pie chart"))
 
@@ -141,10 +143,23 @@ with(coffee_pie,
 
 netflix <- read_csv("netflix.csv")
 
+
+netflix %>% 
+  select(type, duration) %>% 
+  head(20)
+
+netflix %>% 
+  ggplot(aes(x = release_year)) +
+  geom_histogram(color = "white", fill = "#74867c", binwidth = 10, alpha = 0.7)
+
+netflix %>% 
+  count(type)
+
+
 netflix %>% 
   ggplot(aes(x = release_year, fill = type)) +
-  scale_fill_wsj() +
-  geom_histogram(bins = 30, color = "white") 
+  geom_histogram(binwidth = 5, color = "white") +
+  scale_fill_wsj()
 
 
 ## We can store plots created with ggplot2 in R objects, as below:
@@ -163,7 +178,7 @@ p2 <- netflix %>%
   labs(title = "Netflix TV shows: release years")
 
 
-p1 / p2 ## using the 'patchwork' poackage.
+p1 / p2 ## using the 'patchwork' package.
 
 
 ## Another option is using "facet_wrap," as below:
@@ -195,12 +210,14 @@ netflix %>%
   mutate(duration_mins = as.integer(duration_mins), ## transforming "mins" into an integer value.
          rating = fct_reorder(rating, duration_mins)) %>% 
   ggplot(aes(x = duration_mins, y = rating)) +
-  geom_boxplot(color = "firebrick") +
+  geom_boxplot(color = "#6c2bac") +
   labs(x = "Duration (mins)",
        y = "Movie Ratings",
        title = "Netflix movie durations (in minutes)") +
   easy_x_axis_title_size(12) +
   easy_y_axis_title_size(12) +
   scale_x_continuous(breaks = seq(0,350,50))
+
+
 
 
