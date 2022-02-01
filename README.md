@@ -1,7 +1,7 @@
 # ECON 3640-001, Spring 2022
 
 
-ECON 3640-001: Probability &amp; Statistical Inference (Spring 2022), taught by Marcio Santetti.
+ECON 3640-001: Probability &amp; Statistical Inference (Spring 2022), taught at the [University of Utah](https://www.utah.edu/) by Marcio Santetti.
 
 
 
