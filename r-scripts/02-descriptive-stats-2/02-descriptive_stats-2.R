@@ -4,7 +4,7 @@
 #== Marcio Santetti
 
 #=============================================================================#
-#                 DESCRIPTIVE STATISTICS I - DATA VISUALIZATION               #
+#                 DESCRIPTIVE STATISTICS II - SUMMARY STATISTICS              #
 #=============================================================================#
 
 

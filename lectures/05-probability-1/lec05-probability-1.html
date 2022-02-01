@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Probability Theory, pt. I]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec05-probability-1_files/header-attrs/header-attrs.js"></script>
+    <link href="lec05-probability-1_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec05-probability-1_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec05-probability-1_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Probability Theory, pt. I]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Blitzstein &amp; Hwang (2019)`, ch. 1
+
+  - sections 1.1&amp;#8212;1.3, and 1.6&amp;#8212;1.7
+
+---
+
+# Motivation
+
+
+&lt;br&gt;
+
+Check out this video:
+
+&lt;br&gt;&lt;br&gt;
+
+[`Teach statistics before calculus!, by Arthur Benjamin`](https://www.ted.com/talks/arthur_benjamin_teach_statistics_before_calculus?language=en#t-158820)
+
+
+---
+
+# Motivation
+
+A quick .hi-blue[quiz]:
+
+
+Select the statement (*a*, *b*, or *c*) that you agree with most strongly. .hi[There are no wrong answers here!]
+
+&lt;br&gt;
+
+--
+
+How do you interpret the following: "*When flipping a coin, the probability of flipping Heads is 0.5*"?
+
+&lt;br&gt;
+
+  - (*a*) If I flip this coin over and over and over and over, roughly 50% of the flips will be Heads.
+  - (*b*) If I flip this coin, Heads / Tails are equally plausible.
+  - (*c*) Both of the above make sense.
+
+
+---
+
+# Motivation
+
+A quick .hi-blue[quiz]:
+
+
+Select the statement (*a*, *b*, or *c*) that you agree with most strongly. .hi[There are no wrong answers here!]
+
+&lt;br&gt;
+
+--
+
+An election is coming up and a pollster claims that "*candidate A has a 0.9 probability of winning.*" How do you interpret this probability?
+
+&lt;br&gt;
+
+  - (*a*) If we observe the election over and over, candidate A will win roughly 90% of the time.
+  - (*b*) Candidate A is much more likely to win than to lose.
+  - (*c*) The pollster’s calculation is wrong. Candidate A will either win or lose, thus their probability of winning can only be 0 or 1.
+  
+  
+---
+
+# Motivation
+
+A quick .hi-blue[quiz]:
+
+
+Select the statement (*a* or *b*) that you agree with most strongly. .hi[There are no wrong answers here!]
+
+--
+
+In a survey with 10 students, they are asked the following 2 questions:
+
+  - Will you vote for a Republican in 2024? 10 out of 10 say "yes."
+  - Each student is given a sample of Pepsi and Coke. 10 out of 10 correctly identify which is which.
+
+&lt;br&gt;
+
+In light of these experiments, what do you conclude?
+
+  - (*a*) You’re more confident that students can distinguish between Coke and Pepsi than that students plan to vote for a Republican candidate.
+  - (*b*) he evidence in favor of students’ intention to vote a Republican is just as strong as the evidence in favor of  students’ ability to distinguish between Coke and Pepsi.
+
+---
+
+# Motivation
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+If your answers were (*a*), (*a*), and (*b*), you are fairly .hi[frequentist].
+
+--
+
+If your answers were (*b*), (*b*), and (*a*), you are a .hi-blue[Bayesian].
+
+--
+
+If your answers to the first two questions were (*c*) and (*c*), you have .hi-orange[no side!]
+
+---
+
+layout: false
+class: inverse, middle
+
+# Studying probability
+
+---
+
+# Studying probability
+
+&lt;br&gt;&lt;br&gt;
+
+You have probably either used or heard the words *luck*, *coincidence*, *odds*, *chance* in your life to reflect some .hi[guess] or .hi-blue[prediction] about future events.
+
+--
+
+These can also be understood as .hi[probability statements].
+
+--
+
+  - Perhaps you don't usually .hi-green[quantify] these guesses!
+
+
+--
+
+Whether you translate such predictions into numbers or not, in the next lectures we will study probability as a .hi-blue[logical path] to measure *uncertainty* and *randomness* through *theoretical principles*.
+
+---
+
+# Studying probability
+
+Probability is the .hi[logic of uncertainty]. 
+
+--
+
+It quantifies uncertainty in a way through which we may 
+
+  - formalize such uncertainty;
+  
+  - make informed decisions about uncertain events;
+  
+  - make inferences about noisy processes and population parameters;
+  
+  - better understand our surroundings.
+  
+---
+layout: false
+class: inverse, middle
+
+# Basics of set theory
+
+---
+
+# Basics of set theory
+
+The mathematical framework for probability is built around .hi[sets].
+
+--
+
+Suppose we run an .red[*experiment*], and its result is one out of a set of possible .red[*outcomes*] (.red[*events*]).
+
+--
+
+Before one can quantify the inherent *randomness* in this experiment, one must understand its possible outcomes.
+
+--
+
+Consider some definitions:
+
+  - A .hi-slate[sample space] (*S*) is the collection of all possible outcomes of an experiment;
+  
+  - An .hi-slate[event] is an element or collection of elements in the sample space, typically denoted by capital letters (e.g., *A, B, C*).
+  
+    - Thus an event is a *subset* of the sample space *S*: *A* &amp;#8838; *S*.
+    
+---
+
+# Basics of set theory
+
+
+
+Some .hi-blue[special events]:
+
+
+- Empty (null) set (&amp;#8709;): contains .hi[no] outcomes.
+
+--
+
+- The complement of an event (*A*&lt;sup&gt;*C*&lt;/sup&gt;): contains .hi-slate[all] outcomes that are not in event *A*.
+
+--
+
+- Intersection between events (*A* &amp;#8745; *B*): contains all outcomes that are in .hi[both] *A* and *B*.
+
+  - *A* and *B* are .hi-blue[disjoint] if *A* &amp;#8745; *B* = &amp;#8709;.
+  
+--
+  
+- Union between events (*A* &amp;#8746; *B*): contains all outcomes that are in *A* .hi-slate[or] *B* .hi-slate[or] both.
+
+--
+
+- De Morgan's laws: 
+  
+  - (*A* &amp;#8746; *B*)&lt;sup&gt;*C*&lt;/sup&gt; = *A*&lt;sup&gt;*C*&lt;/sup&gt; &amp;#8745; *B*&lt;sup&gt;*C*&lt;/sup&gt;
+  - (*A* &amp;#8745; *B*)&lt;sup&gt;*C*&lt;/sup&gt; = *A*&lt;sup&gt;*C*&lt;/sup&gt; &amp;#8746; *B*&lt;sup&gt;*C*&lt;/sup&gt;
+
+---
+
+layout: false
+class: inverse, middle
+
+# Many shades of probability
+
+---
+
+# Many shades of probability
+
+Now it is time to study the .hi[uncertainty] associated with the possible outcomes of an experiment.
+
+--
+
+To this purpose, we will need .hi-blue[probability].
+
+--
+
+Informally, one may define probability as *a measure of uncertainty, ranging between 0 (impossible outcome) and 1 (almost certain event).*
+
+--
+
+&lt;br&gt;
+
+But there are more .hi-slate[formal] ways of defining it:
+
+  - The "*naive*" definition of probability;
+  
+  - The "*frequency*" definition of probability;
+  
+  - The "*Bayesian*" definition of probability.
+
+
+---
+
+# Many shades of probability
+
+The .hi[earliest] definition of the probability of an event was to .hi-slate[count] the number of *ways* the event could happen and divide by the *total* number of possible outcomes for the experiment.
+
+$$
+`\begin{aligned}
+P^{naive}(A) = \dfrac{\text{number of ways A can happen}}{\text{total number of outcomes in} \ S}
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+The naive definition is very .hi[restrictive]. 
+
+  - It requires *S* to be *finite*, with equal symmetry across events/outcomes.
+  
+  - Events must be *equally likely*!
+  
+---
+
+# Many shades of probability
+
+Given the .hi-blue[limitations] of the naive definition of probability, we will move on to more general and effective concepts.
+
+
+&gt; A *probability space* consists of a sample space *S* and a *probability function* *P* which takes an event *A* &amp;#8838; *S* as input and returns *P(A)*, a real number between 0 and 1, as output.
+
+--
+
+The function *P(&amp;middot;)* must satisfy the following .hi[two] axioms:
+
+  - *P*(&amp;#8709;) = 0;
+  - *P(S)* = 1
+  
+--
+
+If events *A*&lt;sub&gt;1&lt;/sub&gt;, *A*&lt;sub&gt;2&lt;/sub&gt;, *A*&lt;sub&gt;3&lt;/sub&gt;,... are .hi-blue[disjoint], then
+
+$$
+`\begin{aligned}
+P \bigg(\bigcup_{j=1}^{\infty} A_j \bigg) = \sum_{j=1}^{\infty} P(A_j)
+\end{aligned}`
+$$
+
+---
+
+# Many shades of probability
+
+
+Any function *P(&amp;middot;)* that satisfies the two axioms is considered a .hi[valid] probability function.
+
+--
+
+However, the axioms don’t tell us how probability should be .hi-blue[interpreted].
+
+--
+
+There are different .hi-slate[schools of thought] regarding such interpretation.
+
+--
+
+&lt;br&gt;
+
+The .hi[frequentist] view of probability is that it represents a long-run frequency over a large number of repetitions of an experiment: if we say a coin has probability 1/2 of Heads, that means the coin would land Heads 50% of the time if we tossed it over and over and over.
+
+--
+
+The .hi-slate[Bayesian] view of probability is that it represents a degree of belief about the event in question, so we can assign probabilities to hypotheses like “candidate A will win the election” or “the defendant is guilty” even if it is not possible to repeat the same election or the same crime over and over again.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Properties of probability; conditional probability
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
