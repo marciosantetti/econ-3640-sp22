@@ -1,0 +1,300 @@
+---
+title: ".b[Probability Theory, pt. II]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Blitzstein & Hwang (2019)`, ch. 2
+
+  - sections 2.1 & 2.2.
+
+---
+
+# Motivation
+
+<br>
+
+Last time, we started our study of probability, which is the .hi[logic of uncertainty].
+
+--
+
+<br>
+
+Despite its different interpretations (e.g., frequentists *vs*. Bayesians), the .hi-slate[theoretical foundations] for both approaches are the same.
+
+--
+
+<br>
+
+Now, we use our knowledge of set theory to get to some crucial .hi-blue[properties] of probability.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Properties of probability
+
+---
+
+# Properties of probability
+
+
+From the .hi-blue[axioms] studied last time
+
+  - *P*(&#8709;) = 0;
+  - *P(S)* = 1
+  
+--
+
+<br>
+
+We can derive the following .hi[properties of probability]:
+
+1. .b[Complement rule]: *P(A<sup>C</sup>)* = 1 - *P(A)*
+
+2. .b[Subset rule]: If *A* &#8838; *B*, then *P(A)* &#8804; *P(B)*
+
+3. .b[Inclusion-exclusion rule]: *P*(*A* &#8746; *B*) = *P(A)* + *P(B)* - *P*(*A* &#8745; *B*)
+
+
+---
+
+# Properties of probability
+
+Suppose a sample of voters<sup>1</sup> was asked whether they voted for a .hi-blue[Democrat] (*D*) or .hi[other] candidate (*ND*) in the last election.
+
+.footnote[1: Example inspired by [`this article`](https://www.buzzfeednews.com/article/craigsilverman/fake-news-survey#.sl2NYVrQN).]
+
+--
+
+Then, each interviewee was shown a .hi-slate[fake news] article. 81% of them believed in the headline. 
+
+--
+
+Out of those who voted for the .hi-blue[Democrat] candidate, 30% believed in the headline.
+
+--
+
+Overall, 48% of the sample vote for the .hi-blue[Democrat] candidate.
+
+
+--
+
+<br><br>
+
+Convert the above information into* probability statements* and apply the studied *properties.*
+  
+---
+layout: false
+class: inverse, middle
+
+# Conditional probability
+
+---
+
+# Conditional probability
+
+<br>
+
+Probability is a language for expressing our .hi-blue[degrees of belief] or uncertainties about events. 
+
+--
+
+As .hi[new evidence] (i.e., information) is incorporated, this may affect our uncertainty about specific events.
+
+--
+
+<br>
+
+.mono[Q]: This way, how should we .hi-blue[update] our beliefs in light of the evidence we observe?
+
+--
+
+.mono[A]: Through .hi[conditional probabilities].
+
+---
+
+# Conditional probability
+
+Conditional probability shows how to *incorporate* evidence into our understanding of the world in a .hi[logical], *coherent* manner.
+
+--
+
+In fact, one can say that .hi-slate[all] probabilities are conditional to some degree, since there is always .hi[background knowledge] built into every probability.
+
+--
+
+Suppose we .hi[have not] turned on the TV yet and our team is playing. Our assessment about the team winning can be stated as *P(W)*.
+
+--
+
+We then .hi-blue[turn the TV on] and our team is *losing.*
+
+--
+
+Presumably, our belief that the team will win should *decrease.* 
+
+--
+
+We may denote this new probability by *P(W|TV)*.
+
+--
+
+Going from *P(W)* to *P(W|TV)* means that we are .hi-blue[conditioning on] *TV*.
+
+---
+
+# Conditional probability
+
+
+
+> "*Conditioning is the soul of statistics*." (Blitzstein & Hwang, 2019, p. 42)
+
+
+
+
+
+--
+
+<br>
+
+If *A* and *B* are events, and *P(B)* &gt; 0, then the .hi-blue[conditional probability] of *A* given *B*, denoted by *P(A|B)*, is defined as
+
+$$
+\begin{aligned}
+P(A|B) = \dfrac{P(A \cap B)}{P(B)}
+\end{aligned}
+$$
+
+--
+
+where *A* is the event whose uncertainty we wish to update, and *B* is the observed evidence (information) we bring in.
+
+--
+
+Before we see any new data/information, *P(A)* is our .hi[prior probability] of *A*.
+
+--
+
+Consequently, *P(A|B)* is the .hi-blue[posterior probability] of *A*.
+
+
+---
+
+# Conditional probability
+
+
+.hi[Important warning]: *P(A|B)* &#8800; *P(B|A)*!
+
+--
+
+Confusing these two quantities is called the "*prosecutor’s fallacy*."
+
+
+<br><br><br>
+
+--
+
+.mono[Q]: How would a *frequentist* interpret *P(A|B)*?
+
+--
+
+.mono[Q]: How would a *Bayesian* interpret *P(A|B)*?
+
+---
+
+layout: false
+class: inverse, middle
+
+# Independence
+
+---
+
+# Independence
+
+Events *A* and *B* are .hi[independent] if
+
+--
+
+.center[
+
+*P(A|B)* = *P(A)*
+
+]
+
+--
+
+<br>
+
+This implies that *any knowledge* of *B* does not help/affect/inform one's belief about *A*.
+
+--
+
+<br>
+
+Also, from the .hi-blue[conditional probability formula], independence implies
+
+
+.center[
+
+*P(A|B)* = *P(A)P(B)*
+
+]
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Law of total probability; Bayes' Theorem
+
+---
+exclude: true

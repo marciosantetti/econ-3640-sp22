@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Probability Theory, pt. II]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec06-probability-2_files/header-attrs/header-attrs.js"></script>
+    <link href="lec06-probability-2_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec06-probability-2_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec06-probability-2_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Probability Theory, pt. II]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Blitzstein &amp; Hwang (2019)`, ch. 2
+
+  - sections 2.1 &amp; 2.2.
+
+---
+
+# Motivation
+
+&lt;br&gt;
+
+Last time, we started our study of probability, which is the .hi[logic of uncertainty].
+
+--
+
+&lt;br&gt;
+
+Despite its different interpretations (e.g., frequentists *vs*. Bayesians), the .hi-slate[theoretical foundations] for both approaches are the same.
+
+--
+
+&lt;br&gt;
+
+Now, we use our knowledge of set theory to get to some crucial .hi-blue[properties] of probability.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Properties of probability
+
+---
+
+# Properties of probability
+
+
+From the .hi-blue[axioms] studied last time
+
+  - *P*(&amp;#8709;) = 0;
+  - *P(S)* = 1
+  
+--
+
+&lt;br&gt;
+
+We can derive the following .hi[properties of probability]:
+
+1. .b[Complement rule]: *P(A&lt;sup&gt;C&lt;/sup&gt;)* = 1 - *P(A)*
+
+2. .b[Subset rule]: If *A* &amp;#8838; *B*, then *P(A)* &amp;#8804; *P(B)*
+
+3. .b[Inclusion-exclusion rule]: *P*(*A* &amp;#8746; *B*) = *P(A)* + *P(B)* - *P*(*A* &amp;#8745; *B*)
+
+
+---
+
+# Properties of probability
+
+Suppose a sample of voters&lt;sup&gt;1&lt;/sup&gt; was asked whether they voted for a .hi-blue[Democrat] (*D*) or .hi[other] candidate (*ND*) in the last election.
+
+.footnote[1: Example inspired by [`this article`](https://www.buzzfeednews.com/article/craigsilverman/fake-news-survey#.sl2NYVrQN).]
+
+--
+
+Then, each interviewee was shown a .hi-slate[fake news] article. 81% of them believed in the headline. 
+
+--
+
+Out of those who voted for the .hi-blue[Democrat] candidate, 30% believed in the headline.
+
+--
+
+Overall, 48% of the sample vote for the .hi-blue[Democrat] candidate.
+
+
+--
+
+&lt;br&gt;&lt;br&gt;
+
+Convert the above information into* probability statements* and apply the studied *properties.*
+  
+---
+layout: false
+class: inverse, middle
+
+# Conditional probability
+
+---
+
+# Conditional probability
+
+&lt;br&gt;
+
+Probability is a language for expressing our .hi-blue[degrees of belief] or uncertainties about events. 
+
+--
+
+As .hi[new evidence] (i.e., information) is incorporated, this may affect our uncertainty about specific events.
+
+--
+
+&lt;br&gt;
+
+.mono[Q]: This way, how should we .hi-blue[update] our beliefs in light of the evidence we observe?
+
+--
+
+.mono[A]: Through .hi[conditional probabilities].
+
+---
+
+# Conditional probability
+
+Conditional probability shows how to *incorporate* evidence into our understanding of the world in a .hi[logical], *coherent* manner.
+
+--
+
+In fact, one can say that .hi-slate[all] probabilities are conditional to some degree, since there is always .hi[background knowledge] built into every probability.
+
+--
+
+Suppose we .hi[have not] turned on the TV yet and our team is playing. Our assessment about the team winning can be stated as *P(W)*.
+
+--
+
+We then .hi-blue[turn the TV on] and our team is *losing.*
+
+--
+
+Presumably, our belief that the team will win should *decrease.* 
+
+--
+
+We may denote this new probability by *P(W|TV)*.
+
+--
+
+Going from *P(W)* to *P(W|TV)* means that we are .hi-blue[conditioning on] *TV*.
+
+---
+
+# Conditional probability
+
+
+
+&gt; "*Conditioning is the soul of statistics*." (Blitzstein &amp; Hwang, 2019, p. 42)
+
+
+
+
+
+--
+
+&lt;br&gt;
+
+If *A* and *B* are events, and *P(B)* &amp;gt; 0, then the .hi-blue[conditional probability] of *A* given *B*, denoted by *P(A|B)*, is defined as
+
+$$
+`\begin{aligned}
+P(A|B) = \dfrac{P(A \cap B)}{P(B)}
+\end{aligned}`
+$$
+
+--
+
+where *A* is the event whose uncertainty we wish to update, and *B* is the observed evidence (information) we bring in.
+
+--
+
+Before we see any new data/information, *P(A)* is our .hi[prior probability] of *A*.
+
+--
+
+Consequently, *P(A|B)* is the .hi-blue[posterior probability] of *A*.
+
+
+---
+
+# Conditional probability
+
+
+.hi[Important warning]: *P(A|B)* &amp;#8800; *P(B|A)*!
+
+--
+
+Confusing these two quantities is called the "*prosecutor’s fallacy*."
+
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+--
+
+.mono[Q]: How would a *frequentist* interpret *P(A|B)*?
+
+--
+
+.mono[Q]: How would a *Bayesian* interpret *P(A|B)*?
+
+---
+
+layout: false
+class: inverse, middle
+
+# Independence
+
+---
+
+# Independence
+
+Events *A* and *B* are .hi[independent] if
+
+--
+
+.center[
+
+*P(A|B)* = *P(A)*
+
+]
+
+--
+
+&lt;br&gt;
+
+This implies that *any knowledge* of *B* does not help/affect/inform one's belief about *A*.
+
+--
+
+&lt;br&gt;
+
+Also, from the .hi-blue[conditional probability formula], independence implies
+
+
+.center[
+
+*P(A|B)* = *P(A)P(B)*
+
+]
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Law of total probability; Bayes' Theorem
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
