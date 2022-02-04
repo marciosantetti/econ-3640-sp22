@@ -40,7 +40,7 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
 **Lecture 6: Probability Theory II (properties and conditional probability)**
 
-  -[Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/06-probability-2/lec06-probability-2.html)
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/06-probability-2/lec06-probability-2.html)
 
 ## R Code
 
