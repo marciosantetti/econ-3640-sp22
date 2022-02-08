@@ -45,7 +45,7 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
 **Lecture 7: Probability Theory III (LOTP, Bayes' Theorem)**
 
-  - [Slides (html)(https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/07-probability-3/lec07-probability-3.html)
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/07-probability-3/lec07-probability-3.html)
 
 ## R Code
 
