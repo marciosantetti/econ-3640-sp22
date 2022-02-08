@@ -20,7 +20,11 @@ mroz_tibble %>%
 mroz_tibble %>% 
   select(educ, wage) %>% 
   head(5) %>% 
-  summarize(covariance = cov(educ, wage),
+  summarize(sum_educ = sum(educ),
+            sum_wage = sum(wage),
+            sd_educ = sd(educ),
+            sd_wage = sd(wage),
+            covariance = cov(educ, wage),
             correlation = cor(educ, wage),
             r_squared = cor(educ, wage)^2 * 100)
 
@@ -38,6 +42,22 @@ mroz_tibble %>%
   geom_histogram(color = "white") +
   facet_wrap(~inlf, ncol = 1) 
 
+
+
+####
+
+
+change <- tibble(
+  how_much = c(52, 25, 15, 0, 104, 44, 60, 30, 33, 81, 40, 5)
+)
+
+change %>% 
+  count(how_much) # putting values in ascending order.
+
+change %>% 
+  summarize(summ = sum(how_much),
+            var_hm = var(how_much),
+            sd_hm = sd(how_much)) %>% View()
 
 mroz_tibble %>% 
   ggplot(aes(x = huswage, y = faminc, color = inlf)) +

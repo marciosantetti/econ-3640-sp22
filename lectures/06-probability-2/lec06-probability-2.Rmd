@@ -285,7 +285,7 @@ Also, from the .hi-blue[conditional probability formula], independence implies
 
 .center[
 
-*P(A|B)* = *P(A)P(B)*
+*P(A &#8745; B)* = *P(A)P(B)*
 
 ]
 

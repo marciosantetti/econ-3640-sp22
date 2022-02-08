@@ -1,0 +1,272 @@
+---
+title: ".b[Probability Theory, pt. III]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Blitzstein & Hwang (2019)`, ch. 2
+
+  - sections 2.3 & 2.4.
+
+---
+
+# Motivation
+
+<br>
+
+Last time, we saw that .hi[conditional probabilities] are the "*soul*" of Statistics.
+
+<br>
+
+--
+
+Recall:
+
+$$
+\begin{aligned}
+P(A|B) = \dfrac{P(A \cap B)}{P(B)}
+\end{aligned}
+$$
+
+--
+
+<br><br>
+
+Although being an extremely .hi-blue[simple] definition, it has far-reaching *applications* and *possibilities.*
+
+---
+
+layout: false
+class: inverse, middle
+
+# An application
+
+
+---
+
+# An application
+
+Based on survey data, [`CNBC ran a study last Summer regarding vaccine mandates`](https://www.cnbc.com/2021/08/04/americans-are-sharply-divided-over-vaccine-mandates-cnbc-survey-shows.html).
+
+--
+
+With a sample size (*n*) of 802 individuals, the survey found that:
+
+  - 68% of Americans had been vaccinated;
+  
+  - Among those who had been vaccinated, 63% approved of vaccine mandates;
+  
+  - Among unvaccinated interviewees, 17% supported these mandates.
+  
+
+--
+
+<br>
+
+As a .hi[first task], set up a .hi-blue[contingency table] for these data.
+  
+  
+---
+
+# An application
+
+Based on survey data, [`CNBC ran a study last Summer regarding vaccine mandates`](https://www.cnbc.com/2021/08/04/americans-are-sharply-divided-over-vaccine-mandates-cnbc-survey-shows.html).
+
+
+
+With a sample size (*n*) of 802 individuals, the survey found that:
+
+  - 68% of Americans had been vaccinated;
+  
+  - Among those that had been vaccinated, 63% approved of vaccine mandates;
+  
+  - Among unvaccinated interviewees, 17% supported these mandates.
+  
+
+
+
+<br>
+
+.hi[Secondly], given that an individual .hi-blue[supports] a vaccine mandate, what is the probability that they .hi-blue[are vaccinated]?
+
+---
+
+layout: false
+class: inverse, middle
+
+# The law of total probability
+
+---
+
+# The law of total probability
+
+Without explicitly calling for it, in the previous exercise, you have applied the .hi[Law of Total Probability].
+
+--
+
+It directly follows from the definition of .hi-blue[conditional probability] that
+
+
+$$
+\begin{aligned}
+P(A \cap B) = P(B)P(A|B) = P(A)P(B|A)
+\end{aligned}
+$$
+
+<br>
+
+--
+
+Then, suppose the set of events $\{A_1, A_2, A_3, ..., A_k\}$ partition the sample space $S$. For any event $B \subseteq S$
+
+$$
+\begin{aligned}
+B =  \bigcup_{i=1}^{k} (B \cap A_i) = (B \cap A_1) \ \cup \ (B \cap A_2) \ \cup \ ... \ \cup \ (B \cap A_k)
+\end{aligned}
+$$
+--
+
+For pairwise .hi-blue[disjoint] events,
+
+$$
+\begin{aligned}
+P(B) =  \sum_{i=1}^{k} P(B \cap A_i) = \sum_{i=1}^{k} P(B|A_i)P(A_i)
+\end{aligned}
+$$
+
+---
+
+# The law of total probability
+
+
+In case we have the simple partition $\{A, A^C\}$, the .hi[Law of Total Probability] looks like
+
+$$
+\begin{aligned}
+P(B) =  P(B \cap A) + P(B \cap A^C) = P(A)P(B|A) + P(A^C)P(B|A^C)
+\end{aligned}
+$$
+--
+
+<br>
+
+Therefore, the .hi[LTP] is useful when we want to compute an .hi-blue[unconditional] probability, such as *P(B)*, and the only available information are conditional probabilities, *P*(B|A<sub>i</sub>).
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Bayes' Theorem 
+
+---
+
+# Bayes' Theorem
+
+Another thing that you have done was to use .hi-blue[Bayes' Theorem] without calling for it.
+
+--
+
+It is defined by
+
+$$
+\begin{aligned}
+P(A|B) = \dfrac{P(A) \ P(B | A)}{P(B)}
+\end{aligned}
+$$
+
+<br>
+
+--
+
+It tells us that the .hi-blue[posterior] probability of *A*, in light of information *B*, *P(A|B)*, is given by 
+
+  - The .hi[prior] probability of *A*, *P(A)*;
+  
+  - The .hi-blue[chances] of observing data *B* if *A* occurs, *P(B|A)*<sup>1</sup>;
+  
+  - The .hi-green[overall] chance of observing *B*, *P(B)*.
+  
+.footnote[1: This part is also called the .hi[likelihood].]
+
+---
+
+# Bayes' Theorem
+
+
+
+
+$$
+\begin{aligned}
+P(A|B) = \dfrac{P(A) \ P(B | A)}{P(B)}
+\end{aligned}
+$$
+
+<br>
+
+This theorem is extremely useful when we want to know the *conditional* probability *P(A|B)*, but only have knowledge of the *reverse conditional*, *P(B|A)*.
+
+--
+
+<br><br>
+
+As we will explore in detail in future lectures, the above theorem is the foundation of .hi-slate[Bayesian Statistics].
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Random variables and probability distributions
+
+
+---
+exclude: true

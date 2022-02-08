@@ -1,0 +1,523 @@
+---
+title: ".b[ECON 3640--001]"
+subtitle: ".hi[Problem Set 1 - Solutions]"
+author: ".b[Marcio Santetti] <br> Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'a-css.css']
+    # self_contained: true
+    nature:
+      ratio: '8.5:11'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+layout: true
+class: clear
+---
+
+## Problem 1
+
+<br>
+
+With your own words, define and give an example of each of the following statistical terms.
+
+
+
+(a) Population;
+
+(b) Sample;
+
+(c) Parameter;
+
+(d) Statistic.
+
+
+.b[.mono[ANSWER]]: Suppose we want to compute the average course evaluations (ranging from 0 to 10) from *all* students at the University of Utah. This is our **population** of interest. However, it may be very costly (in terms of time, budget, and response rates) to obtain replies from each student. Thus, we may select a **sample** of 200 students from each school/department, and run a survey with them. The population **parameter** we are interested in is the average course evaluation, but what we end up with is with this sample's **statistic**, i.e., their course evaluations. Through statistical inference, we may evaluate whether this was an apporpriate sample or not for such purpose.
+
+---
+class:clear
+
+## Problem 2
+
+<br>
+
+A student received the following letter grades on the 14 quizzes she took during a semester: *A, A-, B+, A-, A, C, A, A, A-, B, B+, C, A*, and *A*.
+
+
+(a) What is the .mono[type] of these data? Explain.
+
+.b[.mono[ANSWER]]: These are **categorical** data.
+
+
+
+(b) Use your best judgment to *illustrate* these data.
+
+.b[.mono[ANSWER]]:
+
+```{r, fig.height = 5, dev='svg', message=FALSE, warning = FALSE}
+library(tidyverse)
+library(hrbrthemes)
+
+grades <- tibble(
+  letter_grade = c("A", "A-", "B+", "A-", "A", "C", "A", "A", "A-", "B", "B+", "C", "A")
+)
+
+grades %>% 
+  count(letter_grade, sort = TRUE) %>% 
+  mutate(letter_grade = fct_reorder(letter_grade, n)) %>% 
+  ggplot(aes(y = letter_grade, x = n)) +
+  geom_col(fill = "#426386", alpha = 0.6) +
+  labs(x = "Count", y = "Letter Grade", title = "Letter grade counts") +
+  theme_ipsum()
+
+```
+
+---
+class:clear
+
+
+## Problem 3
+
+<br>
+
+A sample of 12 people was asked how much change they had in their pockets and wallets. The responses (in cents) were:
+
+.center[
+
+52 25 15 0 104 44 60 30 33 81 40 5
+]
+
+
+
+(a) Determine the *mean*, *median* and *mode* for these data. Show your calculations.
+
+.b[.mono[ANSWER]]: Sample **mean**:
+
+$$
+\begin{aligned}
+\bar{x} = \dfrac{\sum_{i = 1}^{12} x_i}{n} = \dfrac{52+25 + ... + 5}{12} = 40.8 \ \text{cents}
+\end{aligned}
+$$
+
+<br>
+
+- Sample **median**:
+
+
+
+```{r}
+change <- tibble(
+  how_much = c(52, 25, 15, 0, 104, 44, 60, 30, 33, 81, 40, 5)
+)
+
+change %>% 
+  count(how_much) # putting values in ascending order.
+
+```
+
+
+
+$$
+\begin{aligned}
+\text{Sample median} = \dfrac{33+40}{2} = 36.5 \ \text{cents}
+\end{aligned}
+$$
+<br>
+
+- Sample **mode**: No value is repeated, Thus, this data set has **no mode**.
+
+---
+class:clear
+
+(b) Determine the first, second, and third *quartiles* of these data.
+
+.b[.mono[ANSWER]]:
+
+$$
+\begin{aligned}
+L_{25} = (n+1)\dfrac{25}{100} = (13)\cdot 0.25 = 3.25
+\end{aligned}
+$$
+
+The 1st quartile lies between the 3rd (15) and 4th (25) positions (with the values in ascending order). More specifically, it lies on the 3rd location plus one-quarter of the distance between the 3rd and the 4th. Let's compute this additional distance:
+
+$$
+\begin{aligned}
+0.25 \times (25-15) = 2.5
+\end{aligned}
+$$
+
+Thus, the 1st quartile is 15 + 2.5 = .b[17.5] cents.
+
+$$
+\begin{aligned}
+L_{50} = (n+1)\dfrac{50}{100} = (13)\cdot 0.5 = 6.5
+\end{aligned}
+$$
+
+The second quartile lies between the 6th and 7th positions, which are 33 and 40, respectively.
+
+
+$$
+\begin{aligned}
+0.5 \times (40-33) = 3.5
+\end{aligned}
+$$
+
+Thus, the second quartile (Q2) is 33 + 3.5 = **36.5** cents. Not surprisingly, it equals the sample **median**.
+
+$$
+\begin{aligned}
+L_{75} = (n+1)\dfrac{75}{100} = (13)\cdot 0.75 = 9.75
+\end{aligned}
+$$
+
+The third quartile lies between the 9th and 10th positions, which are 52 and 60, respectively.
+
+$$
+\begin{aligned}
+0.75 \times (60-52) = 6
+\end{aligned}
+$$
+
+Thus, the third quartile (Q3) is 52 + 6 = **58** cents.
+
+<br>
+
+
+.hi[IIMPORTANT]: .mono[R] locates percentiles using a different **method**. Above, we used the methodology seen in class. But you may try the following in .mono[R]:
+
+```{r}
+change %>% 
+  summarize(quartiles = quantile(how_much))
+```
+
+The median value remains the same. However, for Q1 and Q3, .mono[R] uses a different methodology, consisting of subtracting the excess distances (2.5 for Q1 and 6 for Q3, as above) from the final position. 
+
+Thus, the `quantile` function gives 22.5 as the first quartile because it takes the 4th position, 25, and subtracts the excess distance, 2.5, from it, giving us 22.5.
+
+Similarly, the `quantile` function gives 54 as the third quartile because it takes the 10th position, 60, and subtracts the excess distance, 6, from it, giving us 54. **Both methodologies are correct, and you may choose whichever you prefer**.
+
+
+
+---
+class:clear
+
+(c) Compute the *variance* and *standard deviation* for these data. Show your calculations.
+
+.b[.mono[ANSWER]]:
+
+- Sample variance:
+
+$$
+\begin{aligned}
+s_{x}^2 =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}^2 - \dfrac{\bigg(\displaystyle\sum_{i=1}^{n}x_{i}\bigg)^2}{n} \Bigg] = \dfrac{1}{12}\Bigg[(0)^2 + (5)^2 + ... + (104)^2 - \dfrac{(489)^2}{13}\Bigg] = 923.11 \ \text{cents}^2
+\end{aligned}
+$$
+
+<br>
+
+- Sample standard deviation:
+
+$$
+\begin{aligned}
+s_{x} =  \sqrt{s^2_x} = \sqrt{923.11} = 30.38 \ \text{cents}
+\end{aligned}
+$$
+
+<br>
+
+
+(d) Draw a *box plot* for these data.
+
+.b[.mono[ANSWER]]:
+
+Notice that the first and second quartiles are obtained using the **second methodology** explained in part (b)'s answer.
+
+
+```{r, fig.height = 4, dev='svg', message=FALSE, warning = FALSE}
+change %>% 
+  ggplot(aes(x = how_much)) +
+  geom_boxplot() +
+  labs(x = "Change in people's pockets",
+       title = "How much change do people have in their pockets?") +
+  theme_ipsum()
+
+```
+
+---
+class:clear
+
+## Problem 4
+
+<br>
+
+From the `wooldridge` package, load the `mroz` data set. The data come from [`Mroz (1987)`](https://econpapers.repec.org/article/ecmemetrp/v_3a55_3ay_3a1987_3ai_3a4_3ap_3a765-99.htm). Just as with any data set from this package, its documentation contains all variable names and descriptions. Simply google "wooldridge R package" and you will find it.
+
+First, transform it into a `tibble`. Just follow the code below:
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 5}
+library(tidyverse)
+library(wooldridge)
+
+data("mroz")
+
+mroz_tibble <- mroz %>% as_tibble()
+
+```
+
+Then, answer the following questions:
+
+(a) What is the mode (i.e., most frequent) educational attainment&#8212; in years &#8212;in this sample?
+
+```{r}
+mroz_tibble %>% 
+  count(educ, sort=TRUE)
+```
+
+
+We can see that **12** years of education is the educational attainment that gets repeated the most. Therefore, this is the sample mode.
+
+---
+class: clear
+
+.b[.mono[ANSWER]]:
+
+(b) Select the first five rows of this data set and manually compute the covariance, correlation coefficient, and coefficient of determination (*R*<sup>2</sup>) between educational attainment (`educ`) and hourly earnings (`wage`). Interpret these results. **Hint**: `head(5)`.
+
+```{r}
+mroz_tibble %>% 
+  select(educ, wage) %>% 
+  head(5) # selecting the first five rows.
+```
+
+<br>
+
+.b[.mono[ANSWER]]:
+
+- Sample **covariance**:
+
+$$
+\begin{aligned}
+s_{xy} =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}y_{i} - \dfrac{\displaystyle\sum_{i=1}^{n}x_{i}\displaystyle\sum_{i=1}^{n}y_{i}}{n} \Bigg] = \dfrac{1}{4}\Bigg[[(12\times3.35)+(12\times1.39)+...+(14\times4.59)] - \dfrac{62\times15}{5}\Bigg] = 0.798
+\end{aligned}
+$$
+
+<br>
+
+- Sample **correlation**:
+
+$$
+\begin{aligned}
+r = \dfrac{s_{xy}}{s_{x}s_{y}} = \dfrac{0.798}{(0.894)\times(1.68)} = 0.532
+\end{aligned}
+$$
+<br>
+
+- Sample **R**<sup>2</sup>:
+
+$$
+\begin{aligned}
+R^2 = (0.532)^2 = 0.283 \ \text{or} \ 28.3\%
+\end{aligned}
+$$
+<br>
+
+.hi[Interpreting these 3 results]: For these 5 observations, educational attainment and wages show a positive association (given by the *covariance*), showing some linearity (given by the positive *correlation* coefficient). 28.3% of variations (changes) in wages are explained by variations (changes) in educational attainment.
+
+
+---
+class: clear
+
+
+(c) Use the most appropriate visual descriptive technique to illustrate the association between the two variables from part (b). Do not forget to make your plot informative to a wide audience (i.e., label your axes and give it a nice title).
+
+.b[.mono[ANSWER]]: Using the entire data set...
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 4}
+
+mroz_tibble %>% 
+  ggplot(aes(x = educ, y = wage)) +
+  geom_point(color = "#0091fa", alpha = 0.7, size = 1) +
+  labs(x = "Years of education",
+       y = "Hourly wages",
+       title = "Hourly wages vs. Educational attainment") +
+  theme_ipsum()
+
+```
+
+---
+class: clear
+
+## Problem 5
+
+<br>
+
+Still using the `mroz` data set, run the following:
+
+```{r}
+mroz_tibble %>% 
+  select(inlf, hours, huswage) %>% 
+  head()
+```
+
+
+
+Notice that the `inlf` variable is defined here as an integer (`int`), but what it is actually doing is serving as a *binary* indicator, which equals 1 if the woman interviewed is in the labor force, and 0 if not. Thus, if we want to use this variable for the upcoming plot, we should transform it into a factor (`fct`) class object.
+
+Just do the following:
+
+```{r}
+mroz_tibble <- mroz_tibble %>% 
+  mutate(inlf = as_factor(inlf))
+```
+
+
+and check out whether the variable is now a factor. The `as_factor()` function is part of the `tidyverse`.
+
+---
+class: clear
+
+(a) Draw a histogram of husband wages (`huswage`), comparing the difference between whether the interviewee is in the labor force or not. **Hint**: you may either use the `fill` argument within the `aes()` environment, or use the `facet_wrap()` function to do that. Interpret your results.
+
+.b[.mono[ANSWER]]:
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 4}
+
+mroz_tibble %>% 
+  ggplot(aes(x = huswage)) +
+  geom_histogram(aes(fill = inlf), color = "white") +
+  theme_ipsum()
+
+```
+
+This histogram distinguishes between women that are in the labor force and those who are not. Even though the distribution of husband wages does not change across groups, we observe a larger count of data for families where women are not in the labor force. However, the average wage is basically the same for both groups.
+
+<br>
+
+
+
+
+
+(b) In this sample, how many interviewees are in the labor force? How many aren't?
+
+.b[.mono[ANSWER]]:
+
+```{r}
+mroz_tibble %>% 
+  count(inlf, sort=TRUE)
+```
+
+428 individuals are in the labor force, while 325 are not.
+
+---
+class: clear
+
+(c) From your answer to part (b), illustrate the relative frequencies (i.e., %) for each case either with a bar or pie chart.
+
+.b[.mono[ANSWER]]:
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 4}
+library(scales)
+
+mroz_tibble %>% 
+  count(inlf, sort=TRUE) %>% 
+  mutate(lf_share = round(n/sum(n), 2)) %>% # the "round()" function rounds the decimal points.
+  ggplot(aes(y = inlf, x = lf_share)) +
+  geom_col(color = "black", alpha = 0.7) +
+  scale_x_continuous(labels = percent_format()) +
+  labs(x = "Percent",
+       y = "In the labor force?",
+       title = "Relative frequencies of labor force participation") +
+  theme_ipsum()
+```
+
+---
+class:clear
+
+## Problem 6
+
+<br>
+
+```{r, include=FALSE, echo=FALSE, message=FALSE}
+covid_cases <- read_csv("covid-cases-22.csv")
+```
+
+
+During these pandemic times, you have probably come across the `moving average` term. It simply consists of calculating a mean that is adjusted over a specified time window. For instance, a 7-day moving (or rolling) average computes the mean value of a variable over the previous 7 days, and it gets adjusted as time moves on.
+
+This application allows us to smooth out short-term oscillations in a data set. Applying this in .mono[R] is very simple, and we'll get there soon.
+
+(a) First, import the `covid-cases-22.csv` data set into your .mono[R] environment. Call it `covid_cases`.
+
+.b[.mono[ANSWER]]:
+
+```{r, message = FALSE, warning = FALSE}
+covid_cases <- read_csv("covid-cases-22.csv")
+```
+
+
+(b) Now, we need to convert the `period` column into a `date` object. It will be imported as a character (`chr`). You need to use the [`lubridate`](https://lubridate.tidyverse.org/) package, specifically built to deal with dates and times. Check out the code below:
+
+```{r, message=FALSE}
+library(lubridate) # make sure to have it installed first.
+
+covid_cases <- covid_cases %>% 
+  mutate(period = mdy(period))
+```
+
+The `mdy` function simply converts a character string defined by `d`ay-`m`onth-`y`ear into a `date` object.
+
+(c) Find out how to plot the `new_cases` variable over time using `ggplot2`.
+
+.b[.mono[ANSWER]]:
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 4}
+
+covid_cases %>% 
+  ggplot(aes(x = period, y = new_cases)) +
+  geom_line() +  # for line plots.
+  scale_y_continuous(labels = comma) +
+  theme_ipsum()
+
+```
+
+---
+class: clear
+
+
+(d) To calculate moving averages, one may use the `RcppRoll` package. Its `roll_mean()` function does the job. So, create a new column in your data set, called `new_cases_ma`, defined by the 14-day moving average for the `new_cases` series. You will use the `roll_mean()` function and 3 arguments: `n`, which is the number of days you want your moving-average window to be; `align`, which you will set equal to "right"; and `fill`, which you will set to `NA`. The latter guarantees that the first values (for which you will not be able to calculate the moving average) will be filled out with `NA` values.
+
+.b[.mono[ANSWER]]:
+
+```{r}
+library(RcppRoll)
+
+covid_cases <- covid_cases %>% 
+  mutate(new_cases_ma = roll_mean(new_cases, n = 14, align = "right", fill = NA))
+```
+
+
+
+(e) Lastly, plot this new variable from part (d) over time and compare it with your plot from part (c).
+
+
+.b[.mono[ANSWER]]:
+
+```{r, message=FALSE, warning = FALSE, dev="svg", fig.height = 4}
+
+covid_cases %>% 
+  ggplot(aes(x = period, y = new_cases_ma)) +
+  geom_line(color = "#317256", alpha = 0.6) + 
+  scale_y_continuous(labels = comma) +
+  theme_ipsum()
+
+```
+
+
+
+
+
+---
+exclude:true

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>.b[Probability Theory, pt. II]</title>
+    <title>.b[Probability Theory, pt. III]</title>
     <meta charset="utf-8" />
     <meta name="author" content="Marcio Santetti" />
-    <script src="lec06-probability-2_files/header-attrs/header-attrs.js"></script>
-    <link href="lec06-probability-2_files/remark-css/default.css" rel="stylesheet" />
-    <link href="lec06-probability-2_files/remark-css/metropolis.css" rel="stylesheet" />
-    <link href="lec06-probability-2_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <script src="lec07-probability-3_files/header-attrs/header-attrs.js"></script>
+    <link href="lec07-probability-3_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec07-probability-3_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec07-probability-3_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
     <link rel="stylesheet" href="utah-css.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# .b[Probability Theory, pt. II]
+# .b[Probability Theory, pt. III]
 ## .b[ECON 3640–001]
 ### Marcio Santetti
 ### Spring 2022
@@ -40,7 +40,7 @@ class: inverse, middle
 
 Notes based on `Blitzstein &amp; Hwang (2019)`, ch. 2
 
-  - sections 2.1 &amp; 2.2.
+  - sections 2.3 &amp; 2.4.
 
 ---
 
@@ -48,152 +48,13 @@ Notes based on `Blitzstein &amp; Hwang (2019)`, ch. 2
 
 &lt;br&gt;
 
-Last time, we started our study of probability, which is the .hi[logic of uncertainty].
-
---
+Last time, we saw that .hi[conditional probabilities] are the "*soul*" of Statistics.
 
 &lt;br&gt;
 
-Despite its different interpretations (e.g., frequentists *vs*. Bayesians), the .hi-slate[theoretical foundations] for both approaches are the same.
-
 --
 
-&lt;br&gt;
-
-Now, we use our knowledge of set theory to get to some crucial .hi-blue[properties] of probability.
-
----
-
-layout: false
-class: inverse, middle
-
-# Properties of probability
-
----
-
-# Properties of probability
-
-
-From the .hi-blue[axioms] studied last time
-
-  - *P*(&amp;#8709;) = 0;
-  - *P(S)* = 1
-  
---
-
-&lt;br&gt;
-
-We can derive the following .hi[properties of probability]:
-
-1. .b[Complement rule]: *P(A&lt;sup&gt;C&lt;/sup&gt;)* = 1 - *P(A)*
-
-2. .b[Subset rule]: If *A* &amp;#8838; *B*, then *P(A)* &amp;#8804; *P(B)*
-
-3. .b[Inclusion-exclusion rule]: *P*(*A* &amp;#8746; *B*) = *P(A)* + *P(B)* - *P*(*A* &amp;#8745; *B*)
-
-
----
-
-# Properties of probability
-
-Suppose a sample of voters&lt;sup&gt;1&lt;/sup&gt; was asked whether they voted for a .hi-blue[Democrat] (*D*) or .hi[other] candidate (*ND*) in the last election.
-
-.footnote[1: Example inspired by [`this article`](https://www.buzzfeednews.com/article/craigsilverman/fake-news-survey#.sl2NYVrQN).]
-
---
-
-Then, each interviewee was shown a .hi-slate[fake news] article. 81% of them believed in the headline. 
-
---
-
-Out of those who voted for the .hi-blue[Democrat] candidate, 30% believed in the headline.
-
---
-
-Overall, 48% of the sample vote for the .hi-blue[Democrat] candidate.
-
-
---
-
-&lt;br&gt;&lt;br&gt;
-
-Convert the above information into* probability statements* and apply the studied *properties.*
-  
----
-layout: false
-class: inverse, middle
-
-# Conditional probability
-
----
-
-# Conditional probability
-
-&lt;br&gt;
-
-Probability is a language for expressing our .hi-blue[degrees of belief] or uncertainties about events. 
-
---
-
-As .hi[new evidence] (i.e., information) is incorporated, this may affect our uncertainty about specific events.
-
---
-
-&lt;br&gt;
-
-.mono[Q]: This way, how should we .hi-blue[update] our beliefs in light of the evidence we observe?
-
---
-
-.mono[A]: Through .hi[conditional probabilities].
-
----
-
-# Conditional probability
-
-Conditional probability shows how to *incorporate* evidence into our understanding of the world in a .hi[logical], *coherent* manner.
-
---
-
-In fact, one can say that .hi-slate[all] probabilities are conditional to some degree, since there is always .hi[background knowledge] built into every probability.
-
---
-
-Suppose we .hi[have not] turned on the TV yet and our team is playing. Our assessment about the team winning can be stated as *P(W)*.
-
---
-
-We then .hi-blue[turn the TV on] and our team is *losing.*
-
---
-
-Presumably, our belief that the team will win should *decrease.* 
-
---
-
-We may denote this new probability by *P(W|TV)*.
-
---
-
-Going from *P(W)* to *P(W|TV)* means that we are .hi-blue[conditioning on] *TV*.
-
----
-
-# Conditional probability
-
-
-
-&gt; "*Conditioning is the soul of statistics*." (Blitzstein &amp; Hwang, 2019, p. 42)
-
-
-
-
-
---
-
-&lt;br&gt;
-
-If *A* and *B* are events, and *P(B)* &amp;gt; 0, then the .hi-blue[conditional probability] of *A* given *B*, denoted by *P(A|B)*, is defined as
+Recall:
 
 $$
 `\begin{aligned}
@@ -203,85 +64,196 @@ $$
 
 --
 
-where *A* is the event whose uncertainty we wish to update, and *B* is the observed evidence (information) we bring in.
+&lt;br&gt;&lt;br&gt;
 
---
-
-Before we see any new data/information, *P(A)* is our .hi[prior probability] of *A*.
-
---
-
-Consequently, *P(A|B)* is the .hi-blue[posterior probability] of *A*.
-
-
----
-
-# Conditional probability
-
-
-.hi[Important warning]: *P(A|B)* &amp;#8800; *P(B|A)*!
-
---
-
-Confusing these two quantities is called the "*prosecutor’s fallacy*."
-
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;
-
---
-
-.mono[Q]: How would a *frequentist* interpret *P(A|B)*?
-
---
-
-.mono[Q]: How would a *Bayesian* interpret *P(A|B)*?
+Although being an extremely .hi-blue[simple] definition, it has far-reaching *applications* and *possibilities.*
 
 ---
 
 layout: false
 class: inverse, middle
 
-# Independence
+# An application
+
 
 ---
 
-# Independence
+# An application
 
-Events *A* and *B* are .hi[independent] if
-
---
-
-.center[
-
-*P(A|B)* = *P(A)*
-
-]
+Based on survey data, [`CNBC ran a study last Summer regarding vaccine mandates`](https://www.cnbc.com/2021/08/04/americans-are-sharply-divided-over-vaccine-mandates-cnbc-survey-shows.html).
 
 --
 
-&lt;br&gt;
+With a sample size (*n*) of 802 individuals, the survey found that:
 
-This implies that *any knowledge* of *B* does not help/affect/inform one's belief about *A*.
+  - 68% of Americans had been vaccinated;
+  
+  - Among those who had been vaccinated, 63% approved of vaccine mandates;
+  
+  - Among unvaccinated interviewees, 17% supported these mandates.
+  
 
 --
 
 &lt;br&gt;
 
-Also, from the .hi-blue[conditional probability formula], independence implies
+As a .hi[first task], set up a .hi-blue[contingency table] for these data.
+  
+  
+---
+
+# An application
+
+Based on survey data, [`CNBC ran a study last Summer regarding vaccine mandates`](https://www.cnbc.com/2021/08/04/americans-are-sharply-divided-over-vaccine-mandates-cnbc-survey-shows.html).
 
 
-.center[
 
-*P(A &amp;#8745; B)* = *P(A)P(B)*
+With a sample size (*n*) of 802 individuals, the survey found that:
 
-]
+  - 68% of Americans had been vaccinated;
+  
+  - Among those that had been vaccinated, 63% approved of vaccine mandates;
+  
+  - Among unvaccinated interviewees, 17% supported these mandates.
+  
+
+
+
+&lt;br&gt;
+
+.hi[Secondly], given that an individual .hi-blue[supports] a vaccine mandate, what is the probability that they .hi-blue[are vaccinated]?
 
 ---
 
 layout: false
 class: inverse, middle
 
-# Next time: Law of total probability; Bayes' Theorem
+# The law of total probability
+
+---
+
+# The law of total probability
+
+Without explicitly calling for it, in the previous exercise, you have applied the .hi[Law of Total Probability].
+
+--
+
+It directly follows from the definition of .hi-blue[conditional probability] that
+
+
+$$
+`\begin{aligned}
+P(A \cap B) = P(B)P(A|B) = P(A)P(B|A)
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+--
+
+Then, suppose the set of events `\(\{A_1, A_2, A_3, ..., A_k\}\)` partition the sample space `\(S\)`. For any event `\(B \subseteq S\)`
+
+$$
+`\begin{aligned}
+B =  \bigcup_{i=1}^{k} (B \cap A_i) = (B \cap A_1) \ \cup \ (B \cap A_2) \ \cup \ ... \ \cup \ (B \cap A_k)
+\end{aligned}`
+$$
+--
+
+For pairwise .hi-blue[disjoint] events,
+
+$$
+`\begin{aligned}
+P(B) =  \sum_{i=1}^{k} P(B \cap A_i) = \sum_{i=1}^{k} P(B|A_i)P(A_i)
+\end{aligned}`
+$$
+
+---
+
+# The law of total probability
+
+
+In case we have the simple partition `\(\{A, A^C\}\)`, the .hi[Law of Total Probability] looks like
+
+$$
+`\begin{aligned}
+P(B) =  P(B \cap A) + P(B \cap A^C) = P(A)P(B|A) + P(A^C)P(B|A^C)
+\end{aligned}`
+$$
+--
+
+&lt;br&gt;
+
+Therefore, the .hi[LTP] is useful when we want to compute an .hi-blue[unconditional] probability, such as *P(B)*, and the only available information are conditional probabilities, *P*(B|A&lt;sub&gt;i&lt;/sub&gt;).
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Bayes' Theorem 
+
+---
+
+# Bayes' Theorem
+
+Another thing that you have done was to use .hi-blue[Bayes' Theorem] without calling for it.
+
+--
+
+It is defined by
+
+$$
+`\begin{aligned}
+P(A|B) = \dfrac{P(A) \ P(B | A)}{P(B)}
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+--
+
+It tells us that the .hi-blue[posterior] probability of *A*, in light of information *B*, *P(A|B)*, is given by 
+
+  - The .hi[prior] probability of *A*, *P(A)*;
+  
+  - The .hi-blue[chances] of observing data *B* if *A* occurs, *P(B|A)*&lt;sup&gt;1&lt;/sup&gt;;
+  
+  - The .hi-green[overall] chance of observing *B*, *P(B)*.
+  
+.footnote[1: This part is also called the .hi[likelihood].]
+
+---
+
+# Bayes' Theorem
+
+
+
+
+$$
+`\begin{aligned}
+P(A|B) = \dfrac{P(A) \ P(B | A)}{P(B)}
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+This theorem is extremely useful when we want to know the *conditional* probability *P(A|B)*, but only have knowledge of the *reverse conditional*, *P(B|A)*.
+
+--
+
+&lt;br&gt;&lt;br&gt;
+
+As we will explore in detail in future lectures, the above theorem is the foundation of .hi-slate[Bayesian Statistics].
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Random variables and probability distributions
+
 
 ---
 exclude: true

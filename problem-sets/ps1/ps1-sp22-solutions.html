@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[ECON 3640–001]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=".b[Marcio Santetti]   Spring 2022" />
+    <script src="ps1-sp22-solutions_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="ps1-sp22-solutions_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="ps1-sp22-solutions_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="ps1-sp22-solutions_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="a-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[ECON 3640–001]
+## .hi[Problem Set 1 - Solutions]
+### .b[Marcio Santetti] <br> Spring 2022
+
+---
+
+layout: true
+class: clear
+---
+
+## Problem 1
+
+&lt;br&gt;
+
+With your own words, define and give an example of each of the following statistical terms.
+
+
+
+(a) Population;
+
+(b) Sample;
+
+(c) Parameter;
+
+(d) Statistic.
+
+
+.b[.mono[ANSWER]]: Suppose we want to compute the average course evaluations (ranging from 0 to 10) from *all* students at the University of Utah. This is our **population** of interest. However, it may be very costly (in terms of time, budget, and response rates) to obtain replies from each student. Thus, we may select a **sample** of 200 students from each school/department, and run a survey with them. The population **parameter** we are interested in is the average course evaluation, but what we end up with is with this sample's **statistic**, i.e., their course evaluations. Through statistical inference, we may evaluate whether this was an apporpriate sample or not for such purpose.
+
+---
+class:clear
+
+## Problem 2
+
+&lt;br&gt;
+
+A student received the following letter grades on the 14 quizzes she took during a semester: *A, A-, B+, A-, A, C, A, A, A-, B, B+, C, A*, and *A*.
+
+
+(a) What is the .mono[type] of these data? Explain.
+
+.b[.mono[ANSWER]]: These are **categorical** data.
+
+
+
+(b) Use your best judgment to *illustrate* these data.
+
+.b[.mono[ANSWER]]:
+
+
+```r
+library(tidyverse)
+library(hrbrthemes)
+
+grades &lt;- tibble(
+  letter_grade = c("A", "A-", "B+", "A-", "A", "C", "A", "A", "A-", "B", "B+", "C", "A")
+)
+
+grades %&gt;% 
+  count(letter_grade, sort = TRUE) %&gt;% 
+  mutate(letter_grade = fct_reorder(letter_grade, n)) %&gt;% 
+  ggplot(aes(y = letter_grade, x = n)) +
+  geom_col(fill = "#426386", alpha = 0.6) +
+  labs(x = "Count", y = "Letter Grade", title = "Letter grade counts") +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-1-1.svg)&lt;!-- --&gt;
+
+---
+class:clear
+
+
+## Problem 3
+
+&lt;br&gt;
+
+A sample of 12 people was asked how much change they had in their pockets and wallets. The responses (in cents) were:
+
+.center[
+
+52 25 15 0 104 44 60 30 33 81 40 5
+]
+
+
+
+(a) Determine the *mean*, *median* and *mode* for these data. Show your calculations.
+
+.b[.mono[ANSWER]]: Sample **mean**:
+
+$$
+`\begin{aligned}
+\bar{x} = \dfrac{\sum_{i = 1}^{12} x_i}{n} = \dfrac{52+25 + ... + 5}{12} = 40.8 \ \text{cents}
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+- Sample **median**:
+
+
+
+
+```r
+change &lt;- tibble(
+  how_much = c(52, 25, 15, 0, 104, 44, 60, 30, 33, 81, 40, 5)
+)
+
+change %&gt;% 
+  count(how_much) # putting values in ascending order.
+```
+
+```
+## # A tibble: 12 × 2
+##    how_much     n
+##       &lt;dbl&gt; &lt;int&gt;
+##  1        0     1
+##  2        5     1
+##  3       15     1
+##  4       25     1
+##  5       30     1
+##  6       33     1
+##  7       40     1
+##  8       44     1
+##  9       52     1
+## 10       60     1
+## 11       81     1
+## 12      104     1
+```
+
+
+
+$$
+`\begin{aligned}
+\text{Sample median} = \dfrac{33+40}{2} = 36.5 \ \text{cents}
+\end{aligned}`
+$$
+&lt;br&gt;
+
+- Sample **mode**: No value is repeated, Thus, this data set has **no mode**.
+
+---
+class:clear
+
+(b) Determine the first, second, and third *quartiles* of these data.
+
+.b[.mono[ANSWER]]:
+
+$$
+`\begin{aligned}
+L_{25} = (n+1)\dfrac{25}{100} = (13)\cdot 0.25 = 3.25
+\end{aligned}`
+$$
+
+The 1st quartile lies between the 3rd (15) and 4th (25) positions (with the values in ascending order). More specifically, it lies on the 3rd location plus one-quarter of the distance between the 3rd and the 4th. Let's compute this additional distance:
+
+$$
+`\begin{aligned}
+0.25 \times (25-15) = 2.5
+\end{aligned}`
+$$
+
+Thus, the 1st quartile is 15 + 2.5 = .b[17.5] cents.
+
+$$
+`\begin{aligned}
+L_{50} = (n+1)\dfrac{50}{100} = (13)\cdot 0.5 = 6.5
+\end{aligned}`
+$$
+
+The second quartile lies between the 6th and 7th positions, which are 33 and 40, respectively.
+
+
+$$
+`\begin{aligned}
+0.5 \times (40-33) = 3.5
+\end{aligned}`
+$$
+
+Thus, the second quartile (Q2) is 33 + 3.5 = **36.5** cents. Not surprisingly, it equals the sample **median**.
+
+$$
+`\begin{aligned}
+L_{75} = (n+1)\dfrac{75}{100} = (13)\cdot 0.75 = 9.75
+\end{aligned}`
+$$
+
+The third quartile lies between the 9th and 10th positions, which are 52 and 60, respectively.
+
+$$
+`\begin{aligned}
+0.75 \times (60-52) = 6
+\end{aligned}`
+$$
+
+Thus, the third quartile (Q3) is 52 + 6 = **58** cents.
+
+&lt;br&gt;
+
+
+.hi[IIMPORTANT]: .mono[R] locates percentiles using a different **method**. Above, we used the methodology seen in class. But you may try the following in .mono[R]:
+
+
+```r
+change %&gt;% 
+  summarize(quartiles = quantile(how_much))
+```
+
+```
+## # A tibble: 5 × 1
+##   quartiles
+##       &lt;dbl&gt;
+## 1       0  
+## 2      22.5
+## 3      36.5
+## 4      54  
+## 5     104
+```
+
+The median value remains the same. However, for Q1 and Q3, .mono[R] uses a different methodology, consisting of subtracting the excess distances (2.5 for Q1 and 6 for Q3, as above) from the final position. 
+
+Thus, the `quantile` function gives 22.5 as the first quartile because it takes the 4th position, 25, and subtracts the excess distance, 2.5, from it, giving us 22.5.
+
+Similarly, the `quantile` function gives 54 as the third quartile because it takes the 10th position, 60, and subtracts the excess distance, 6, from it, giving us 54. **Both methodologies are correct, and you may choose whichever you prefer**.
+
+
+
+---
+class:clear
+
+(c) Compute the *variance* and *standard deviation* for these data. Show your calculations.
+
+.b[.mono[ANSWER]]:
+
+- Sample variance:
+
+$$
+`\begin{aligned}
+s_{x}^2 =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}^2 - \dfrac{\bigg(\displaystyle\sum_{i=1}^{n}x_{i}\bigg)^2}{n} \Bigg] = \dfrac{1}{12}\Bigg[(0)^2 + (5)^2 + ... + (104)^2 - \dfrac{(489)^2}{13}\Bigg] = 923.11 \ \text{cents}^2
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+- Sample standard deviation:
+
+$$
+`\begin{aligned}
+s_{x} =  \sqrt{s^2_x} = \sqrt{923.11} = 30.38 \ \text{cents}
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+
+(d) Draw a *box plot* for these data.
+
+.b[.mono[ANSWER]]:
+
+Notice that the first and second quartiles are obtained using the **second methodology** explained in part (b)'s answer.
+
+
+
+```r
+change %&gt;% 
+  ggplot(aes(x = how_much)) +
+  geom_boxplot() +
+  labs(x = "Change in people's pockets",
+       title = "How much change do people have in their pockets?") +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-4-1.svg)&lt;!-- --&gt;
+
+---
+class:clear
+
+## Problem 4
+
+&lt;br&gt;
+
+From the `wooldridge` package, load the `mroz` data set. The data come from [`Mroz (1987)`](https://econpapers.repec.org/article/ecmemetrp/v_3a55_3ay_3a1987_3ai_3a4_3ap_3a765-99.htm). Just as with any data set from this package, its documentation contains all variable names and descriptions. Simply google "wooldridge R package" and you will find it.
+
+First, transform it into a `tibble`. Just follow the code below:
+
+
+```r
+library(tidyverse)
+library(wooldridge)
+
+data("mroz")
+
+mroz_tibble &lt;- mroz %&gt;% as_tibble()
+```
+
+Then, answer the following questions:
+
+(a) What is the mode (i.e., most frequent) educational attainment&amp;#8212; in years &amp;#8212;in this sample?
+
+
+```r
+mroz_tibble %&gt;% 
+  count(educ, sort=TRUE)
+```
+
+```
+## # A tibble: 13 × 2
+##     educ     n
+##    &lt;int&gt; &lt;int&gt;
+##  1    12   381
+##  2    16    57
+##  3    14    51
+##  4    17    46
+##  5    10    44
+##  6    13    44
+##  7    11    43
+##  8     8    30
+##  9     9    25
+## 10    15    14
+## 11     7     8
+## 12     6     6
+## 13     5     4
+```
+
+
+We can see that **12** years of education is the educational attainment that gets repeated the most. Therefore, this is the sample mode.
+
+---
+class: clear
+
+.b[.mono[ANSWER]]:
+
+(b) Select the first five rows of this data set and manually compute the covariance, correlation coefficient, and coefficient of determination (*R*&lt;sup&gt;2&lt;/sup&gt;) between educational attainment (`educ`) and hourly earnings (`wage`). Interpret these results. **Hint**: `head(5)`.
+
+
+```r
+mroz_tibble %&gt;% 
+  select(educ, wage) %&gt;% 
+  head(5) # selecting the first five rows.
+```
+
+```
+## # A tibble: 5 × 2
+##    educ  wage
+##   &lt;int&gt; &lt;dbl&gt;
+## 1    12  3.35
+## 2    12  1.39
+## 3    12  4.55
+## 4    12  1.10
+## 5    14  4.59
+```
+
+&lt;br&gt;
+
+.b[.mono[ANSWER]]:
+
+- Sample **covariance**:
+
+$$
+`\begin{aligned}
+s_{xy} =  \dfrac{1}{n-1}\Bigg[\displaystyle\sum_{i=1}^{n}x_{i}y_{i} - \dfrac{\displaystyle\sum_{i=1}^{n}x_{i}\displaystyle\sum_{i=1}^{n}y_{i}}{n} \Bigg] = \dfrac{1}{4}\Bigg[[(12\times3.35)+(12\times1.39)+...+(14\times4.59)] - \dfrac{62\times15}{5}\Bigg] = 0.798
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+- Sample **correlation**:
+
+$$
+`\begin{aligned}
+r = \dfrac{s_{xy}}{s_{x}s_{y}} = \dfrac{0.798}{(0.894)\times(1.68)} = 0.532
+\end{aligned}`
+$$
+&lt;br&gt;
+
+- Sample **R**&lt;sup&gt;2&lt;/sup&gt;:
+
+$$
+`\begin{aligned}
+R^2 = (0.532)^2 = 0.283 \ \text{or} \ 28.3\%
+\end{aligned}`
+$$
+&lt;br&gt;
+
+.hi[Interpreting these 3 results]: For these 5 observations, educational attainment and wages show a positive association (given by the *covariance*), showing some linearity (given by the positive *correlation* coefficient). 28.3% of variations (changes) in wages are explained by variations (changes) in educational attainment.
+
+
+---
+class: clear
+
+
+(c) Use the most appropriate visual descriptive technique to illustrate the association between the two variables from part (b). Do not forget to make your plot informative to a wide audience (i.e., label your axes and give it a nice title).
+
+.b[.mono[ANSWER]]: Using the entire data set...
+
+
+```r
+mroz_tibble %&gt;% 
+  ggplot(aes(x = educ, y = wage)) +
+  geom_point(color = "#0091fa", alpha = 0.7, size = 1) +
+  labs(x = "Years of education",
+       y = "Hourly wages",
+       title = "Hourly wages vs. Educational attainment") +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-8-1.svg)&lt;!-- --&gt;
+
+---
+class: clear
+
+## Problem 5
+
+&lt;br&gt;
+
+Still using the `mroz` data set, run the following:
+
+
+```r
+mroz_tibble %&gt;% 
+  select(inlf, hours, huswage) %&gt;% 
+  head()
+```
+
+```
+## # A tibble: 6 × 3
+##    inlf hours huswage
+##   &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1     1  1610    4.03
+## 2     1  1656    8.44
+## 3     1  1980    3.58
+## 4     1   456    3.54
+## 5     1  1568   10   
+## 6     1  2032    6.71
+```
+
+
+
+Notice that the `inlf` variable is defined here as an integer (`int`), but what it is actually doing is serving as a *binary* indicator, which equals 1 if the woman interviewed is in the labor force, and 0 if not. Thus, if we want to use this variable for the upcoming plot, we should transform it into a factor (`fct`) class object.
+
+Just do the following:
+
+
+```r
+mroz_tibble &lt;- mroz_tibble %&gt;% 
+  mutate(inlf = as_factor(inlf))
+```
+
+
+and check out whether the variable is now a factor. The `as_factor()` function is part of the `tidyverse`.
+
+---
+class: clear
+
+(a) Draw a histogram of husband wages (`huswage`), comparing the difference between whether the interviewee is in the labor force or not. **Hint**: you may either use the `fill` argument within the `aes()` environment, or use the `facet_wrap()` function to do that. Interpret your results.
+
+.b[.mono[ANSWER]]:
+
+
+```r
+mroz_tibble %&gt;% 
+  ggplot(aes(x = huswage)) +
+  geom_histogram(aes(fill = inlf), color = "white") +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-11-1.svg)&lt;!-- --&gt;
+
+This histogram distinguishes between women that are in the labor force and those who are not. Even though the distribution of husband wages does not change across groups, we observe a larger count of data for families where women are not in the labor force. However, the average wage is basically the same for both groups.
+
+&lt;br&gt;
+
+
+
+
+
+(b) In this sample, how many interviewees are in the labor force? How many aren't?
+
+.b[.mono[ANSWER]]:
+
+
+```r
+mroz_tibble %&gt;% 
+  count(inlf, sort=TRUE)
+```
+
+```
+## # A tibble: 2 × 2
+##   inlf      n
+##   &lt;fct&gt; &lt;int&gt;
+## 1 1       428
+## 2 0       325
+```
+
+428 individuals are in the labor force, while 325 are not.
+
+---
+class: clear
+
+(c) From your answer to part (b), illustrate the relative frequencies (i.e., %) for each case either with a bar or pie chart.
+
+.b[.mono[ANSWER]]:
+
+
+```r
+library(scales)
+
+mroz_tibble %&gt;% 
+  count(inlf, sort=TRUE) %&gt;% 
+  mutate(lf_share = round(n/sum(n), 2)) %&gt;% # the "round()" function rounds the decimal points.
+  ggplot(aes(y = inlf, x = lf_share)) +
+  geom_col(color = "black", alpha = 0.7) +
+  scale_x_continuous(labels = percent_format()) +
+  labs(x = "Percent",
+       y = "In the labor force?",
+       title = "Relative frequencies of labor force participation") +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-13-1.svg)&lt;!-- --&gt;
+
+---
+class:clear
+
+## Problem 6
+
+&lt;br&gt;
+
+
+
+
+During these pandemic times, you have probably come across the `moving average` term. It simply consists of calculating a mean that is adjusted over a specified time window. For instance, a 7-day moving (or rolling) average computes the mean value of a variable over the previous 7 days, and it gets adjusted as time moves on.
+
+This application allows us to smooth out short-term oscillations in a data set. Applying this in .mono[R] is very simple, and we'll get there soon.
+
+(a) First, import the `covid-cases-22.csv` data set into your .mono[R] environment. Call it `covid_cases`.
+
+.b[.mono[ANSWER]]:
+
+
+```r
+covid_cases &lt;- read_csv("covid-cases-22.csv")
+```
+
+
+(b) Now, we need to convert the `period` column into a `date` object. It will be imported as a character (`chr`). You need to use the [`lubridate`](https://lubridate.tidyverse.org/) package, specifically built to deal with dates and times. Check out the code below:
+
+
+```r
+library(lubridate) # make sure to have it installed first.
+
+covid_cases &lt;- covid_cases %&gt;% 
+  mutate(period = mdy(period))
+```
+
+The `mdy` function simply converts a character string defined by `d`ay-`m`onth-`y`ear into a `date` object.
+
+(c) Find out how to plot the `new_cases` variable over time using `ggplot2`.
+
+.b[.mono[ANSWER]]:
+
+
+```r
+covid_cases %&gt;% 
+  ggplot(aes(x = period, y = new_cases)) +
+  geom_line() +  # for line plots.
+  scale_y_continuous(labels = comma) +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-17-1.svg)&lt;!-- --&gt;
+
+---
+class: clear
+
+
+(d) To calculate moving averages, one may use the `RcppRoll` package. Its `roll_mean()` function does the job. So, create a new column in your data set, called `new_cases_ma`, defined by the 14-day moving average for the `new_cases` series. You will use the `roll_mean()` function and 3 arguments: `n`, which is the number of days you want your moving-average window to be; `align`, which you will set equal to "right"; and `fill`, which you will set to `NA`. The latter guarantees that the first values (for which you will not be able to calculate the moving average) will be filled out with `NA` values.
+
+.b[.mono[ANSWER]]:
+
+
+```r
+library(RcppRoll)
+
+covid_cases &lt;- covid_cases %&gt;% 
+  mutate(new_cases_ma = roll_mean(new_cases, n = 14, align = "right", fill = NA))
+```
+
+
+
+(e) Lastly, plot this new variable from part (d) over time and compare it with your plot from part (c).
+
+
+.b[.mono[ANSWER]]:
+
+
+```r
+covid_cases %&gt;% 
+  ggplot(aes(x = period, y = new_cases_ma)) +
+  geom_line(color = "#317256", alpha = 0.6) + 
+  scale_y_continuous(labels = comma) +
+  theme_ipsum()
+```
+
+![](ps1-sp22-solutions_files/figure-html/unnamed-chunk-19-1.svg)&lt;!-- --&gt;
+
+
+
+
+
+---
+exclude:true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "8.5:11",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
