@@ -38,6 +38,10 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/05-probability-1/lec05-probability-1.html)
 
+**Lecture 6: Probability Theory II (properties and conditional probability)**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/06-probability-2/lec06-probability-2.html)
+
 ## R Code
 
 1. [Descriptive Statistics (data wrangling & plotting)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/01-descriptive-stats/01-descriptive-stats.R)
