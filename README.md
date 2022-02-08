@@ -22,7 +22,7 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/01-intro/lec01-introduction.html)
 
 
-**Lecture 2: Descriptive Statistics I (graphical techniques)**
+**Lecture 2: Descriptive Statistics I (types of data; graphical techniques)**
 
    - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/02-descriptive/lec02-descriptive-stats.html#1)
 
@@ -35,7 +35,7 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/04-descriptive-3/lec04-descriptive-3.html)
 
 
-**Lecture 5: Probability Theory I (definitions, set theory, axioms)**
+**Lecture 5: Probability Theory I (definitions; set theory; axioms)**
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/05-probability-1/lec05-probability-1.html)
 
@@ -43,7 +43,7 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/06-probability-2/lec06-probability-2.html)
 
-**Lecture 7: Probability Theory III (LOTP, Bayes' Theorem)**
+**Lecture 7: Probability Theory III (LOTP; Bayes' Theorem)**
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/07-probability-3/lec07-probability-3.html)
 
