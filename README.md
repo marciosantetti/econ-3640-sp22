@@ -22,15 +22,15 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/01-intro/lec01-introduction.html)
 
 
-**Lecture 2: Descriptive Statistics I**
+**Lecture 2: Descriptive Statistics I (graphical techniques)**
 
    - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/02-descriptive/lec02-descriptive-stats.html#1)
 
-**Lecture 3: Descriptive Statistics II**
+**Lecture 3: Descriptive Statistics II (measures of central location, variability, relative standing)**
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/03-descriptive-2/lec03-descriptive-2.html)
 
-**Lecture 4: Descriptive Statistics III**
+**Lecture 4: Descriptive Statistics III (bivariate descriptive techniques)**
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/04-descriptive-3/lec04-descriptive-3.html)
 
