@@ -14,7 +14,7 @@ ECON 3640-001: Probability &amp; Statistical Inference (Spring 2022), taught at 
 
 ## Lecture slides
 
-Note: Slides created with the `xaringan` *R* package, with templates mainly inspired by [Ed Rubin](https://github.com/edrubin)'s notes.
+Note: Slides created with the `xaringan` *R* package, with templates mainly inspired by [Ed Rubin](https://github.com/edrubin)'s CSS file.
 
 
 **Lecture 1: What is the course about?**
