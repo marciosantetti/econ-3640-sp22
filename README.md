@@ -47,6 +47,18 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/07-probability-3/lec07-probability-3.html)
 
+**Lecture 8: Random Variables I (discrete RVs)**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/08-rvs-1/lec08-rvs-1.html)
+  
+**Lecture 9: Random Variables II (continuous RVs)**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/09-rvs-2/lec09-rvs-2.html)
+
+**Lecture 10: Random Variables III (Expected Value, Variance of RVs)**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/10-rvs-3/lec10-rvs-3.html)
+
 ## R Code
 
 1. [Descriptive Statistics (data wrangling & plotting)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/01-descriptive-stats/01-descriptive-stats.R)
