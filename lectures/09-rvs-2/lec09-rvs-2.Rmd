@@ -1,0 +1,396 @@
+---
+title: ".b[Random Variables, pt. II]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Keller (2009)`, ch. 8
+
+---
+
+# From discrete to continuous
+
+Last week, we were introduced to .hi[random variables].
+
+--
+
+The starting point was to study .hi-blue[discrete] outcomes
+
+  - That is, events from experiments that can be .hi-slate[listed].
+  
+--
+
+<br>
+
+However, in many cases one is .hi[not able] to count all possible outcomes from an experiment.
+
+--
+
+  - For instance, how much money would you like to make five years from now?
+  
+--
+
+<br>
+
+This answer is probably best given through an .hi-blue[interval], and not an exact amount.
+
+--
+
+That is where .hi-green[continuous random variables] come in.
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Continuous random variables
+
+---
+
+# Continuous random variables
+
+<br>
+
+A .hi[continuous random variable] can take on .hi-blue[any] real value in an interval.
+
+--
+
+Going back to the salary example, there is an .hi-slate[infinite] number of possible values one can think of.
+
+  - This way, .red[*the probability of each individual value is virtually 0*].
+
+--
+
+<br>
+
+Thus, the probability is best given through a .hi[range] of values.
+
+
+--
+
+Visually, this can be represented through a .hi-blue[histogram].
+
+
+---
+
+# Continuous random variables
+
+```{r, dev = "svg", fig.height = 3.5, fig.width = 9}
+data <- read_csv("cdc_data.csv")
+
+data %>% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(color = "white", fill = "#800080", binwidth = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+
+---
+
+# Continuous random variables
+
+Recall that, in a .hi[histogram], we count the number of occurrences of a range values of a variable in a predetermined .hi-blue[interval].
+
+--
+
+These intervals configure the histogram's .red[*bin size*] (or bin width).
+
+--
+
+By dividing the number of counts within each bin by the sample size, we obtain the .hi-blue[relative frequencies] of each range of values.
+
+--
+
+```{r}
+data %>% nrow()
+```
+
+
+--
+
+For instance, there are 129 values that fall within the [10 &#8212;11) interval, and 90 values within the [13 &#8212;14) interval.
+
+--
+
+  - .small[129/969 = 0.13 is the .hi[probability] that a randomly chosen poverty rate will lie .red[*between*] 10% and 10.99%.]
+  - .small[90/969 = 0.092 is the .hi[probability] that a randomly chosen poverty rate will lie .red[*between*] 13% and 13.99%.]
+
+
+
+---
+
+# Continuous random variables
+
+```{r, dev = "svg", fig.height = 4, fig.width = 9}
+data %>% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(aes(y = ..density..), color = "white", fill = "#800080", binwidth = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+---
+
+# Continuous random variables
+
+The .hi-slate[sum] of all relative frequencies must add up to 1.
+
+--
+
+In case we draw the histogram with a large number of .hi[small] bins, it is possible to .hi-blue[smooth] its edges.
+
+--
+
+This generates a .hi[density curve].
+
+--
+
+It is possible to approximate this density curve through calculus, obtaining a function *f(x)*.
+
+--
+
+*f(x)* is called a .hi-blue[probability density function].
+
+
+---
+
+# Continuous random variables
+
+```{r, dev = "svg", fig.height = 3.5, fig.width = 9}
+data %>% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(aes(y = ..density..), color = "white", fill = "#800080", binwidth = 0.1, alpha = 0.5) +
+  geom_density(alpha = .3, size = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+---
+
+# Continuous random variables
+
+```{r, dev = "svg", fig.height = 3.5, fig.width = 9}
+data %>% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(aes(y = ..density..), color = "white", fill = "#800080", binwidth = 1, alpha = 0.5) +
+  geom_density(alpha = .3, size = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+
+---
+
+# Continuous random variables
+
+A *probability density function* (.hi-blue[PDF]) whose range is *a &le; x &le; b* must fulfill the following two .hi-slate[requirements]:
+
+  1. *f(x)* &ge; 0 for all *x* between *a* and *b*;
+  
+  2. The total *area* under the curve between a and b is 1.
+  
+--
+
+<br>
+
+Just as with discrete RVs, some random variables show such *specific behaviors* that they can be put into certain categories of PDFs.
+
+--
+
+We will study .hi[two] of the most popular .red[*continuous probability distributions*]:
+
+  - The .hi-blue[Uniform];
+  
+  - And the .hi-blue[Normal] (Gaussian) distribution.
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The Uniform distribution
+
+---
+
+# The Uniform distribution
+
+The .hi-blue[Uniform] (*aka* rectangular) distribution is useful when a random variable is .hi[uniformly] or .hi[equally likely] to take on *any value* in a given range.
+
+--
+
+```{r, echo=FALSE, fig.height = 4.5, fig.width = 9, dev = "svg"}
+curve(dunif(x, min = 0, max = 10),
+      main = "A uniformy distributed RV",
+      ylab = "Density")
+```
+
+
+
+
+
+---
+
+# The Uniform distribution
+
+<br><br>
+
+Its .hi-blue[probability density function (PDF)] is given by:
+
+$$
+\begin{aligned}
+f(x) = \dfrac{1}{b-a}
+\end{aligned}
+$$
+
+
+where *a &le; x &le; b*.
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# The Normal distribution
+
+
+---
+
+# The Normal distribution
+
+
+The .hi-blue[Normal] (*aka* Gaussian) distribution is the .hi[most popular] probability distribution in Statistics.
+
+--
+
+It is called "Normal" due to its patterns being so .red[*commonly observed*] in data.
+
+--
+
+```{r, echo=FALSE, fig.height = 4.5, fig.width = 9, dev = "svg"}
+curve(dnorm(x, mean = 0, sd = 1),
+      main = "A normally distributed RV",
+      ylab = "Density",
+      xlim = c(-3.5, 3.5))
+```
+
+---
+
+# The Normal distribution
+
+<br><br>
+
+Its .hi-blue[probability density function (PDF)] is given by:
+
+
+
+$$
+\begin{aligned}
+f(x) = \dfrac{1}{\sigma \sqrt{2\pi}}e^{\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \ ; \ -\infty <x< \infty
+\end{aligned}
+$$
+
+--
+
+<br>
+
+As it is possible to see from the formula, the Normal distribution is described by .hi[two parameters]:
+
+  1. The population .hi-blue[mean], &mu;;
+  
+  2. And the population .hi-blue[standard deviation], &sigma;.
+  
+
+---
+
+# The Normal distribution
+
+```{r, echo=FALSE, fig.height = 5.5, fig.width = 9, dev = "svg"}
+curve(dnorm(x, mean = 0, sd = 1), xlim = c(-5, 5), col = "#1478a7", lwd = 2,
+      ylab = "Density",
+      main = "Different means, same SD")
+curve(dnorm(x, mean = 1, sd = 1), add = TRUE, col = "#701718", lwd = 2)
+curve(dnorm(x, mean = -1, sd = 1), add = TRUE, col = '#809b94', lwd = 2)
+
+```
+
+---
+
+# The Normal distribution
+
+```{r, echo=FALSE, fig.height = 5.5, fig.width = 9, dev = "svg"}
+curve(dnorm(x, mean = 0, sd = 1), xlim = c(-5, 5), col = "#1478a7", lwd = 2,
+      ylab = "Density",
+      main = "Same means, different SDs")
+curve(dnorm(x, mean = 0, sd = 2), add = TRUE, col = "#701718", lwd = 2)
+curve(dnorm(x, mean = 0, sd = 3), add = TRUE, col = '#809b94', lwd = 2)
+
+```
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Dealing with continuous distributions
+
+
+---
+exclude: true

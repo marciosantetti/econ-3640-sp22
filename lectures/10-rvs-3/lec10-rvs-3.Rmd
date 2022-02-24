@@ -1,0 +1,558 @@
+---
+title: ".b[Random Variables, pt. III]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Keller (2009)`, ch. 7
+
+  - pp. 222&mdash;225.
+
+---
+
+# What else do we need?
+
+By now, we know what a .hi[probability distribution] is.
+
+--
+
+One of its uses is to give us information about the .hi-blue[probability] that a random variable  will be .red[*equal*] to some value *x*; or will lie .red[*between*] values *a* and *b*, or will be .red[*greater*] than *c*, and so on.
+
+--
+
+Another use of probability distributions is to express .hi-green[degrees of uncertainty/belief] in visual and probabilistic terms.
+
+  - Later!
+  
+--
+
+But many times, our goal is to simply .hi-blue[summarize] key pieces of information from a distribution.
+
+--
+
+  - Hello again, .red[*summary statistics*]!
+
+---
+
+layout: false
+class: inverse, middle
+
+# Expected Value
+
+---
+
+# Expected Value
+
+We already know what a .red[*population*] or .red[*sample*] means are.
+
+--
+
+The way we use these concept is through an *arithmetic* mean of from a list of values.
+
+--
+
+Thus, given a list of values $\{x_1, x_2, x_3, ..., x_n\}$, the arithmetic mean is defined by 
+
+$$
+\begin{aligned}
+\bar{x} = \dfrac{1}{n}\sum_{i=1}^{n}x_i
+\end{aligned}
+$$
+--
+
+A more .hi[general] definition of a mean is a .hi-slate[weighted average]:
+
+$$
+\begin{aligned}
+\text{weighted-mean}(x) = \sum_{i=1}^{n}x_ip_i
+\end{aligned}
+$$
+
+where $p_i = p_1, p_2,..., p_n$ are *predetermined* nonnegative numbers (weights) that add up to 1.
+
+  - What is $p_i$ in the arithmetic mean formula?
+
+---
+
+# Expected Value
+
+When we are dealing with .hi-blue[random variables], we use the concept of a weighted average to calculate its .hi[expected value (EV)]:
+
+--
+
+> The **expected value** (*aka* the *expectation* or *mean*) of a random variable *X* whose possible values are *x<sub>1</sub>*, *x<sub>2</sub>*,..., *x<sub>n</sub>* is defined by
+
+--
+
+$$
+\begin{aligned}
+E(X) = \sum_{all \ x} x \ P(X=x) \ \ \ \ \  \text{(Discrete RVs)}
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+E(X) = \int_{all \ x} x \ P(X=x) \  dx\ \ \ \ \  \text{(Continuous RVs)}
+\end{aligned}
+$$
+
+--
+
+<br>
+
+.hi-slate[Intuitively], the expected value of *X* is a weighted average of the possible values that *X* can take on, .hi[weighted by their probabilities]. *E(X)* measures the .hi-blue[trend] or .hi-blue[long-run] average of *X*.
+
+
+---
+
+
+# Expected Value
+
+<br>
+
+From the .red[*definition*] of expected value, we see that it depends only on the .hi[distribution] of *X*.
+
+--
+
+Therefore, if we have two different random variables, *X* and *Y*, with the .hi-blue[same distribution], then
+
+<br>
+
+$$
+\begin{aligned}
+E(X) = E(Y)
+\end{aligned}
+$$
+--
+
+<br>
+
+However, the .hi[converse] of the above statement is *not true*.
+
+--
+
+  - Why?
+
+---
+
+layout: false
+class: inverse, middle
+
+# Variability
+
+
+---
+
+# Variability
+
+The expected value informs the .hi[center] of mass of a distribution.
+
+--
+
+However, it does not tell us how .hi-slate[spread out] the distribution is.
+
+--
+
+> The .red[*variance*] of a random variable *X* is given by
+
+
+$$
+\begin{aligned}
+Var(X) = E(X - E(X))^2  \ \ \ \ \text{or}
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+Var(X) = E(X^2) - [E(X)]^2
+\end{aligned}
+$$
+
+--
+
+<br>
+
+And the .hi-blue[standard deviation] of a random variable is
+
+
+$$
+\begin{aligned}
+SD(X) = \sqrt{Var(X)}
+\end{aligned}
+$$
+---
+
+
+layout: false
+class: inverse, middle
+
+# Properties of Expected Value and Variance
+
+
+---
+
+# Properties of Expected Value and Variance
+
+Many times, we work with random variables that are .hi[functions of] other random variables.
+
+--
+
+We can .hi-green[easily] calculate the expected value and variance measures when this is the case.
+
+--
+
+<br>
+
+.pull-left[
+
+*E(c) = c*
+
+*E(X + c) = E(X) + c*
+
+*E(cX) = cE(X)*
+
+
+]
+
+.pull-right[
+
+*Var(c) = 0*
+
+*Var(X + c) = Var(X)*
+
+*Var(cX) = c<sup>2</sup> Var(X)*
+
+
+
+]
+
+<br><br>
+
+where *c* is a constant.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Pictures
+
+
+---
+
+# Pictures
+
+Recall the example seen in class of a .b[binomial random variable] (students guessing answers in a multiple-choice quiz).
+
+--
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+set.seed(123)
+
+xb <- rbinom(n = 10, size = 10, prob = 0.2)
+
+xb <- xb %>% as_tibble()
+
+p1 <- xb %>% 
+  ggplot(aes(value)) +
+  geom_histogram(color = "white", binwidth = 1) +
+  expand_limits(x = c(0, 10)) +
+  labs(x = "Number of correct guesses",
+       title = "Histogram") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p2 <- xb %>% 
+  count(value, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(y = pct, x = value)) +
+  geom_point() +
+  geom_segment(aes(x = value, xend = value, y = 0, yend = pct)) +
+  expand_limits(x = c(0, 10)) +
+  labs(x = "x",
+       y = "P(X = x)",
+       title = "PMF") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p1 | p2
+
+
+```
+
+
+---
+
+# Pictures
+
+Now, highlighting the expected value (.hi[red] vertical line):
+
+
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+set.seed(123)
+
+xb <- rbinom(n = 10, size = 10, prob = 0.2)
+
+xb <- xb %>% as_tibble()
+
+p1 <- xb %>% 
+  ggplot(aes(value)) +
+  geom_histogram(color = "white", binwidth = 1) +
+  expand_limits(x = c(0, 10)) +
+  labs(x = "Number of correct guesses",
+       title = "Histogram") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p2 <- xb %>% 
+  count(value, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(y = pct, x = value)) +
+  geom_point() +
+  geom_segment(aes(x = value, xend = value, y = 0, yend = pct)) +
+  expand_limits(x = c(0, 10)) +
+  geom_vline(xintercept = 2.4, size = 1.5, color = 'firebrick', alpha = 0.5) +
+  labs(x = "x",
+       y = "P(X = x)",
+       title = "PMF") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p1 | p2
+
+
+```
+
+---
+
+# Pictures
+
+Now, suppose $X \sim \text{Binom}(100, 0.25)$:
+
+--
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+set.seed(123)
+
+x <- rbinom(n = 1000, size = 100, prob = 0.25)
+
+x <- x %>% as_tibble()
+
+
+p3 <- x %>% 
+  count(value, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(y = pct, x = value)) +
+  geom_point() +
+  geom_segment(aes(x = value, xend = value, y = 0, yend = pct)) +
+  expand_limits(x = c(0, 60)) +
+  geom_vline(xintercept = 25, size = 1.5, color = 'firebrick', alpha = 0.5) +
+  labs(x = "x",
+       y = "P(X = x)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p4 <- x %>% 
+  ggplot(aes(value)) +
+  geom_histogram(color = "white", binwidth = 1) +
+  labs(x = "Number of successes") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p4 | p3
+
+
+```
+
+
+---
+
+# Pictures
+
+
+Assume a Poisson-distributed RV, $X \sim \text{Pois}(1.5)$:
+
+--
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+set.seed(123)
+
+
+xp <- rpois(n = 10000, lambda = 1.5)
+
+xp <- xp %>% as_tibble()
+
+
+p5 <- xp %>% 
+  count(value, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(y = pct, x = value)) +
+  geom_point() +
+  geom_segment(aes(x = value, xend = value, y = 0, yend = pct)) +
+  expand_limits(x = c(0, 15)) +
+  geom_vline(xintercept = 1.49, size = 1.5, color = 'firebrick', alpha = 0.5) +
+  labs(x = "x",
+       y = "P(X = x)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p6 <- xp %>% 
+  ggplot(aes(value)) +
+  geom_histogram(color = "white", binwidth = 1, fill = "#fa9933", alpha = 0.7) +
+  labs(x = "Number of successes") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p6 | p5
+
+
+
+```
+
+
+---
+
+# Pictures
+
+Now, assume a continuous random variable, uniformly distributed between 0 and 10: $X \sim \text{Unif}(0, 10)$.
+
+--
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+set.seed(123)
+
+
+umin <- 0
+umax <- 10
+
+ggplot(data.frame(x = c(umin, umax)), aes(x = x)) +
+  xlim(c(umin, umax)) + ylim(c(0, 0.15)) +
+  stat_function(fun = dunif, args = list(min = umin, max = umax), geom = "area", fill = "#78c8c0", alpha = 0.35) +
+  stat_function(fun = dunif, args = list(min = umin, max = umax), color = "#78c8c0", size = 1, alpha = 0.5) +
+  geom_vline(xintercept = (1/2 * (umin + umax)), color = "firebrick", alpha = 0.5, size = 1) +
+  labs(x = "x",
+       y = "f(x)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+---
+
+# Pictures
+
+Now, consider a .b[standard normally] distributed random variable: $X \sim \mathcal{N}(0, 1)$
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+min <- -3.5
+max <- 3.5
+
+ggplot(data.frame(x = c(min, max)), aes(x = x)) +
+  xlim(c(min, max)) + ylim(c(0, 0.45)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), geom = "area", fill = "#8b9dc3", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), color = "#b092b1", size = 1, alpha = 0.5) +
+  geom_vline(xintercept = 0, size = 1.5, color = "firebrick", alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+
+```
+
+---
+
+# Pictures
+
+What is the .b[difference] between these two?
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, fig.width=13}
+
+min <- -3.5
+max <- 3.5
+
+ggplot(data.frame(x = c(min, max)), aes(x = x)) +
+  xlim(c(min, max)) + ylim(c(0, 0.9)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), geom = "area", fill = "#8b9dc3", alpha = 0.5) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), color = "#b092b1", size = 1, alpha = 0.5) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = .5), geom = "area", fill = "#b00b69", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = .5), color = "#b092b1", size = 1, alpha = 0.5) +
+  geom_vline(xintercept = 0, size = 1.5, color = "firebrick", alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+
+```
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Back to .mono[R]!
+
+
+---
+exclude: true

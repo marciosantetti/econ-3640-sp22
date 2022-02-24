@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Random Variables, pt. II]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec09-rvs-2_files/header-attrs/header-attrs.js"></script>
+    <link href="lec09-rvs-2_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec09-rvs-2_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec09-rvs-2_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Random Variables, pt. II]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Keller (2009)`, ch. 8
+
+---
+
+# From discrete to continuous
+
+Last week, we were introduced to .hi[random variables].
+
+--
+
+The starting point was to study .hi-blue[discrete] outcomes
+
+  - That is, events from experiments that can be .hi-slate[listed].
+  
+--
+
+&lt;br&gt;
+
+However, in many cases one is .hi[not able] to count all possible outcomes from an experiment.
+
+--
+
+  - For instance, how much money would you like to make five years from now?
+  
+--
+
+&lt;br&gt;
+
+This answer is probably best given through an .hi-blue[interval], and not an exact amount.
+
+--
+
+That is where .hi-green[continuous random variables] come in.
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Continuous random variables
+
+---
+
+# Continuous random variables
+
+&lt;br&gt;
+
+A .hi[continuous random variable] can take on .hi-blue[any] real value in an interval.
+
+--
+
+Going back to the salary example, there is an .hi-slate[infinite] number of possible values one can think of.
+
+  - This way, .red[*the probability of each individual value is virtually 0*].
+
+--
+
+&lt;br&gt;
+
+Thus, the probability is best given through a .hi[range] of values.
+
+
+--
+
+Visually, this can be represented through a .hi-blue[histogram].
+
+
+---
+
+# Continuous random variables
+
+
+```r
+data &lt;- read_csv("cdc_data.csv")
+
+data %&gt;% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(color = "white", fill = "#800080", binwidth = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Continuous random variables
+
+Recall that, in a .hi[histogram], we count the number of occurrences of a range values of a variable in a predetermined .hi-blue[interval].
+
+--
+
+These intervals configure the histogram's .red[*bin size*] (or bin width).
+
+--
+
+By dividing the number of counts within each bin by the sample size, we obtain the .hi-blue[relative frequencies] of each range of values.
+
+--
+
+
+```r
+data %&gt;% nrow()
+```
+
+```
+#&gt; [1] 969
+```
+
+
+--
+
+For instance, there are 129 values that fall within the [10 &amp;#8212;11) interval, and 90 values within the [13 &amp;#8212;14) interval.
+
+--
+
+  - .small[129/969 = 0.13 is the .hi[probability] that a randomly chosen poverty rate will lie .red[*between*] 10% and 10.99%.]
+  - .small[90/969 = 0.092 is the .hi[probability] that a randomly chosen poverty rate will lie .red[*between*] 13% and 13.99%.]
+
+
+
+---
+
+# Continuous random variables
+
+
+```r
+data %&gt;% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(aes(y = ..density..), color = "white", fill = "#800080", binwidth = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Continuous random variables
+
+The .hi-slate[sum] of all relative frequencies must add up to 1.
+
+--
+
+In case we draw the histogram with a large number of .hi[small] bins, it is possible to .hi-blue[smooth] its edges.
+
+--
+
+This generates a .hi[density curve].
+
+--
+
+It is possible to approximate this density curve through calculus, obtaining a function *f(x)*.
+
+--
+
+*f(x)* is called a .hi-blue[probability density function].
+
+
+---
+
+# Continuous random variables
+
+
+```r
+data %&gt;% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(aes(y = ..density..), color = "white", fill = "#800080", binwidth = 0.1, alpha = 0.5) +
+  geom_density(alpha = .3, size = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Continuous random variables
+
+
+```r
+data %&gt;% 
+  ggplot(aes(poverty_rate)) +
+  geom_histogram(aes(y = ..density..), color = "white", fill = "#800080", binwidth = 1, alpha = 0.5) +
+  geom_density(alpha = .3, size = 1) +
+  labs(x = "Poverty rate in the US (1999 - 2017)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Continuous random variables
+
+A *probability density function* (.hi-blue[PDF]) whose range is *a &amp;le; x &amp;le; b* must fulfill the following two .hi-slate[requirements]:
+
+  1. *f(x)* &amp;ge; 0 for all *x* between *a* and *b*;
+  
+  2. The total *area* under the curve between a and b is 1.
+  
+--
+
+&lt;br&gt;
+
+Just as with discrete RVs, some random variables show such *specific behaviors* that they can be put into certain categories of PDFs.
+
+--
+
+We will study .hi[two] of the most popular .red[*continuous probability distributions*]:
+
+  - The .hi-blue[Uniform];
+  
+  - And the .hi-blue[Normal] (Gaussian) distribution.
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The Uniform distribution
+
+---
+
+# The Uniform distribution
+
+The .hi-blue[Uniform] (*aka* rectangular) distribution is useful when a random variable is .hi[uniformly] or .hi[equally likely] to take on *any value* in a given range.
+
+--
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+---
+
+# The Uniform distribution
+
+&lt;br&gt;&lt;br&gt;
+
+Its .hi-blue[probability density function (PDF)] is given by:
+
+$$
+`\begin{aligned}
+f(x) = \dfrac{1}{b-a}
+\end{aligned}`
+$$
+
+
+where *a &amp;le; x &amp;le; b*.
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# The Normal distribution
+
+
+---
+
+# The Normal distribution
+
+
+The .hi-blue[Normal] (*aka* Gaussian) distribution is the .hi[most popular] probability distribution in Statistics.
+
+--
+
+It is called "Normal" due to its patterns being so .red[*commonly observed*] in data.
+
+--
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Normal distribution
+
+&lt;br&gt;&lt;br&gt;
+
+Its .hi-blue[probability density function (PDF)] is given by:
+
+
+
+$$
+`\begin{aligned}
+f(x) = \dfrac{1}{\sigma \sqrt{2\pi}}e^{\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \ ; \ -\infty &lt;x&lt; \infty
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+As it is possible to see from the formula, the Normal distribution is described by .hi[two parameters]:
+
+  1. The population .hi-blue[mean], &amp;mu;;
+  
+  2. And the population .hi-blue[standard deviation], &amp;sigma;.
+  
+
+---
+
+# The Normal distribution
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Normal distribution
+
+&lt;img src="lec09-rvs-2_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Dealing with continuous distributions
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[ECON 3640–001]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=".b[Marcio Santetti]   Spring 2022" />
+    <script src="ps2-sp22_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="ps2-sp22_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="ps2-sp22_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="ps2-sp22_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="a-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[ECON 3640–001]
+## .hi[Problem Set 2]
+### .b[Marcio Santetti] <br> Spring 2022
+
+---
+
+layout: true
+class: clear
+---
+
+## Problem 1
+
+&lt;br&gt;
+
+A poll aggregator wants to combine the results of 2 different pollsters into 1 single prediction. In doing so, they take into account the track record for the 2 pollsters.
+
+  - In 30% of past elections, pollster 1’s predictions were “right” (results were within the margin of error of their prediction).
+  
+  - In 5%, both pollsters were right.
+  
+  - In 10%, pollster 1 was wrong but pollster 2 was right.
+  
+For the next election, let *A* be the event that pollster 1 is right and *B* be the event that pollster 2 is right.
+
+&lt;br&gt;
+
+(a) Write down all of the information you are given about *A* and *B* in the problem.
+
+(b) What is the probability that pollster 2 is right?
+
+(c) What is the probability that at least 1 of the 2 pollsters is right?
+
+(d) What is the probability that at least 1 is wrong?
+
+(e) Fill out a contingency table and utilize this to confirm your answers above.
+
+
+## Problem 2
+
+&lt;br&gt;
+
+Suppose one rolls two fair six-sided dice. Each one of the 36 possible outcomes is assumed to be equally likely.
+
+(a) Find the probability that doubles are rolled. Call it *P(A)*.
+
+(b) Given that the roll results in a sum of 4 or less, find the conditional probability that doubles are rolled. Call it *P(B)*.
+
+(c) Find the probability that at least one die roll is a 6. Call it *P(C)*.
+
+(d) Given that the two dice land on different numbers, find the conditional probability that at least one die roll is a 6.
+
+(e) Given that the minimum of the two rolls is equal to 3, what is the probability that the maximum of the two rolls is equal to 4?
+
+---
+class: clear
+
+
+## Problem 3
+
+&lt;br&gt;
+
+Approximately 10% of people are left-handed. If two people are selected at random, what is the probability of the following events?
+
+(a) Both are right-handed.
+
+(b) Both are left-handed.
+
+(c) One is right-handed and the other is left-handed.
+
+(d) At least one is right-handed.
+
+## Problem 4
+
+&lt;br&gt;
+
+A financial analyst estimates that the probability that the economy will experience a recession in the next 12 months is 25%. She also believes that if the economy encounters a recession, the probability that her mutual fund will increase in value is 20%. If there is no recession, the probability that the mutual fund will increase in value is 75%. Find the probability that the mutual fund’s value will increase.
+
+
+## Problem 5
+
+&lt;br&gt;
+
+Bad gums may mean a bad heart. Researchers discovered that 85% of people who have suffered a heart attack had periodontal disease, an inflammation of the gums. Only 29% of healthy people have this disease. Suppose that in a certain community heart attacks are quite rare, occurring with only 10% probability. If someone has periodontal disease, what is the probability that he or she will have a heart attack?
+
+
+## Problem 6
+
+&lt;br&gt;
+
+The mark on a statistics exam that consists of 100 multiple-choice questions is a random variable.
+
+(a) What are the possible values of this random variable? 
+
+(b) Are the values countable? Explain.
+
+(c) Is there a finite number of values? Explain.
+
+(d) Is the random variable discrete or continuous? Explain.
+
+---
+class: clear
+
+
+## Problem 7
+
+&lt;br&gt;
+
+The number of accidents that occur on a busy stretch of highway is a random variable.
+
+(a) What are the possible values of this random variable? 
+
+(b) Are the values countable? Explain.
+
+(c) Is there a finite number of values? Explain.
+
+(d) Is the random variable discrete or continuous? Explain.
+
+---
+exclude:true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "8.5:11",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

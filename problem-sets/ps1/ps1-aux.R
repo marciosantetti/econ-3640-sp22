@@ -26,6 +26,7 @@ mroz_tibble %>%
             sd_wage = sd(wage),
             covariance = cov(educ, wage),
             correlation = cor(educ, wage),
+            corr_manual = covariance / (sd_educ * sd_wage),
             r_squared = cor(educ, wage)^2 * 100)
 
 mroz_tibble %>% 

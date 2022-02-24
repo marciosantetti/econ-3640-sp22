@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Random Variables, pt. III]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec10-rvs-3_files/header-attrs/header-attrs.js"></script>
+    <link href="lec10-rvs-3_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec10-rvs-3_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec10-rvs-3_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Random Variables, pt. III]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Keller (2009)`, ch. 7
+
+  - pp. 222&amp;mdash;225.
+
+---
+
+# What else do we need?
+
+By now, we know what a .hi[probability distribution] is.
+
+--
+
+One of its uses is to give us information about the .hi-blue[probability] that a random variable  will be .red[*equal*] to some value *x*; or will lie .red[*between*] values *a* and *b*, or will be .red[*greater*] than *c*, and so on.
+
+--
+
+Another use of probability distributions is to express .hi-green[degrees of uncertainty/belief] in visual and probabilistic terms.
+
+  - Later!
+  
+--
+
+But many times, our goal is to simply .hi-blue[summarize] key pieces of information from a distribution.
+
+--
+
+  - Hello again, .red[*summary statistics*]!
+
+---
+
+layout: false
+class: inverse, middle
+
+# Expected Value
+
+---
+
+# Expected Value
+
+We already know what a .red[*population*] or .red[*sample*] means are.
+
+--
+
+The way we use these concept is through an *arithmetic* mean of from a list of values.
+
+--
+
+Thus, given a list of values `\(\{x_1, x_2, x_3, ..., x_n\}\)`, the arithmetic mean is defined by 
+
+$$
+`\begin{aligned}
+\bar{x} = \dfrac{1}{n}\sum_{i=1}^{n}x_i
+\end{aligned}`
+$$
+--
+
+A more .hi[general] definition of a mean is a .hi-slate[weighted average]:
+
+$$
+`\begin{aligned}
+\text{weighted-mean}(x) = \sum_{i=1}^{n}x_ip_i
+\end{aligned}`
+$$
+
+where `\(p_i = p_1, p_2,..., p_n\)` are *predetermined* nonnegative numbers (weights) that add up to 1.
+
+  - What is `\(p_i\)` in the arithmetic mean formula?
+
+---
+
+# Expected Value
+
+When we are dealing with .hi-blue[random variables], we use the concept of a weighted average to calculate its .hi[expected value (EV)]:
+
+--
+
+&gt; The **expected value** (*aka* the *expectation* or *mean*) of a random variable *X* whose possible values are *x&lt;sub&gt;1&lt;/sub&gt;*, *x&lt;sub&gt;2&lt;/sub&gt;*,..., *x&lt;sub&gt;n&lt;/sub&gt;* is defined by
+
+--
+
+$$
+`\begin{aligned}
+E(X) = \sum_{all \ x} x \ P(X=x) \ \ \ \ \  \text{(Discrete RVs)}
+\end{aligned}`
+$$
+
+$$
+`\begin{aligned}
+E(X) = \int_{all \ x} x \ P(X=x) \  dx\ \ \ \ \  \text{(Continuous RVs)}
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+.hi-slate[Intuitively], the expected value of *X* is a weighted average of the possible values that *X* can take on, .hi[weighted by their probabilities]. *E(X)* measures the .hi-blue[trend] or .hi-blue[long-run] average of *X*.
+
+
+---
+
+
+# Expected Value
+
+&lt;br&gt;
+
+From the .red[*definition*] of expected value, we see that it depends only on the .hi[distribution] of *X*.
+
+--
+
+Therefore, if we have two different random variables, *X* and *Y*, with the .hi-blue[same distribution], then
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+E(X) = E(Y)
+\end{aligned}`
+$$
+--
+
+&lt;br&gt;
+
+However, the .hi[converse] of the above statement is *not true*.
+
+--
+
+  - Why?
+
+---
+
+layout: false
+class: inverse, middle
+
+# Variability
+
+
+---
+
+# Variability
+
+The expected value informs the .hi[center] of mass of a distribution.
+
+--
+
+However, it does not tell us how .hi-slate[spread out] the distribution is.
+
+--
+
+&gt; The .red[*variance*] of a random variable *X* is given by
+
+
+$$
+`\begin{aligned}
+Var(X) = E(X - E(X))^2  \ \ \ \ \text{or}
+\end{aligned}`
+$$
+
+$$
+`\begin{aligned}
+Var(X) = E(X^2) - [E(X)]^2
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+And the .hi-blue[standard deviation] of a random variable is
+
+
+$$
+`\begin{aligned}
+SD(X) = \sqrt{Var(X)}
+\end{aligned}`
+$$
+---
+
+
+layout: false
+class: inverse, middle
+
+# Properties of Expected Value and Variance
+
+
+---
+
+# Properties of Expected Value and Variance
+
+Many times, we work with random variables that are .hi[functions of] other random variables.
+
+--
+
+We can .hi-green[easily] calculate the expected value and variance measures when this is the case.
+
+--
+
+&lt;br&gt;
+
+.pull-left[
+
+*E(c) = c*
+
+*E(X + c) = E(X) + c*
+
+*E(cX) = cE(X)*
+
+
+]
+
+.pull-right[
+
+*Var(c) = 0*
+
+*Var(X + c) = Var(X)*
+
+*Var(cX) = c&lt;sup&gt;2&lt;/sup&gt; Var(X)*
+
+
+
+]
+
+&lt;br&gt;&lt;br&gt;
+
+where *c* is a constant.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Pictures
+
+
+---
+
+# Pictures
+
+Recall the example seen in class of a .b[binomial random variable] (students guessing answers in a multiple-choice quiz).
+
+--
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Pictures
+
+Now, highlighting the expected value (.hi[red] vertical line):
+
+
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Pictures
+
+Now, suppose `\(X \sim \text{Binom}(100, 0.25)\)`:
+
+--
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Pictures
+
+
+Assume a Poisson-distributed RV, `\(X \sim \text{Pois}(1.5)\)`:
+
+--
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Pictures
+
+Now, assume a continuous random variable, uniformly distributed between 0 and 10: `\(X \sim \text{Unif}(0, 10)\)`.
+
+--
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Pictures
+
+Now, consider a .b[standard normally] distributed random variable: `\(X \sim \mathcal{N}(0, 1)\)`
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Pictures
+
+What is the .b[difference] between these two?
+
+&lt;img src="lec10-rvs-3_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Back to .mono[R]!
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
