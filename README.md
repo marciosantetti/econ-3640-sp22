@@ -65,3 +65,7 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
 2. [Descriptive Statistics (summary statistics)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/02-descriptive-stats-2/02-descriptive_stats-2.R)
 
+3. [Probability in practice - discrete Rvs and distributions](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/03-probability/03-probability-discrete.R)
+
+4. [Probability in practice - continuous Rvs and distributions](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/03-probability/04-probability-continuous.R)
+
