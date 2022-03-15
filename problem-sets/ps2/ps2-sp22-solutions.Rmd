@@ -1,0 +1,185 @@
+---
+title: ".b[ECON 3640--001]"
+subtitle: ".hi[Problem Set 2 - Solutions]"
+author: ".b[Marcio Santetti] <br> Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'a-css.css']
+    # self_contained: true
+    nature:
+      ratio: '8.5:11'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+layout: true
+class: clear
+---
+
+## Problem 1
+
+<br>
+
+A poll aggregator wants to combine the results of 2 different pollsters into 1 single prediction. In doing so, they take into account the track record for the 2 pollsters.
+
+  - In 30% of past elections, pollster 1’s predictions were “right” (results were within the margin of error of their prediction).
+  
+  - In 5%, both pollsters were right.
+  
+  - In 10%, pollster 1 was wrong but pollster 2 was right.
+  
+For the next election, let *A* be the event that pollster 1 is right and *B* be the event that pollster 2 is right.
+
+<br>
+
+(a) Write down all of the information you are given about *A* and *B* in the problem.
+
+.hi[ANSWER]: *P(A)* = 0.3; *P(A &cap; B)* = 0.05; *P(A<sup>C</sup> &cap; B)* = 0.1.
+
+(b) What is the probability that pollster 2 is right?
+
+.hi[ANSWER]: Pollster 2 is right when both pollsters are right and when pollster 1 is wrong and 2 is right. From the given information, we have both:
+
+*P(B)* = *P(A &cap; B)* + *P(A<sup>C</sup> &cap; B)* = 0.05 + 0.1 = 0.15.
+
+(c) What is the probability that at least 1 of the 2 pollsters is right?
+
+.hi[ANSWER]: *P(A &cup; B)* = *P(A)* + *P(B)* - *P(A<sup>C</sup> &cap; B)* = 0.3 + 0.15 - 0.05 = 0.4.
+
+(d) What is the probability that at least 1 is wrong?
+
+.hi[ANSWER]: *P(A<sup>C</sup> &cup; B<sup>C</sup>)* = 1 - *P(A &cap; B)* = 1 - 0.05 = 0.95.
+
+(e) Fill out a contingency table and utilize this to confirm your answers above.
+
+.hi[ANSWER]:
+
+
+
+---
+class: clear
+
+
+## Problem 2
+
+<br>
+
+Suppose one rolls two fair six-sided dice. Each one of the 36 possible outcomes is assumed to be equally likely.
+
+(a) Find the probability that doubles are rolled. Call it *P(A)*.
+
+.hi[ANSWER]:
+
+(b) Given that the roll results in a sum of 4 or less, find the conditional probability that doubles are rolled. Call it *P(B)*.
+
+.hi[ANSWER]:
+
+(c) Find the probability that at least one die roll is a 6. Call it *P(C)*.
+
+.hi[ANSWER]:
+
+(d) Given that the two dice land on different numbers, find the conditional probability that at least one die roll is a 6.
+
+.hi[ANSWER]:
+
+(e) Given that the minimum of the two rolls is equal to 3, what is the probability that the maximum of the two rolls is equal to 4?
+
+.hi[ANSWER]:
+
+---
+class: clear
+
+
+## Problem 3
+
+<br>
+
+Approximately 10% of people are left-handed. If two people are selected at random, what is the probability of the following events?
+
+(a) Both are right-handed.
+
+.hi[ANSWER]:
+
+(b) Both are left-handed.
+
+.hi[ANSWER]:
+
+(c) One is right-handed and the other is left-handed.
+
+.hi[ANSWER]:
+
+(d) At least one is right-handed.
+
+.hi[ANSWER]:
+
+## Problem 4
+
+<br>
+
+A financial analyst estimates that the probability that the economy will experience a recession in the next 12 months is 25%. She also believes that if the economy encounters a recession, the probability that her mutual fund will increase in value is 20%. If there is no recession, the probability that the mutual fund will increase in value is 75%. Find the probability that the mutual fund’s value will increase.
+
+.hi[ANSWER]:
+
+---
+class: clear
+
+
+## Problem 5
+
+<br>
+
+Bad gums may mean a bad heart. Researchers discovered that 85% of people who have suffered a heart attack had periodontal disease, an inflammation of the gums. Only 29% of healthy people have this disease. Suppose that in a certain community heart attacks are quite rare, occurring with only 10% probability. If someone has periodontal disease, what is the probability that he or she will have a heart attack?
+
+.hi[ANSWER]:
+
+
+## Problem 6
+
+<br>
+
+The mark on a statistics exam that consists of 100 multiple-choice questions is a random variable.
+
+(a) What are the possible values of this random variable? 
+
+.hi[ANSWER]:
+
+(b) Are the values countable? Explain.
+
+.hi[ANSWER]:
+
+(c) Is there a finite number of values? Explain.
+
+.hi[ANSWER]:
+
+(d) Is the random variable discrete or continuous? Explain.
+
+.hi[ANSWER]:
+
+---
+class: clear
+
+
+## Problem 7
+
+<br>
+
+The number of accidents that occur on a busy stretch of highway is a random variable.
+
+(a) What are the possible values of this random variable? 
+
+.hi[ANSWER]:
+
+(b) Are the values countable? Explain.
+
+.hi[ANSWER]:
+
+(c) Is there a finite number of values? Explain.
+
+.hi[ANSWER]:
+
+(d) Is the random variable discrete or continuous? Explain.
+
+.hi[ANSWER]:
+
+---
+exclude:true

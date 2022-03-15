@@ -1,0 +1,67 @@
+---
+title: 'Title'
+author: "Your Name"
+date: "Date"
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    number_sections: yes
+fancy: true   
+fontfamily: mathpazo
+fontsize: 11pt
+geometry: margin=1in
+linkcolor: blue
+citecolor: blue
+urlcolor: blue
+header-includes:
+- \newcommand{\bcenter}{\begin{center}}
+- \newcommand{\ecenter}{\end{center}}
+---
+
+
+# Introduction
+
+Here, you will briefly introduce what your research is about. In addition to motivating the relevance of your research question, you will give some information on what is about to come in the paper, such as main results and conclusions. 
+
+# Data sources
+
+In this section, you will tell your reader where your data come from. 
+
+In case you had to modify it in some way (e.g., converting into new measurement units, standardization, etc.), make sure to mention it here.
+
+# Descriptive statistics
+
+Here you will show everything that helps your reader to better understand your data through descriptive statistics. 
+
+Not only is it strongly recommended that you present numerical measures, but also use visual techniques. Make sure to explore all possible graphical techniques that we have seen in class that can help you better translate your data into palatable information.
+
+Some suggestions of data sources are [Google Dataset Search](https://datasetsearch.research.google.com/) and [Kaggle](https://www.kaggle.com/datasets). 
+
+
+You are **not** allowed to use data from $\textsf{R}$ packages. One of the purposes of this assignment is to gather the data you need by yourself.
+
+
+
+# Further analysis
+
+In this section, you may run inference procedures, be them from a Bayesian or frequentist perspective.
+
+Make sure to inform your reader about what question you are trying to answer, and be transparent about your process.
+
+
+
+# Conclusion
+
+Brief summary of what the paper was about. Do not add anything new here. Only summarize the information from before in 2--3 paragraphs. 
+
+Your project must be double-spaced and have no more than 10 pages (excluding references and appendix). 
+
+
+# Appendix
+
+Use this section to present additional plots, tables, or any information you find relevant about your model and data.
+
+
+
+
+
