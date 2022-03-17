@@ -63,6 +63,10 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/11-inference-1/lec11-inference-1.html)
 
+**Lecture 12: Statistical Inference II (The Beta-Binomial Model)**
+
+  -[Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/12-inference-2/lec12-inference-2.html)
+
 ## R Code
 
 1. [Descriptive Statistics (data wrangling & plotting)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/01-descriptive-stats/01-descriptive-stats.R)
