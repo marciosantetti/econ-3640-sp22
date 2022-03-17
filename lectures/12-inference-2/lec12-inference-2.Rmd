@@ -1,0 +1,644 @@
+---
+title: ".b[Statistical Inference, pt. II]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Johnson et al. (2022)`:
+
+  - Chapter 3
+  
+  - Available [`here`](https://www.bayesrulesbook.com/)
+
+
+---
+
+# Last time...
+
+<br><br>
+
+Last time, we studied our first .hi-blue[Bayesian] model.
+
+--
+
+Our purpose was to figure out what is the underlying proportion of Bayesians to frequentists in the Social Sciences.
+
+--
+
+We started with the .hi[prior] belief that any value of this proportion (*&#952;*) is equally likely.
+
+--
+
+But does it have to be this way?
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Updating our prior
+
+
+---
+
+
+# Updating our prior
+
+
+Last time, we defined our prior as
+
+.center[
+
+$$
+\begin{aligned}
+\theta \sim \text{Unif}(0, 1) 
+\end{aligned}
+$$
+]
+
+
+--
+
+<br>
+
+However, assuming that the plausibility of .b[no] scholars being Bayesians is the .red[*same*] as .b[all] researchers being Bayesians is quite .red[*imprecise*] and .red[*uninformative*].
+
+
+--
+
+So let us incorporate some .hi[prior] information into our model.
+
+--
+
+In a recent survey, it was found that 75% of interviewed researchers used more *frequentist* than *Bayesian* methods in their research agendas.
+
+--
+
+How can we use this .hi-blue[previous knowledge] and interact it with .hi[new data]?
+
+
+---
+
+
+# Updating our prior
+
+
+In order to translate this prior information into a probability distribution, we need some .red[*specific distribution*], lying from 0 to 1, that allows us to move beyond a "*flat*" prior setting.
+
+--
+
+   - Say hello to the .hi[Beta distribution]!
+
+--
+
+<br>
+
+A .hi[Beta] random variable is *continuous*, and lies on the [0,1] interval.
+
+--
+
+Therefore, it should satisfy our needs of a more .hi-blue[informative] prior to conduct our analysis.
+
+--
+
+A random variable *X* follows a *Beta* distribution with .hi-blue[shape] parameters *&alpha;* and *&beta;*:
+
+<br>
+
+.center[
+$$
+\begin{aligned}
+X \sim \text{Beta}(\alpha, \beta) 
+\end{aligned}
+$$
+]
+
+
+---
+
+# Updating our prior
+
+A Beta-distributed random variable has a .hi[probability density function] (PDF) as follows:
+
+<br>
+
+
+.center[
+$$
+\begin{aligned}
+f(x) = \dfrac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \ \Gamma (\beta)} \ \  x^{\alpha-1} \ (1 - x)^{\beta - 1}
+\end{aligned}
+$$
+]
+
+<br>
+
+for $x \in [0,1]$.
+
+<br>
+
+--
+
+$\Gamma(\cdot)$ is called a *gamma function*. 
+
+--
+
+If *x* is a positive integer, it simplifies to $\Gamma(x) = (x - 1)!$
+
+---
+
+# Updating our prior
+
+<br><br>
+
+We will call *&alpha;* and *&beta;* as the Beta distribution's .hi-blue[hyperparameters].
+
+--
+
+<br>
+
+> A .hi-blue[hyperparameter] is a parameter used in a prior probability model.
+
+--
+
+<br>
+
+Depending on how one .hi[tunes] these hyperparameters, the Beta distribution's PDF will have different .hi-blue[shapes].
+
+
+---
+
+# Updating our prior
+
+```{r, echo=FALSE, dev = "svg", fig.height=8, fig.width=15}
+
+p1 <- ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 5)) +
+  stat_function(fun = dbeta, args = list(shape1 = 1, shape2 = 5), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(1, 5)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p2 <- ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 5)) +
+  stat_function(fun = dbeta, args = list(shape1 = 5, shape2 = 1), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(5, 1)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p3 <- ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 2)) +
+  stat_function(fun = dbeta, args = list(shape1 = 3, shape2 = 2), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(3, 2)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+
+p4 <- ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 2)) +
+  stat_function(fun = dbeta, args = list(shape1 = 2, shape2 = 2), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(2, 2)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+
+p5 <- ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 5.5)) +
+  stat_function(fun = dbeta, args = list(shape1 = 20, shape2 = 20), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(20, 20)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p6 <- ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 8)) +
+  stat_function(fun = dbeta, args = list(shape1 = 50, shape2 = 30), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(50, 30)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+
+(p1 | p2 | p3) / (p4 | p5 | p6)
+
+
+```
+
+
+---
+
+# Updating our prior
+
+Try out the following code:
+
+```{r, eval = FALSE}
+
+library(tidyverse)
+
+data <- tibble(x = c(0,1))
+
+data %>% 
+  ggplot(aes(x = x)) +
+  stat_function(fun = dbeta, args = list(shape1 = 1, shape2 = 1), size = 1) +
+  labs(x = "x",
+       y = "f(x)")
+
+```
+
+
+<br><br>
+
+What do you get?
+
+
+---
+
+# Updating our prior
+
+From these distributions, we can extract some measures of central tendency:
+
+  - **Expected Value** (i.e., .red[*mean*]);
+  
+  - **Mode** (most .red[*plausible*] value)
+  
+--
+
+
+For a Beta distribution, these can be calculated as:
+
+.center[
+$$
+\begin{aligned}
+E(x) = \dfrac{\alpha}{\alpha + \beta}
+\end{aligned}
+$$
+]
+
+.center[
+$$
+\begin{aligned}
+\text{Mode}(x) = \dfrac{\alpha - 1}{\alpha + \beta - 2}
+\end{aligned}
+$$
+]
+
+--
+
+<br>
+
+
+As an example, what are the expected value and mode for a *Beta(5, 4)* random variable?
+
+
+---
+
+# Updating our prior
+
+
+Dashed: expected value; dotted: mode
+
+
+```{r, echo=FALSE, dev = "svg", fig.height=5, fig.width=8}
+
+
+ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 4)) +
+  stat_function(fun = dbeta, args = list(shape1 = 5, shape2 = 4), color = "#264d84", size = 1, alpha = 0.5) +
+  geom_vline(xintercept = (5/9), lty = 2, size = 0.8) +
+  geom_vline(xintercept = (4/7), lty = 3, size = 0.8) +
+  labs(x = "x",
+       y = "f(x)",
+       title = "X ~ Beta(5, 4)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+
+---
+
+# Updating our prior
+
+<br><br><br>
+
+The .b[variance] of a Beta-distributed random variable is calculated as follows:
+
+<br>
+
+.center[
+$$
+\begin{aligned}
+\text{Var}(x) = \dfrac{\alpha \beta}{(\alpha + \beta)^2 \ (\alpha + \beta + 1)}
+\end{aligned}
+$$
+]
+
+---
+
+layout: false
+class: inverse, middle
+
+# Hyperparameter tuning
+
+
+---
+
+
+# Hyperparameter tuning
+
+
+Now, it is time to .hi[update] our previous "*flat*" prior, in order to incorporate previous knowledge about our proportion of interest.
+
+--
+
+Practically, what we need is to properly .hi-blue[tune] the *&alpha;* and *&beta;* hyperparameters.
+
+--
+
+```{r, echo=FALSE, dev = "svg", fig.height=4, fig.width=8}
+
+ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  xlim(c(0, 1)) + ylim(c(0, 9)) +
+  stat_function(fun = dbeta, args = list(shape1 = 20, shape2 = 60), color = "#264d84", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)",
+       title = expression(theta~"~ Beta(20, 60)")) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The likelihood function
+
+
+---
+
+
+# The likelihood function
+
+As our prior is set up, it is time to incorporate .hi[new data] into our analysis.
+
+--
+
+Assume we interview 100 scholars.
+
+
+--
+
+We can assume that each individual we interview will answer the question .red[*independently*] of what other people will say.
+
+--
+
+<br>
+
+Thus, we may define our .hi-blue[Binomial] likelihood function as
+
+<br>
+
+
+.center[
+$$
+\begin{aligned}
+P(y | \theta) \sim \text{Binomial}(100, \theta)
+\end{aligned}
+$$
+]
+
+
+---
+
+# The likelihood function
+
+<br><br><br>
+
+By the end of this new survey, we find out that 30 people answered ".red[Bayesian]."
+
+--
+
+<br>
+
+Let us .hi-blue[update] our prior!
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The posterior
+
+
+---
+
+# The posterior
+
+
+```{r, echo=FALSE, dev = "svg", fig.height=6, fig.width=15}
+dat <- 
+  tibble(
+    p_grid = seq( from=0 , to=1 , length.out=1000 ),
+    prior = dbeta(p_grid, shape1 = 20, shape2 = 60),
+    likelihood = dbinom(x = 30, size = 100, prob = p_grid),
+    posterior = prior * likelihood,
+    std_posterior = posterior / sum(posterior)
+  )
+
+pp <- dat %>% 
+  ggplot(aes(x = p_grid, y = prior)) +
+  geom_line(size = 0.8, color = "#95608e") +
+  labs(y = "Plausibility",
+       x = "Proportion of Bayesians",
+       title = "Prior") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+pp1 <- dat %>% 
+  ggplot(aes(x = p_grid, y = likelihood)) +
+  geom_line(size = 0.8, color = "#5bc810") +
+  labs(y = "Plausibility",
+       x = "Proportion of Bayesians",
+       title = "Likelihood") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+pp2 <- dat %>% 
+  ggplot(aes(x = p_grid, y = posterior)) +
+  geom_line(size = 0.8) +
+  labs(y = "Plausibility",
+       x = "Proportion of Bayesians",
+       title = "Posterior") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+pp | pp1 | pp2
+
+```
+
+---
+
+# The posterior
+
+
+All in one picture...
+
+
+```{r, dev = "svg", fig.height=4, fig.width=11}
+library(bayesrules)
+
+plot_beta_binomial(alpha = 20, beta = 60, y = 30, n = 100)
+```
+
+
+---
+
+# The posterior
+
+<br>
+
+We are ready for some (*posterior*) .hi[inference]:
+
+<br>
+
+```{r, dev = "svg", fig.height=4, fig.width=11}
+library(bayesrules)
+
+summarize_beta_binomial(alpha = 20, beta = 60, y = 30, n = 100)
+```
+
+---
+
+layout: false
+class: inverse, middle
+
+
+# The Beta-Binomial model
+
+---
+
+
+# The Beta-Binomial model
+
+
+This example illustrated the .hi-blue[Beta-Binomial model].
+
+--
+
+In other words, we have .hi-orange[combined] a .red[*Beta*] *prior probability model* with a .red[*Binomial*] *likelihood function*.
+
+--
+
+When combining these two, our posterior will follow a .hi-blue[Beta distribution] as follows:
+
+<br>
+
+
+$$
+\begin{aligned}
+\theta \  | \  y \sim \text{Beta}(\alpha + y, \beta + n - y)
+\end{aligned}
+$$
+
+<br>
+
+where *y* is the number of successes, and *n* is the number of trials from the binomial experiment.
+
+
+---
+
+# The Beta-Binomial model
+
+
+The Beta-Binomial model is an example for .hi[conjugate priors].
+
+--
+
+It simply means that, when combining a specific prior with a specific likelihood function, the posterior will follow the .hi-blue[same] distribution as the prior's.
+
+--
+
+<br>
+
+> *P(&theta;)* is a conjugate prior for *P(y | &theta;)* if the posterior, *P(&theta; | y)* &Proportional; *P(&theta;)* *P(y | &theta;)* is from the same model family as the prior.
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Next time: More conjugate families
+
+
+---
+exclude: true

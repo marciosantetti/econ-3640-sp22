@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Statistical Inference, pt. II]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec12-inference-2_files/header-attrs/header-attrs.js"></script>
+    <link href="lec12-inference-2_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec12-inference-2_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec12-inference-2_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Statistical Inference, pt. II]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Johnson et al. (2022)`:
+
+  - Chapter 3
+  
+  - Available [`here`](https://www.bayesrulesbook.com/)
+
+
+---
+
+# Last time...
+
+&lt;br&gt;&lt;br&gt;
+
+Last time, we studied our first .hi-blue[Bayesian] model.
+
+--
+
+Our purpose was to figure out what is the underlying proportion of Bayesians to frequentists in the Social Sciences.
+
+--
+
+We started with the .hi[prior] belief that any value of this proportion (*&amp;#952;*) is equally likely.
+
+--
+
+But does it have to be this way?
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Updating our prior
+
+
+---
+
+
+# Updating our prior
+
+
+Last time, we defined our prior as
+
+.center[
+
+$$
+`\begin{aligned}
+\theta \sim \text{Unif}(0, 1) 
+\end{aligned}`
+$$
+]
+
+
+--
+
+&lt;br&gt;
+
+However, assuming that the plausibility of .b[no] scholars being Bayesians is the .red[*same*] as .b[all] researchers being Bayesians is quite .red[*imprecise*] and .red[*uninformative*].
+
+
+--
+
+So let us incorporate some .hi[prior] information into our model.
+
+--
+
+In a recent survey, it was found that 75% of interviewed researchers used more *frequentist* than *Bayesian* methods in their research agendas.
+
+--
+
+How can we use this .hi-blue[previous knowledge] and interact it with .hi[new data]?
+
+
+---
+
+
+# Updating our prior
+
+
+In order to translate this prior information into a probability distribution, we need some .red[*specific distribution*], lying from 0 to 1, that allows us to move beyond a "*flat*" prior setting.
+
+--
+
+   - Say hello to the .hi[Beta distribution]!
+
+--
+
+&lt;br&gt;
+
+A .hi[Beta] random variable is *continuous*, and lies on the [0,1] interval.
+
+--
+
+Therefore, it should satisfy our needs of a more .hi-blue[informative] prior to conduct our analysis.
+
+--
+
+A random variable *X* follows a *Beta* distribution with .hi-blue[shape] parameters *&amp;alpha;* and *&amp;beta;*:
+
+&lt;br&gt;
+
+.center[
+$$
+`\begin{aligned}
+X \sim \text{Beta}(\alpha, \beta) 
+\end{aligned}`
+$$
+]
+
+
+---
+
+# Updating our prior
+
+A Beta-distributed random variable has a .hi[probability density function] (PDF) as follows:
+
+&lt;br&gt;
+
+
+.center[
+$$
+`\begin{aligned}
+f(x) = \dfrac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \ \Gamma (\beta)} \ \  x^{\alpha-1} \ (1 - x)^{\beta - 1}
+\end{aligned}`
+$$
+]
+
+&lt;br&gt;
+
+for `\(x \in [0,1]\)`.
+
+&lt;br&gt;
+
+--
+
+`\(\Gamma(\cdot)\)` is called a *gamma function*. 
+
+--
+
+If *x* is a positive integer, it simplifies to `\(\Gamma(x) = (x - 1)!\)`
+
+---
+
+# Updating our prior
+
+&lt;br&gt;&lt;br&gt;
+
+We will call *&amp;alpha;* and *&amp;beta;* as the Beta distribution's .hi-blue[hyperparameters].
+
+--
+
+&lt;br&gt;
+
+&gt; A .hi-blue[hyperparameter] is a parameter used in a prior probability model.
+
+--
+
+&lt;br&gt;
+
+Depending on how one .hi[tunes] these hyperparameters, the Beta distribution's PDF will have different .hi-blue[shapes].
+
+
+---
+
+# Updating our prior
+
+&lt;img src="lec12-inference-2_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Updating our prior
+
+Try out the following code:
+
+
+```r
+library(tidyverse)
+
+data &lt;- tibble(x = c(0,1))
+
+data %&gt;% 
+  ggplot(aes(x = x)) +
+  stat_function(fun = dbeta, args = list(shape1 = 1, shape2 = 1), size = 1) +
+  labs(x = "x",
+       y = "f(x)")
+```
+
+
+&lt;br&gt;&lt;br&gt;
+
+What do you get?
+
+
+---
+
+# Updating our prior
+
+From these distributions, we can extract some measures of central tendency:
+
+  - **Expected Value** (i.e., .red[*mean*]);
+  
+  - **Mode** (most .red[*plausible*] value)
+  
+--
+
+
+For a Beta distribution, these can be calculated as:
+
+.center[
+$$
+`\begin{aligned}
+E(x) = \dfrac{\alpha}{\alpha + \beta}
+\end{aligned}`
+$$
+]
+
+.center[
+$$
+`\begin{aligned}
+\text{Mode}(x) = \dfrac{\alpha - 1}{\alpha + \beta - 2}
+\end{aligned}`
+$$
+]
+
+--
+
+&lt;br&gt;
+
+
+As an example, what are the expected value and mode for a *Beta(5, 4)* random variable?
+
+
+---
+
+# Updating our prior
+
+
+Dashed: expected value; dotted: mode
+
+
+&lt;img src="lec12-inference-2_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Updating our prior
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+The .b[variance] of a Beta-distributed random variable is calculated as follows:
+
+&lt;br&gt;
+
+.center[
+$$
+`\begin{aligned}
+\text{Var}(x) = \dfrac{\alpha \beta}{(\alpha + \beta)^2 \ (\alpha + \beta + 1)}
+\end{aligned}`
+$$
+]
+
+---
+
+layout: false
+class: inverse, middle
+
+# Hyperparameter tuning
+
+
+---
+
+
+# Hyperparameter tuning
+
+
+Now, it is time to .hi[update] our previous "*flat*" prior, in order to incorporate previous knowledge about our proportion of interest.
+
+--
+
+Practically, what we need is to properly .hi-blue[tune] the *&amp;alpha;* and *&amp;beta;* hyperparameters.
+
+--
+
+&lt;img src="lec12-inference-2_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The likelihood function
+
+
+---
+
+
+# The likelihood function
+
+As our prior is set up, it is time to incorporate .hi[new data] into our analysis.
+
+--
+
+Assume we interview 100 scholars.
+
+
+--
+
+We can assume that each individual we interview will answer the question .red[*independently*] of what other people will say.
+
+--
+
+&lt;br&gt;
+
+Thus, we may define our .hi-blue[Binomial] likelihood function as
+
+&lt;br&gt;
+
+
+.center[
+$$
+`\begin{aligned}
+P(y | \theta) \sim \text{Binomial}(100, \theta)
+\end{aligned}`
+$$
+]
+
+
+---
+
+# The likelihood function
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+By the end of this new survey, we find out that 30 people answered ".red[Bayesian]."
+
+--
+
+&lt;br&gt;
+
+Let us .hi-blue[update] our prior!
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The posterior
+
+
+---
+
+# The posterior
+
+
+&lt;img src="lec12-inference-2_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The posterior
+
+
+All in one picture...
+
+
+
+```r
+library(bayesrules)
+
+plot_beta_binomial(alpha = 20, beta = 60, y = 30, n = 100)
+```
+
+&lt;img src="lec12-inference-2_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# The posterior
+
+&lt;br&gt;
+
+We are ready for some (*posterior*) .hi[inference]:
+
+&lt;br&gt;
+
+
+```r
+library(bayesrules)
+
+summarize_beta_binomial(alpha = 20, beta = 60, y = 30, n = 100)
+```
+
+```
+#&gt;       model alpha beta      mean      mode         var         sd
+#&gt; 1     prior    20   60 0.2500000 0.2435897 0.002314815 0.04811252
+#&gt; 2 posterior    50  130 0.2777778 0.2752809 0.001108383 0.03329238
+```
+
+---
+
+layout: false
+class: inverse, middle
+
+
+# The Beta-Binomial model
+
+---
+
+
+# The Beta-Binomial model
+
+
+This example illustrated the .hi-blue[Beta-Binomial model].
+
+--
+
+In other words, we have .hi-orange[combined] a .red[*Beta*] *prior probability model* with a .red[*Binomial*] *likelihood function*.
+
+--
+
+When combining these two, our posterior will follow a .hi-blue[Beta distribution] as follows:
+
+&lt;br&gt;
+
+
+$$
+`\begin{aligned}
+\theta \  | \  y \sim \text{Beta}(\alpha + y, \beta + n - y)
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+where *y* is the number of successes, and *n* is the number of trials from the binomial experiment.
+
+
+---
+
+# The Beta-Binomial model
+
+
+The Beta-Binomial model is an example for .hi[conjugate priors].
+
+--
+
+It simply means that, when combining a specific prior with a specific likelihood function, the posterior will follow the .hi-blue[same] distribution as the prior's.
+
+--
+
+&lt;br&gt;
+
+&gt; *P(&amp;theta;)* is a conjugate prior for *P(y | &amp;theta;)* if the posterior, *P(&amp;theta; | y)* &amp;Proportional; *P(&amp;theta;)* *P(y | &amp;theta;)* is from the same model family as the prior.
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Next time: More conjugate families
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
