@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Statistical Inference, pt. IV]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec14-inference-4_files/header-attrs/header-attrs.js"></script>
+    <link href="lec14-inference-4_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec14-inference-4_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec14-inference-4_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Statistical Inference, pt. IV]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Johnson et al. (2022)`:
+
+  - Chapter 6
+  
+  - Available [`here`](https://www.bayesrulesbook.com/)
+  
+&lt;br&gt;
+  
+
+Also, make sure to install the `rstan` package by following the directions in the book's `Preface`, *Getting set up* section.
+
+
+---
+
+# Motivation
+
+&lt;br&gt;
+
+&gt; *"When we can't know something, we approximate it."*
+
+--
+
+&lt;br&gt;&lt;br&gt;
+
+This is the motivation for today's lecture.
+
+--
+
+By this point, you have probably noticed that, in order to answer more .hi[complex/flexible] questions, the .hi-blue[complexity] of statistical models grows in a rather absurd way.
+
+--
+
+However, the mathematical complexity does not change anything about the .hi-blue[logic of the process].
+
+---
+
+class: clear
+
+.center[
+&lt;img src="scr.png", width = "35%"&gt;
+]
+
+
+---
+
+# Motivation
+
+Recall the .hi[proportion] (*&amp;theta;*) of Bayesian researchers within the Social Sciences we were interested in a few lectures ago.
+
+--
+
+What if we are curious about the *same* proportion, but for *other* areas as well?
+
+  - e.g., Natural Sciences, Hard Sciences, etc.
+  
+--
+
+With a quite simple question in mind, our problem goes from
+
+$$
+`\begin{aligned}
+P(\theta \ | \ y) = \dfrac{P(\theta) \ P(y \ | \ \theta)}{\int_{\theta}P(\theta) \ P(y \ | \ \theta) \ d\theta}
+\end{aligned}`
+$$
+--
+
+to
+
+$$
+`\begin{aligned}
+P(\vec{\theta} \ | \ y) = \dfrac{P(\theta) \ P(y \ | \ \theta)}{\int_{\theta_1} \int_{\theta_2} \int_{\theta_3} \int_{\theta_4} \int_{\theta_5} ... \int_{\theta_k}P(\theta) \ P(y \ | \ \theta) \ d\theta_k ... d\theta_2 d\theta_1}
+\end{aligned}`
+$$
+
+---
+
+# Motivation
+
+Even today's computers will .b[not] be able to properly calculate such posteriors.
+
+--
+
+But the .hi-orange[good news] is that we can approximate the posterior .hi-blue[via simulation].
+
+--
+
+&lt;br&gt;
+
+Here, we will explore two simulation techniques:
+
+  1. .red[*Grid approximation*];
+  
+  2. .red[*Markov Chain Monte Carlo (MCMC)*].
+
+
+--
+
+&lt;br&gt;
+
+When properly motivated, these techniques provide a .hi[sample] of *&amp;theta;* values whose properties reflect those of the "true" posterior distribution.
+
+
+
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Grid approximation
+
+
+---
+
+# Grid approximation
+
+&lt;br&gt;&lt;br&gt;
+
+.center[
+&lt;img src="grid.png", width = "90%"&gt;
+]
+
+---
+
+# Grid approximation
+
+Our "target image" is the posterior distribution.
+
+--
+
+if we are able to evaluate its PDF at a .hi[discrete] and .hi[finite] grid of possible *&amp;theta;* values, we may get a *nice image* of what we are looking for.
+
+--
+
+&lt;br&gt;
+
+The .hi-blue[recipe] 👩‍🍳 👨‍🍳:
+
+.pseudocode-small[
+
+1. Define a discrete grid of possible *&amp;theta;* values;
+
+2. Evaluate the **prior** and **likelihood** at each *&amp;theta;* grid value;
+
+3. Multiply the prior by the likelihood;
+
+4. Normalize the product to get a posterior distribution that adds up/integrates to 1.
+
+
+
+
+]
+
+
+---
+
+# Grid approximation
+
+In practice:
+
+&lt;br&gt;
+
+
+```r
+data_grid &lt;- tibble(
+  
+  theta_grid = seq(from = 0, to = 1, by = 0.01),
+  
+  prior = dbeta(theta_grid, shape1 = 20, shape2 = 60),
+  
+  likelihood = dbinom(x = 30, size = 100, prob = theta_grid)
+  
+)
+```
+
+
+---
+
+# Grid approximation
+
+In practice:
+
+&lt;br&gt;
+
+
+```r
+data_grid &lt;- data_grid %&gt;% 
+  
+  mutate(unstd_posterior = prior * likelihood,
+         
+         std_posterior = unstd_posterior/sum(unstd_posterior))
+```
+
+---
+
+# Grid approximation
+
+In practice:
+
+&lt;br&gt;
+
+
+```r
+data_grid %&gt;% 
+  summarize(sum_posterior = sum(std_posterior))
+```
+
+```
+#&gt; # A tibble: 1 × 1
+#&gt;   sum_posterior
+#&gt;           &lt;dbl&gt;
+#&gt; 1             1
+```
+
+---
+
+# Grid approximation
+
+
+```r
+data_grid %&gt;% 
+  ggplot(aes(x = theta_grid, y = std_posterior)) +
+  geom_line(size = .8) 
+```
+
+&lt;img src="lec14-inference-4_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Grid approximation
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+Check out section `6.1.2` of the `Bayes Rules!` book for a .hi[Gamma-Poisson] example of grid approximation.
+
+
+---
+
+# Grid approximation
+
+&lt;br&gt;
+
+
+Grid approximation is simple.
+
+--
+
+.hi-orange[However]...
+
+
+--
+
+As we try to increase the  .red[*number of parameters*] we are curious about, grid approximation is not very effective.
+
+--
+
+&lt;br&gt;
+
+It suffers from the ".hi-blue[curse of dimensionality]."
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Markov Chain Monte Carlo
+
+
+---
+
+# Markov Chain Monte Carlo
+
+Given the limitations of grid approximation, .hi-blue[Markov Chain Monte Carlo] (MCMC) methods are the .hi[most efficient and used] techniques to properly .red[*approximate a posterior distribution*], even when it is too complicated to go over the Math.
+
+--
+
+The idea is .red[*very simple*].
+
+&lt;br&gt;
+
+--
+
+As a first step, we want to simulate a sample of *&amp;theta;* values:
+
+`\(\{\theta^1, \theta^2, \theta^3, ..., \theta^N\}\)` 
+
+--
+
+And then, as a second step, use this sample to *approximate* the .hi-green[main features] of the posterior distribution.
+
+---
+
+# Markov Chain Monte Carlo
+
+One way to start is through .hi-blue[Monte Carlo] simulations.
+
+--
+
+Monte Carlo simulations produce  .hi[random samples] of size *N*, where each value is *independent* of one another.
+
+--
+
+As a quick example, suppose we are interested in the how many cars pass by the *roundabout* close to the Stadium here at the U from 4:00 to 5:00 pm.
+
+--
+
+This is a .hi-blue[count] random variable case, which can be analyzed through a .hi-slate[Gamma-Poisson] model.
+
+---
+
+# Markov Chain Monte Carlo
+
+Suppose we have a prior belief that, on average, 250 cars pass by there within this hour, but we may allow for some uncertainty.
+
+--
+
+And we stop by the roundabout today at this time slot and collect some new data.
+
+--
+
+Here's a simulation:
+
+
+```r
+set.seed(123)
+
+dd &lt;- tibble(
+  
+  lambda_par = rgamma(10000, shape = 500, rate = 2),
+  y = rpois(10000, lambda = lambda_par)
+  
+  
+)
+```
+
+
+---
+
+# Markov Chain Monte Carlo
+
+
+
+```r
+# How many values from this simulation are equal to 250?
+
+dd %&gt;% 
+  filter(y == 250) %&gt;% 
+  nrow()
+```
+
+```
+#&gt; [1] 192
+```
+
+```r
+dd %&gt;% 
+  filter(y == 250) %&gt;% 
+  head(4)
+```
+
+```
+#&gt; # A tibble: 4 × 2
+#&gt;   lambda_par     y
+#&gt;        &lt;dbl&gt; &lt;int&gt;
+#&gt; 1       261.   250
+#&gt; 2       243.   250
+#&gt; 3       238.   250
+#&gt; 4       252.   250
+```
+
+---
+
+# Markov Chain Monte Carlo
+
+
+
+```r
+dd %&gt;% 
+  filter(y == 250) %&gt;% 
+  ggplot(aes(x = lambda_par)) +
+  geom_density()
+```
+
+&lt;img src="lec14-inference-4_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: clear
+
+# Markov Chain Monte Carlo
+
+
+```r
+dd %&gt;% 
+  filter(y == 250) %&gt;% 
+  ggplot(aes(x = lambda_par)) +
+  geom_density() +
+  stat_function(fun = dgamma, args = list(shape = 750, rate = 3), color = "red")
+```
+
+&lt;img src="lec14-inference-4_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Markov Chain Monte Carlo
+
+We can check the validity of a Monte Carlo simulation if we .hi-blue[know] the posterior's form.
+
+--
+
+
+But how can we check our sanity if we .hi[don't know] its form?
+
+--
+
+We introduce .hi-green[Markov chains].
+
+--
+
+.hi-slate[MCMC] follows the same principle as Monte Carlo simulation, but each value `\(\theta^{1+i}\)` in the chain `\(\{\theta^1, \theta^2, \theta^3, ..., \theta^N\}\)` .hi-slate[depends on] the previous value `\(\theta^{i}\)`, but is .hi-red[independent] of all other past values.
+
+--
+
+The chains visit various spots of the *sample space*, so we come up with a *nice picture* of the posterior distribution.
+
+---
+
+# Markov Chain Monte Carlo
+
+.center[
+&lt;img src="markov1.png", width = "50%"&gt;
+]
+
+---
+
+# Markov Chain Monte Carlo
+
+.center[
+&lt;img src="stan.png", width = "60%"&gt;
+]
+
+---
+
+# Markov Chain Monte Carlo
+
+.center[
+&lt;img src="stan2.png", width = "60%"&gt;
+]
+
+
+[`Stan official website`](https://mc-stan.org/)
+
+--
+
+We will use the [`rstan`](https://cran.r-project.org/web/packages/rstan/vignettes/rstan.html) `\(\textsf{R}\)` package to approximate teh posterior via MCMC.
+
+
+In order to properly use this package, go back to the first slide and follow the directions to set it up.
+
+
+
+
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# MCMC in practice
+
+
+---
+
+# MCMC in practice
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+The two main steps for approximating the posterior with MCMC methods using `rstan` are:
+
+  1. .hi-blue[Defining] the model's structure;
+  
+  2. .hi-blue[Simulating] the posterior.
+  
+---
+
+# MCMC in practice
+
+Defining the posterior:
+
+
+
+```r
+your_model &lt;- "
+
+  data {
+    
+  }
+  
+  parameters {
+    
+  }
+  
+  model {
+    
+  }
+  
+"
+```
+
+--
+
+&lt;br&gt;
+
+Check out the `rstan-model-starter.R` file on Canvas!
+
+---
+
+
+# MCMC in practice
+
+We always start with the `model` portion:
+
+
+
+
+```r
+your_model &lt;- "
+
+  data {
+    
+  }
+  
+  parameters {
+    
+  }
+  
+  model {
+  
+    Y ~ binomial(100, theta);  // the likelihood
+    
+    theta ~ beta(20, 60);     // the prior
+  
+  
+    
+  }
+  
+"
+```
+
+
+---
+
+
+
+# MCMC in practice
+
+We then move on to .hi-blue[defining the parameters] we have included in the `model` section.
+
+
+```r
+your_model &lt;- "
+
+  data {
+    
+  }
+  
+  parameters {
+  
+  real&lt;lower=0, upper=1&gt; theta;  // our parameter of interest is theta
+    
+  }
+  
+  model {
+  
+    Y ~ binomial(100, theta);  // the likelihood
+    
+    theta ~ beta(20, 60);     // the prior
+  
+  
+    
+  }
+  
+"
+```
+
+
+---
+
+class:clear
+
+
+Now, we deal with the remaining .hi[data] and .hi-blue[hyperparameters] in the `data` section.
+
+
+```r
+your_model &lt;- "
+
+  data {
+  
+    int&lt;lower=1&gt; n;               // the number of trials
+    int&lt;lower=0, upper=n&gt; Y;    // the number of sucesses
+    real&lt;lower=0&gt; alpha;       // the beta prior's alpha hyperparameter
+    real&lt;lower=0&gt; beta;       // the beta prior's beta hyperparameter
+  }
+  
+  parameters {
+  
+    real&lt;lower=0, upper=1&gt; theta;  // our parameter of interest is theta
+    
+  }
+  
+  model {
+  
+    Y ~ binomial(100, theta);  // the likelihood
+    
+    theta ~ beta(20, 60);     // the prior
+  
+  }
+  
+"
+```
+
+
+---
+
+
+
+# MCMC in practice
+
+Defining the model is the .hi[hardest] part.
+
+--
+
+After this gets done, `rstan` does the heavy lifting for us.
+
+
+```r
+library(rstan)
+options(mc.cores = parallel::detectCores())  ## using your computer cores.
+
+
+
+# Simulating the posterior:
+
+set.seed(123)    ## don't forget to set a seed!
+
+model_sim &lt;- stan(
+  
+  model_code = your_model,    ## the model from before
+  
+  data = list(alpha = 20, beta = 60, Y = 30, n = 100),  ## the actual data and hyperparameters
+  
+  chains = 4, iter = 5000 * 2     ## run 4 parallel Markov chains, with 10,000 simulations
+  
+)
+```
+
+
+---
+
+# MCMC in practice
+
+
+.center[
+&lt;img src="trace.png", width = "70%"&gt;
+]
+
+---
+
+# MCMC in practice
+
+
+.center[
+&lt;img src="dens.png", width = "75%"&gt;
+]
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Posterior inference
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
