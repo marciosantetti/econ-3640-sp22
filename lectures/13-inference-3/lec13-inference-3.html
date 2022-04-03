@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Statistical Inference, pt. III]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec13-inference-3_files/header-attrs/header-attrs.js"></script>
+    <link href="lec13-inference-3_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec13-inference-3_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec13-inference-3_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Statistical Inference, pt. III]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Johnson et al. (2022)`:
+
+  - Chapters 4 (optional) and 5
+  
+  - Available [`here`](https://www.bayesrulesbook.com/)
+  
+
+
+---
+
+# Last time...
+
+&lt;br&gt;&lt;br&gt;
+
+Last time, we were introduced to .hi[conjugate priors].
+
+--
+
+It simply means that, by combining priors and likelihoods from certain families, Bayes' theorem will return a posterior whose distribution is the .hi-blue[same] as the prior.
+
+--
+
+Consequently, we .hi[know] which distribution the posterior follows and are able to *analytically* calculate it.
+
+--
+
+Let us study more conjugate families now, namely
+
+  1. .red[*Gamma-Poisson*];
+  2. .red[*Normal-Normal*]
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# The Gamma-Poisson model
+
+
+---
+
+# The Gamma-Poisson model
+
+Take a look at your email inbox and search for how many .hi[spam messages] you currently have.
+
+--
+
+Assume that we want to know more about the .hi-blue[rate] with which spam emails come into our inbox for a given number of days.
+
+--
+
+Does this problem fit into a Beta-Binomial setting?
+
+--
+
+.hi-orange[No!]
+
+--
+
+This rate does not fit solely on the [0,1] interval, just as a proportion.
+
+--
+
+Furthermore, the number of spam messages is a .hi[count] that can take on any integer value, and is not limited by a number of trials, as with a Binomial experiment.
+
+
+---
+
+# The Gamma-Poisson model
+
+
+Our variable of interest is the .hi-blue[rate] with which spam messages come into our inbox over a given number of days.
+
+--
+
+And the number of spam messages is a .hi[count] random variable.
+
+--
+
+We are once again dealing with a .hi-orange[discrete random variable], and this situation fits perfectly well with one discrete distribution we've already studied.
+
+--
+
+  - The .hi[Poisson] distribution.
+
+
+
+---
+
+# The Gamma-Poisson model
+
+Let's label the daily .hi[count] of spam messages as `\(Y_i\)`.
+
+  - `\(Y_i = \{0, 1, 2, 3, 4, ...\}\)`
+
+--
+
+
+Recall the .hi-blue[Probability Mass Function] (PMF) of a Poisson-distributed random variable:
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+f(Y \ | \ \lambda) = \dfrac{\lambda^Y \ e^{-\lambda}}{Y!}  \ \ \  \ \ \ \ \text{for} \ Y \in \{0,1, 2, 3,...\}
+\end{aligned}`
+$$
+&lt;br&gt;
+--
+
+Moreover, `\(E(Y \ | \ \lambda) = \text{Var}(Y \ | \ \lambda) = \lambda\)`.
+
+--
+
+Depending on the value of `\(\lambda\)`, the Poisson distribution will have .hi-blue[different shapes].
+
+
+---
+class: clear
+
+&lt;img src="lec13-inference-3_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Gamma-Poisson model
+
+Now, assume that `\((Y_1, Y_2, Y_3, ..., Y_n)\)` are the number of spam messages observed on each of the *n* days we are observing these data.
+
+--
+
+The daily number of spam messages will likely .hi[differ] from day to day.
+
+--
+
+Therefore, on each day *i*
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+Y_i \ | \ \lambda \overset{ind}\sim \text{Pois}(\lambda)
+\end{aligned}`
+$$
+
+---
+
+# The Gamma-Poisson model
+
+
+In order to account for .hi[all] individual days, we need to rewrite the Poisson PMF as a .hi-blue[joint] probability mass function:
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+f(\vec{y} \ | \ \lambda) = \prod_{i = 1}^{n}f(y_i\ | \ \lambda) = \prod_{i = 1}^{n}\dfrac{\lambda^{y_i} \ e^{-\lambda}}{y_i!}
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+The above expression  simply follows the product rule for independent events:
+
+  - `\(P(A \cap B) = P(A) \ P(B)\)`
+  
+---
+
+# The Gamma-Poisson model
+
+$$
+`\begin{aligned}
+f(\vec{y} \ | \ \lambda) = \prod_{i = 1}^{n}f(y_i\ | \ \lambda) = \prod_{i = 1}^{n}\dfrac{\lambda^y_i \ e^{-\lambda}}{y_i!}
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+can be simplified to
+
+&lt;br&gt;
+
+
+$$
+`\begin{aligned}
+f(\vec{y} \ | \ \lambda) = \dfrac{\lambda ^{\sum{y_i}} \ e^{-n\lambda}}{\prod_{i=1}^{n} y_i!}
+\end{aligned}`
+$$
+
+
+
+---
+
+# The Gamma-Poisson model
+
+&lt;br&gt;
+
+Now that the likelihood has been defined, it is time to think about the .hi-blue[prior distribution] for our target parameter, `\(\lambda\)`.
+
+--
+
+With `\(\lambda\)` being a .hi-blue[positive] and .hi[continuous] rate, we can incorporate any .hi-orange[prior] information we have available in order to .hi[tune] our prior's *hyperparameter.*
+
+--
+
+Luckily, we do have a .hi-blue[conjugate prior] for the Poisson distribution.
+
+--
+
+This prior is the .hi[Gamma distribution].
+
+---
+
+# The Gamma-Poisson model
+
+
+If `\(\lambda\)` is a continuous RV, taking on any positive value `\((\lambda &gt;0)\)`, its variability may be represented by a .hi[Gamma distribution] with .hi-blue[shape and rate] hyperparameters `\(s\)` and `\(r\)`, respectively:
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+\lambda \sim \text{Gamma}(s, r) \ \ \ \ \ \text{with} \ \  s,r&gt;0
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+The .hi[PDF] of a Gamma distribution is represented by
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+f(\lambda) = \dfrac{r^s}{\Gamma(s)}\lambda ^{s-1}e^{-r\lambda} \ \ \ \ \text{for} \ \ \lambda &gt; 0 
+\end{aligned}`
+$$
+
+---
+
+# The Gamma-Poisson model
+
+The expected value, mode, and variance for the Gamma distribution are given by:
+
+  - .b[Expected Value]: `\(E(\lambda) = \dfrac{s}{r}\)`;
+  
+  - .b[Mode]: `\(\text{Mode}(\lambda) = \dfrac{s-1}{r}\)`;
+  
+  - .b[Variance]: `\(\text{Var}(\lambda) = \dfrac{s}{r^2}\)`.
+  
+
+--
+
+&lt;br&gt;
+
+When the shape `\((s)\)` hyperparameter of a Gamma distribution equals 1, `\(\lambda\)` follows an .hi-blue[Exponential distribution]:
+
+$$
+`\begin{aligned}
+\lambda \sim \text{Exp}(r) 
+\end{aligned}`
+$$
+
+
+---
+
+class: clear
+
+&lt;img src="lec13-inference-3_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Gamma-Poisson model
+
+
+Now, let us .hi-orange[tune] our prior distribution's hyperparameters according to any prior knowledge we have on the problem we are facing.
+
+--
+
+Suppose that, in the past, you've noticed that about 6 spam emails would come each day, varying between 2 and 10. 
+
+--
+
+How do we translate this information into a probability distribution?
+
+
+---
+
+class: clear
+
+
+&lt;img src="lec13-inference-3_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Gamma-Poisson model
+
+With prior and likelihood defined, we can move on the the .hi-blue[posterior estimation].
+
+--
+
+- .b[Prior]: `\(\lambda \sim \text{Gamma}(6, 1)\)`
+
+- .b[Likelihood]: `\(Y_i \ | \lambda \ \sim \text{Poisson}(\lambda)\)`
+
+--
+
+By .hi[conjugacy], the posterior will be
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+\lambda \ | \ \vec{y} \sim \text{Gamma}\big(s + \sum{y_i}, r + n \big) 
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+where `\(n\)` is the number of data points (in our case, days) used in our analysis.
+
+---
+
+# The Gamma-Poisson model
+
+Suppose that we observe .hi[new data] for 10 days.
+
+--
+
+And these are the number of spam messages received each day:
+
+
+$$
+`\begin{aligned}
+\vec{y} = \{6, 10, 3, 5, 7, 6, 6, 10, 3, 5\}
+\end{aligned}`
+$$
+
+
+```r
+library(bayesrules)
+plot_poisson_likelihood(y = c(6, 10, 3, 5, 7, 6, 6, 10, 3, 5), lambda_upper_bound = 15)
+```
+
+&lt;img src="lec13-inference-3_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: clear
+
+&lt;img src="lec13-inference-3_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+
+# The Gamma-Poisson model
+
+
+
+```r
+library(bayesrules)
+plot_gamma_poisson(shape = 6, rate = 1, sum_y = 61, n = 10)
+```
+
+&lt;img src="lec13-inference-3_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+# The Gamma-Poisson model
+
+&lt;br&gt;&lt;br&gt;
+
+
+```r
+library(bayesrules)
+summarize_gamma_poisson(shape = 6, rate = 1, sum_y = 61, n = 10)
+```
+
+```
+#&gt;       model shape rate     mean mode      var       sd
+#&gt; 1     prior     6    1 6.000000    5 6.000000 2.449490
+#&gt; 2 posterior    67   11 6.090909    6 0.553719 0.744123
+```
+
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The Normal-Normal model
+
+
+---
+
+# The Normal-Normal model
+
+The last conjugate family we will cover in detail is the .hi[Normal-Normal] model.
+
+--
+
+If a random variable `\(Y\)` is continuous and can take on any value between `\(-\infty\)` and `\(+\infty\)`, its variability can be modeled through a .hi[Normal] distribution with .hi-blue[mean] `\(\mu\)` and .hi-blue[standard deviation] `\(\sigma\)`:
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+Y \sim \mathcal{N}(\mu, \sigma^2)
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+--
+
+Recall the Normal .hi-blue[PDF]:
+
+$$
+`\begin{aligned}
+f(x) = \dfrac{1}{\sigma \sqrt{2\pi}}e^{\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \ ; \ -\infty &lt;x&lt; \infty
+\end{aligned}`
+$$
+
+---
+
+# The Normal-Normal model
+
+Some useful summary statistics:
+
+  - .b[Expected Value and Mode]: `\(E(Y) = \text{Mode}(Y) = \mu\)`;
+  
+  - .b[Variance]: `\(\text{Var}(Y) = \sigma^2\)`.
+  
+  - .b[Standard deviation]: `\(\text{SD}(Y) = \sigma\)`.
+  
+--
+
+&lt;br&gt;
+
+When a random variable follows a probability distribution, we can state that roughly .hi-blue[95%] of its values fall within .hi-blue[2 standard deviations] of its mean, `\(\mu\)`:
+
+$$
+`\begin{aligned}
+\mu \ \pm \ 2\sigma
+\end{aligned}`
+$$
+
+---
+
+# The Normal-Normal model
+
+For a likelihood function
+
+$$
+`\begin{aligned}
+Y_i \ | \  \mu \sim \mathcal{N}(\mu, \sigma^2)
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+For a sample size of `\(n\)`, the .hi[joint PDF] for all individuals is 
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+f(\vec{y} \ | \ \mu) = \prod_{i=1}^{n}f(y_i \ | \mu) \propto \text{exp}\Bigg[- \dfrac{(\bar{y} - \mu)^2}{2\sigma^2/n}\Bigg] \ \ \ \text{for} \ \ \mu \in (-\infty, + \infty)
+\end{aligned}`
+$$
+
+
+
+
+---
+
+# The Normal-Normal model
+
+When our parameter of interest is `\(\mu\)`, the averag value of a variable we are curious about, we can define its prior model as
+
+&lt;br&gt;
+
+$$
+`\begin{aligned}
+\mu \sim \mathcal{N}(\theta, \tau^2)
+\end{aligned}`
+$$
+
+&lt;br&gt;
+
+
+--
+
+A posterior model for `\(\mu\)` with both prior and likelihood following Normal distributions will be given by 
+
+$$
+`\begin{aligned}
+\mu \ | \ \vec{y} \sim \mathcal{N}\Bigg[\theta \dfrac{\sigma^2}{n\tau^2 + \sigma^2} + \bar{y} \dfrac{n\tau^2}{n\tau^2 + \sigma^2}, \ \dfrac{\tau^2 \sigma^2}{n\tau^2 + \sigma^2}   \Bigg]
+\end{aligned}`
+$$
+
+---
+
+# The Normal-Normal model
+
+
+&lt;br&gt;&lt;br&gt;
+
+Carefully read section .hi-blue[5.3] from the `Bayes Rules!` book.
+
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Next time: Approximating the posterior
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

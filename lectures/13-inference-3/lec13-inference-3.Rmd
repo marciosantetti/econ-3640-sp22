@@ -1,0 +1,739 @@
+---
+title: ".b[Statistical Inference, pt. III]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Johnson et al. (2022)`:
+
+  - Chapters 4 (optional) and 5
+  
+  - Available [`here`](https://www.bayesrulesbook.com/)
+  
+
+
+---
+
+# Last time...
+
+<br><br>
+
+Last time, we were introduced to .hi[conjugate priors].
+
+--
+
+It simply means that, by combining priors and likelihoods from certain families, Bayes' theorem will return a posterior whose distribution is the .hi-blue[same] as the prior.
+
+--
+
+Consequently, we .hi[know] which distribution the posterior follows and are able to *analytically* calculate it.
+
+--
+
+Let us study more conjugate families now, namely
+
+  1. .red[*Gamma-Poisson*];
+  2. .red[*Normal-Normal*]
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# The Gamma-Poisson model
+
+
+---
+
+# The Gamma-Poisson model
+
+Take a look at your email inbox and search for how many .hi[spam messages] you currently have.
+
+--
+
+Assume that we want to know more about the .hi-blue[rate] with which spam emails come into our inbox for a given number of days.
+
+--
+
+Does this problem fit into a Beta-Binomial setting?
+
+--
+
+.hi-orange[No!]
+
+--
+
+This rate does not fit solely on the [0,1] interval, just as a proportion.
+
+--
+
+Furthermore, the number of spam messages is a .hi[count] that can take on any integer value, and is not limited by a number of trials, as with a Binomial experiment.
+
+
+---
+
+# The Gamma-Poisson model
+
+
+Our variable of interest is the .hi-blue[rate] with which spam messages come into our inbox over a given number of days.
+
+--
+
+And the number of spam messages is a .hi[count] random variable.
+
+--
+
+We are once again dealing with a .hi-orange[discrete random variable], and this situation fits perfectly well with one discrete distribution we've already studied.
+
+--
+
+  - The .hi[Poisson] distribution.
+
+
+
+---
+
+# The Gamma-Poisson model
+
+Let's label the daily .hi[count] of spam messages as $Y_i$.
+
+  - $Y_i = \{0, 1, 2, 3, 4, ...\}$
+
+--
+
+
+Recall the .hi-blue[Probability Mass Function] (PMF) of a Poisson-distributed random variable:
+
+<br>
+
+$$
+\begin{aligned}
+f(Y \ | \ \lambda) = \dfrac{\lambda^Y \ e^{-\lambda}}{Y!}  \ \ \  \ \ \ \ \text{for} \ Y \in \{0,1, 2, 3,...\}
+\end{aligned}
+$$
+<br>
+--
+
+Moreover, $E(Y \ | \ \lambda) = \text{Var}(Y \ | \ \lambda) = \lambda$.
+
+--
+
+Depending on the value of $\lambda$, the Poisson distribution will have .hi-blue[different shapes].
+
+
+---
+class: clear
+
+```{r, dev = "svg", echo=FALSE, fig.height=7, fig.width=10}
+
+set.seed(123)
+
+dat <- tibble(
+  x = rpois(1000, lambda = 1),
+  x2 = rpois(1000, lambda = 5),
+  x3 = rpois(1000, lambda = 10),
+  x4 = rpois(1000, lambda = 15)
+)
+
+p1 <- dat %>% 
+  count(x, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(x = x, y = pct)) +
+  geom_point() +
+  geom_segment(aes(x = x, xend = x, y = 0, yend = pct)) +
+  labs(x = "y",
+       y = "f(y)",
+       title = expression(lambda~"= 1")) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+  
+  
+p2 <-dat %>% 
+  count(x2, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(x = x2, y = pct)) +
+  geom_point() +
+  geom_segment(aes(x = x2, xend = x2, y = 0, yend = pct)) +
+  labs(x = "y",
+       y = "f(y)",
+       title = expression(lambda~"= 5")) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p3 <- dat %>% 
+  count(x3, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(x = x3, y = pct)) +
+  geom_point() +
+  geom_segment(aes(x = x3, xend = x3, y = 0, yend = pct)) +
+  labs(x = "y",
+       y = "f(y)",
+       title = expression(lambda~"= 10")) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+p4 <- dat %>% 
+  count(x4, sort=TRUE) %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(x = x4, y = pct)) +
+  geom_point() +
+  geom_segment(aes(x = x4, xend = x4, y = 0, yend = pct)) +
+  labs(x = "y",
+       y = "f(y)",
+       title = expression(lambda~"= 15")) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+(p1 | p2) / (p3 | p4)
+
+```
+
+---
+
+# The Gamma-Poisson model
+
+Now, assume that $(Y_1, Y_2, Y_3, ..., Y_n)$ are the number of spam messages observed on each of the *n* days we are observing these data.
+
+--
+
+The daily number of spam messages will likely .hi[differ] from day to day.
+
+--
+
+Therefore, on each day *i*
+
+<br>
+
+$$
+\begin{aligned}
+Y_i \ | \ \lambda \overset{ind}\sim \text{Pois}(\lambda)
+\end{aligned}
+$$
+
+---
+
+# The Gamma-Poisson model
+
+
+In order to account for .hi[all] individual days, we need to rewrite the Poisson PMF as a .hi-blue[joint] probability mass function:
+
+<br>
+
+$$
+\begin{aligned}
+f(\vec{y} \ | \ \lambda) = \prod_{i = 1}^{n}f(y_i\ | \ \lambda) = \prod_{i = 1}^{n}\dfrac{\lambda^{y_i} \ e^{-\lambda}}{y_i!}
+\end{aligned}
+$$
+
+--
+
+<br>
+
+The above expression  simply follows the product rule for independent events:
+
+  - $P(A \cap B) = P(A) \ P(B)$
+  
+---
+
+# The Gamma-Poisson model
+
+$$
+\begin{aligned}
+f(\vec{y} \ | \ \lambda) = \prod_{i = 1}^{n}f(y_i\ | \ \lambda) = \prod_{i = 1}^{n}\dfrac{\lambda^y_i \ e^{-\lambda}}{y_i!}
+\end{aligned}
+$$
+
+<br>
+
+can be simplified to
+
+<br>
+
+
+$$
+\begin{aligned}
+f(\vec{y} \ | \ \lambda) = \dfrac{\lambda ^{\sum{y_i}} \ e^{-n\lambda}}{\prod_{i=1}^{n} y_i!}
+\end{aligned}
+$$
+
+
+
+---
+
+# The Gamma-Poisson model
+
+<br>
+
+Now that the likelihood has been defined, it is time to think about the .hi-blue[prior distribution] for our target parameter, $\lambda$.
+
+--
+
+With $\lambda$ being a .hi-blue[positive] and .hi[continuous] rate, we can incorporate any .hi-orange[prior] information we have available in order to .hi[tune] our prior's *hyperparameter.*
+
+--
+
+Luckily, we do have a .hi-blue[conjugate prior] for the Poisson distribution.
+
+--
+
+This prior is the .hi[Gamma distribution].
+
+---
+
+# The Gamma-Poisson model
+
+
+If $\lambda$ is a continuous RV, taking on any positive value $(\lambda >0)$, its variability may be represented by a .hi[Gamma distribution] with .hi-blue[shape and rate] hyperparameters $s$ and $r$, respectively:
+
+<br>
+
+$$
+\begin{aligned}
+\lambda \sim \text{Gamma}(s, r) \ \ \ \ \ \text{with} \ \  s,r>0
+\end{aligned}
+$$
+
+--
+
+<br>
+
+The .hi[PDF] of a Gamma distribution is represented by
+
+<br>
+
+$$
+\begin{aligned}
+f(\lambda) = \dfrac{r^s}{\Gamma(s)}\lambda ^{s-1}e^{-r\lambda} \ \ \ \ \text{for} \ \ \lambda > 0 
+\end{aligned}
+$$
+
+---
+
+# The Gamma-Poisson model
+
+The expected value, mode, and variance for the Gamma distribution are given by:
+
+  - .b[Expected Value]: $E(\lambda) = \dfrac{s}{r}$;
+  
+  - .b[Mode]: $\text{Mode}(\lambda) = \dfrac{s-1}{r}$;
+  
+  - .b[Variance]: $\text{Var}(\lambda) = \dfrac{s}{r^2}$.
+  
+
+--
+
+<br>
+
+When the shape $(s)$ hyperparameter of a Gamma distribution equals 1, $\lambda$ follows an .hi-blue[Exponential distribution]:
+
+$$
+\begin{aligned}
+\lambda \sim \text{Exp}(r) 
+\end{aligned}
+$$
+
+
+---
+
+class: clear
+
+```{r, dev = "svg", echo=FALSE, fig.height=7, fig.width=10}
+set.seed(123)
+
+datt <- tibble(
+  x = rgamma(1000, shape = 1, rate = 1),
+  x2 = rgamma(1000, shape = 5, rate = 2),
+  x3 = rgamma(1000, shape = 2, rate = 5),
+  x4 = rgamma(1000, shape = 3, rate = 3)
+)
+
+
+p5 <- datt %>% 
+  ggplot(aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 1, rate = 1), size = 0.7) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "s = 1, r = 1") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p6 <- datt %>% 
+  ggplot(aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 5, rate = 2), size = 0.7) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "s = 5, r = 2") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p7 <- datt %>% 
+  ggplot(aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 2, rate = 5), size = 0.7) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "s = 2, r = 5") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p8 <- datt %>% 
+  ggplot(aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 3, rate = 3), size = 0.7) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "s = 3, r = 3") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+(p5 | p6) / (p7 | p8)
+
+
+```
+
+---
+
+# The Gamma-Poisson model
+
+
+Now, let us .hi-orange[tune] our prior distribution's hyperparameters according to any prior knowledge we have on the problem we are facing.
+
+--
+
+Suppose that, in the past, you've noticed that about 6 spam emails would come each day, varying between 2 and 10. 
+
+--
+
+How do we translate this information into a probability distribution?
+
+
+---
+
+class: clear
+
+
+```{r, dev = "svg", echo=FALSE, fig.height=7, fig.width=9}
+
+p9 <- ggplot(data.frame(x = c(0, 15)), aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 6, rate = 1), size = 0.7) +
+  scale_x_continuous(breaks = seq(0,15,2)) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "Gamma(6, 1)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+
+p10 <- ggplot(data.frame(x = c(0, 15)), aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 12, rate = 2), size = 0.7) +
+  scale_x_continuous(breaks = seq(0,15,2)) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "Gamma(12, 2)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+p9 / p10
+
+
+
+```
+
+---
+
+# The Gamma-Poisson model
+
+With prior and likelihood defined, we can move on the the .hi-blue[posterior estimation].
+
+--
+
+- .b[Prior]: $\lambda \sim \text{Gamma}(6, 1)$
+
+- .b[Likelihood]: $Y_i \ | \lambda \ \sim \text{Poisson}(\lambda)$
+
+--
+
+By .hi[conjugacy], the posterior will be
+
+<br>
+
+$$
+\begin{aligned}
+\lambda \ | \ \vec{y} \sim \text{Gamma}\big(s + \sum{y_i}, r + n \big) 
+\end{aligned}
+$$
+
+<br>
+
+where $n$ is the number of data points (in our case, days) used in our analysis.
+
+---
+
+# The Gamma-Poisson model
+
+Suppose that we observe .hi[new data] for 10 days.
+
+--
+
+And these are the number of spam messages received each day:
+
+
+$$
+\begin{aligned}
+\vec{y} = \{6, 10, 3, 5, 7, 6, 6, 10, 3, 5\}
+\end{aligned}
+$$
+
+```{r, dev = "svg", fig.height=3, fig.width=6}
+library(bayesrules)
+plot_poisson_likelihood(y = c(6, 10, 3, 5, 7, 6, 6, 10, 3, 5), lambda_upper_bound = 15)
+```
+
+---
+
+class: clear
+
+```{r, dev = "svg", echo=FALSE, fig.height=7, fig.width=9}
+pp <- ggplot(data.frame(x = c(0, 15)), aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 6, rate = 1), size = 0.7) +
+  scale_x_continuous(breaks = seq(0,15,2)) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "Prior") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+pp1 <- plot_poisson_likelihood(y = c(6, 10, 3, 5, 7, 6, 6, 10, 3, 5), lambda_upper_bound = 15) +
+  labs(title = "Likelihood")
+
+pp2 <- ggplot(data.frame(x = c(0, 15)), aes(x = x)) +
+  stat_function(fun = dgamma, args = list(shape = 6 + 61, rate = 1 + 10), size = 0.7) +
+  scale_x_continuous(breaks = seq(0,15,2)) +
+  labs(x = expression(lambda),
+       y = expression(f(lambda)),
+       title = "Posterior") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+(pp | pp1) / pp2
+
+```
+
+
+
+---
+
+
+# The Gamma-Poisson model
+
+
+```{r, dev = "svg", fig.height=5, fig.width=9}
+library(bayesrules)
+plot_gamma_poisson(shape = 6, rate = 1, sum_y = 61, n = 10)
+```
+
+---
+
+
+# The Gamma-Poisson model
+
+<br><br>
+
+```{r}
+library(bayesrules)
+summarize_gamma_poisson(shape = 6, rate = 1, sum_y = 61, n = 10)
+```
+
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The Normal-Normal model
+
+
+---
+
+# The Normal-Normal model
+
+The last conjugate family we will cover in detail is the .hi[Normal-Normal] model.
+
+--
+
+If a random variable $Y$ is continuous and can take on any value between $-\infty$ and $+\infty$, its variability can be modeled through a .hi[Normal] distribution with .hi-blue[mean] $\mu$ and .hi-blue[standard deviation] $\sigma$:
+
+<br>
+
+$$
+\begin{aligned}
+Y \sim \mathcal{N}(\mu, \sigma^2)
+\end{aligned}
+$$
+
+<br>
+
+--
+
+Recall the Normal .hi-blue[PDF]:
+
+$$
+\begin{aligned}
+f(x) = \dfrac{1}{\sigma \sqrt{2\pi}}e^{\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \ ; \ -\infty <x< \infty
+\end{aligned}
+$$
+
+---
+
+# The Normal-Normal model
+
+Some useful summary statistics:
+
+  - .b[Expected Value and Mode]: $E(Y) = \text{Mode}(Y) = \mu$;
+  
+  - .b[Variance]: $\text{Var}(Y) = \sigma^2$.
+  
+  - .b[Standard deviation]: $\text{SD}(Y) = \sigma$.
+  
+--
+
+<br>
+
+When a random variable follows a probability distribution, we can state that roughly .hi-blue[95%] of its values fall within .hi-blue[2 standard deviations] of its mean, $\mu$:
+
+$$
+\begin{aligned}
+\mu \ \pm \ 2\sigma
+\end{aligned}
+$$
+
+---
+
+# The Normal-Normal model
+
+For a likelihood function
+
+$$
+\begin{aligned}
+Y_i \ | \  \mu \sim \mathcal{N}(\mu, \sigma^2)
+\end{aligned}
+$$
+
+--
+
+<br>
+
+For a sample size of $n$, the .hi[joint PDF] for all individuals is 
+
+<br>
+
+$$
+\begin{aligned}
+f(\vec{y} \ | \ \mu) = \prod_{i=1}^{n}f(y_i \ | \mu) \propto \text{exp}\Bigg[- \dfrac{(\bar{y} - \mu)^2}{2\sigma^2/n}\Bigg] \ \ \ \text{for} \ \ \mu \in (-\infty, + \infty)
+\end{aligned}
+$$
+
+
+
+
+---
+
+# The Normal-Normal model
+
+When our parameter of interest is $\mu$, the averag value of a variable we are curious about, we can define its prior model as
+
+<br>
+
+$$
+\begin{aligned}
+\mu \sim \mathcal{N}(\theta, \tau^2)
+\end{aligned}
+$$
+
+<br>
+
+
+--
+
+A posterior model for $\mu$ with both prior and likelihood following Normal distributions will be given by 
+
+$$
+\begin{aligned}
+\mu \ | \ \vec{y} \sim \mathcal{N}\Bigg[\theta \dfrac{\sigma^2}{n\tau^2 + \sigma^2} + \bar{y} \dfrac{n\tau^2}{n\tau^2 + \sigma^2}, \ \dfrac{\tau^2 \sigma^2}{n\tau^2 + \sigma^2}   \Bigg]
+\end{aligned}
+$$
+
+---
+
+# The Normal-Normal model
+
+
+<br><br>
+
+Carefully read section .hi-blue[5.3] from the `Bayes Rules!` book.
+
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Next time: Approximating the posterior
+
+
+---
+exclude: true
