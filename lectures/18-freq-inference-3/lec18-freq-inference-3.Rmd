@@ -1,0 +1,279 @@
+---
+title: ".b[Frequentist Inference, pt. III]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Keller (2009)`:
+
+  - Chapter .b[12], sections `12.1`.
+  
+
+  
+
+
+---
+
+# Motivation
+
+<br><br>
+
+So far, we have assumed that the .hi[population standard deviation] (*&sigma;*) was known when computing confidence intervals and hypothesis testing.
+
+--
+
+This assumption, however, is .hi-blue[unrealistic].
+
+--
+
+Now, we .hi-green[relax] such belief, and move on using a very similar approach.
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The Student *t* distribution
+
+
+---
+
+# The Student *t* distribution
+
+Recall the formula for the *z* test:
+
+$$
+\begin{aligned}
+z = \dfrac{\bar{x} - \mu}{\sigma / \sqrt{n}}
+\end{aligned}
+$$
+
+--
+
+Now that the population standard deviation is *unknown*, what is the .hi-blue[best move]?
+
+--
+
+<br><br>
+
+.right[Replace it by its .hi-green[sample estimator], *s*!]
+
+--
+
+$$
+\begin{aligned}
+t = \dfrac{\bar{x} - \mu}{s / \sqrt{n}}
+\end{aligned}
+$$
+
+---
+
+# The Student *t* distribution
+
+Now, we do not know the population standard deviation anymore.
+
+--
+
+However, frequentist methods still assume that the population mean (*&mu;*) is .hi-blue[normally distributed].
+
+--
+
+.pull-left[
+In 1908, William S. Gosset came up with the .hi[Student *t*] distribution, whose mean and variance are
+
+- $E(X) = 0$
+
+- $\text{Var}(X) = \dfrac{\nu}{\nu - 2}$
+
+where $\nu = n - 1$.
+
+]
+
+.pull-right[
+
+<img src="gosset.jpeg", width = "50%">
+
+]
+
+---
+
+# The Student *t* distribution
+
+The *t* distribution has a ".red[*mound-shaped*]" density curve, while the Normal's is bell-shaped.
+
+```{r, dev = "svg", echo = FALSE, fig.height = 5}
+
+min2 <- -3.5
+max2 <- 3.5
+
+ggplot(data.frame(x = c(min2, max2)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), geom = "area", fill = "#8b9dc3", alpha = 0.5) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), size = 1.2, alpha = 0.8) +
+  stat_function(fun = dt, args = list(df = 1), geom = "area", fill = "#d95d2c", alpha = 0.2) +
+  stat_function(fun = dt, args = list(df = 1), size = 0.8, alpha = 0.8) +
+  theme(axis.text.x=element_blank()) +
+  labs(x = "x", y = "",
+       title = "Standard Normal and t distributions") +
+  easy_x_axis_title_size(13)
+
+
+```
+
+---
+
+# The Student *t* distribution
+
+Its only parameter is $\nu$, the .hi-blue[degrees of freedom] of the distribution:
+
+$$
+\begin{aligned}
+X \sim t(\nu)
+\end{aligned}
+$$
+
+--
+
+The larger the value of $\nu$, the more .hi-green[similar] the *t* distribution is to the Normal.
+
+--
+
+```{r, dev = "svg", echo = FALSE, fig.height = 4}
+
+
+
+ggplot(data.frame(x = c(min2, max2)), aes(x = x)) +
+  stat_function(fun = dt, args = list(df = 1), size = 0.4, alpha = 0.8) +
+  stat_function(fun = dt, args = list(df = 2), size = 0.5, alpha = 0.8, color = "#d95d2c") +
+  stat_function(fun = dt, args = list(df = 5), size = 0.6, alpha = 0.8, color = "#33aa66") +
+  stat_function(fun = dt, args = list(df = 10), size = 0.7, alpha = 0.8, color = "#9d43a5") +
+  stat_function(fun = dt, args = list(df = 30), size = 0.8, alpha = 0.8, color = "#4c2b50") +
+  theme(axis.text.x=element_blank()) +
+  labs(x = "x", y = "",
+       title = "t distributions with different degrees of freedom") +
+  easy_x_axis_title_size(13)
+
+
+```
+
+---
+
+# The Student *t* distribution
+
+When *&sigma;* is unknown, we can define the .hi[confidence interval] for the population mean (*&mu;*) as:
+
+$$
+\begin{aligned}
+\bar{x} \pm t_{\alpha/2, \ \nu} \bigg(\dfrac{s}{\sqrt{n}}\bigg)
+\end{aligned}
+$$
+
+--
+
+<br>
+
+Notice that, in addition to the significance level $(\alpha)$, we also must take the number of degrees of freedom $(\nu = n-1)$ into account to find the .hi-blue[standard error] for $\bar{x}$.
+
+
+--
+
+<br>
+
+Furthermore, for .hi[hypothesis testing], the .red[*t-statistic*] is obtained with:
+
+
+$$
+\begin{aligned}
+t = \dfrac{\bar{x} - \mu}{s / \sqrt{n}}
+\end{aligned}
+$$
+
+
+---
+
+# The Student *t* distribution
+
+We .hi[cannot] use the sampling distribution of *&mu;* anymore, since the population standard deviation is unknown.
+
+--
+
+Such assumption considers an .hi-green[infinitely large] sample, which is almost never the case in practice.
+
+--
+
+For .hi-blue[smaller] sample sizes, the *t* distribution is extremely useful, and its shape is conditional on this sample size.
+
+--
+
+<br>
+
+.right[But why $n-1$ degrees of freedom?]
+
+---
+
+# The Student *t* distribution
+
+An example:
+
+Assuming that it can be profitable to recycle newspapers, a company’s financial analyst has computed that the firm would make a profit if the mean weekly newspaper collection from each household exceeded 2 lbs. His study collected data from a sample of 148 households. The calculated sample average weight was 2.18 lbs. 
+
+Do these data provide sufficient evidence to allow the analyst to conclude that a recycling plant would be profitable? Assume a significance level of 1%, and a sample variance of .962 lbs<sup>2</sup>.
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Review & practice problems
+
+
+---
+exclude: true

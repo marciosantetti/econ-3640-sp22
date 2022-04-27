@@ -1,0 +1,541 @@
+---
+title: ".b[Sampling distributions]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Keller (2009)`:
+
+  - Chapter .b[9], section 9.1.
+  
+
+  
+
+
+---
+
+# Motivation
+
+<br><br>
+
+We will spend the remaining lectures on the .hi[*frequentist*] approach to statistical inference. 
+
+--
+
+Recall that the frequentist .hi-blue[interpretation] of probability relies on it coming out of .hi[repeated] experiments.
+
+--
+
+In this context, a fundamental element for understanding frequentist inference is .hi[sampling distributions].
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Sampling distributions
+
+---
+
+# Sampling distributions
+
+<br>
+
+There are .hi[2] ways to approach sampling distributions.
+
+--
+
+The .b[first] is to repeatedly draw .hi[samples of the same size] (*n*) from a .hi-blue[population] of interest (*N*), and calculate the statistic of interest.
+
+--
+
+  - However, it is almost impossible to access data for an entire population.
+  
+--
+
+The .b[second] is to use the laws of .hi[Expected Value and Variance], which we have already studied,  to derive sampling distributions.
+
+--
+
+  - More feasible!
+
+
+---
+
+# Sampling distributions
+
+Let us demonstrate the first approach, using the [`AmesHousing`](http://jse.amstat.org/v19n3/decock.pdf) data set.
+
+  - It includes data on .hi[all] residential home sales in Ames, Iowa, between 2006 and 2010.
+  
+  - Thus, these data may serve as a .hi-slate[populational] reference.
+  
+--
+
+<br>
+
+```{r}
+library(AmesHousing)   ## where the data come from
+library(janitor)       ## package for data cleaning.
+
+ames <- ames_raw       ## picking one of the package's data sets.
+
+
+ames <- ames %>% 
+  clean_names()        ## using 'janitor' to clean the column names.
+
+```
+
+
+
+---
+
+# Sampling distributions
+
+```{r}
+ames %>% 
+  select(gr_liv_area) %>% 
+  head(6)      ## above ground living area (in square feet).
+```
+
+---
+
+# Sampling distributions
+
+```{r, echo = FALSE, dev = "svg", fig.height=5.5}
+ames %>% 
+  ggplot(aes(x = gr_liv_area)) +
+  geom_histogram(binwidth = 200, color = "white", fill = "#bd969b", alpha = 0.8) +
+  labs(x = "Above ground living area") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+
+---
+
+# Sampling distributions
+
+Since we have the whole .hi-slate[population] data, we can compute population parameters, such as *&mu;*, *&sigma;<sup>2</sup>*, and *&sigma;*:
+
+
+
+```{r}
+ames %>% 
+  summarize(pop_mean = mean(gr_liv_area),
+            pop_variance = var(gr_liv_area),
+            pop_sd = sd(gr_liv_area))
+```
+
+--
+
+<br>
+
+Now, let us repeatedly draw .hi[samples of the same size] from this population, and see how the value of *&mu;* and *&sigma;<sup>2</sup>* behave.
+
+
+
+
+---
+
+# Sampling distributions
+
+```{r}
+area <- ames %>% 
+  pull(gr_liv_area)  ## pulling the values for the variable of interest.
+
+```
+
+<br>
+
+
+```{r}
+# A "for" loop:
+
+sample_means50 <- rep(NA, 5000)  ## creating an empty vector of 5000 values.
+
+for(i in 1:5000){                ## starting the loop (5,000 iterations).
+  
+  s50 <- sample(area, 50)        ## drawing samples of size n = 50
+  
+  sample_means50[i] <- mean(s50) ## filling the empty values with the sample means.
+  
+}
+```
+
+
+
+---
+
+# Sampling distributions
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, message=FALSE}
+
+samples <- sample_means50 %>% 
+  as_tibble() %>% 
+  rename(mean_50 = value)
+
+
+
+sample_means500 <- rep(NA, 5000) 
+
+for(i in 1:5000){   
+  
+  s500 <- sample(area, 500)
+  
+  sample_means500[i] <- mean(s500)
+  
+}
+
+
+sample_means500 <- sample_means500 %>% 
+  as_tibble() %>% 
+  rename(mean_500 = value)
+ 
+
+
+samples <- samples %>% 
+  add_column(sample_means500)
+
+
+samples %>% 
+  ggplot(aes(x = mean_50)) +
+  geom_histogram(color = "white", fill = "#204864", alpha = 0.4) +
+  labs(x = "Sample mean") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+
+---
+
+# Sampling distributions
+
+Now, instead of samples of size *n = 50*, what about *n = 500*?
+
+--
+
+<br>
+
+```{r, eval = FALSE}
+
+sample_means500 <- rep(NA, 5000) 
+
+for(i in 1:5000){   
+  
+  s500 <- sample(area, 500)
+  
+  sample_means500[i] <- mean(s500)
+  
+}
+
+```
+
+---
+
+# Sampling distributions
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, message=FALSE}
+
+samples %>% 
+  ggplot(aes(x = mean_500)) +
+  geom_histogram(color = "white", fill = "#fa8072", alpha = 0.5) +
+  labs(x = "Sample mean") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+```
+
+
+---
+
+# Sampling distributions
+
+Now, the two together...
+
+```{r, echo=FALSE, dev = "svg", fig.height=5, message=FALSE}
+
+samples %>% 
+  ggplot(aes(x = mean_50)) +
+  geom_histogram(color = "white", fill = "#204864", alpha = 0.4) +
+  geom_histogram(aes(x = mean_500), color = "white", fill = "#fa8072", alpha = 0.5) +
+  labs(x = "Sample mean") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+
+---
+
+# Sampling distributions
+
+<br>
+
+Having access to the whole population, we may draw samples of the same size and .hi[repeatedly] compute .red[*sample statistics*] from these samples.
+
+--
+
+And as the sample size .hi-blue[increases], the .red[*variance*] (and standard deviation) is reduced.
+
+  - More precision!
+  
+--
+
+<br>
+
+But when we do not have the luxury of accessing the whole population, we may appeal to the laws of .red[*Expected Value and Variance*] we've already studied.
+
+---
+
+# Sampling distributions
+
+
+Let us start with a single .hi-blue[die roll].
+
+--
+
+The population is created by throwing a fair die .red[*infinitely*] many times, with the random variable *X* being the number of spots showing on any one throw.
+
+--
+.pull-left[
+
+What is the probability of each specific value of *X*, *P(x)*?
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, dev = "svg"}
+die <- tibble(
+  value = c(1, 2, 3, 4, 5, 6)
+)
+
+
+die %>% 
+  count(value, sort = TRUE) %>% 
+  ggplot(aes(x = value, y = n)) +
+  geom_col(fill = "#c62460", alpha = 0.6) +
+  labs(x = "Value") +
+  easy_x_axis_title_size(20) +
+  easy_x_axis_labels_size(20) +
+  easy_y_axis_title_size(20) +
+  easy_y_axis_labels_size(20)
+```
+
+
+]
+
+---
+
+# Sampling distributions
+
+As we all know, the probability of a .b[1] is the same as the probability of a .b[6] from this single die roll.
+
+<br>
+
+--
+
+$$
+\begin{aligned}
+\mu = \displaystyle\sum_{all \ x}^{}xP(x) = 1(1/6) + 2(1/6) + ... + 6(1/6) = 3.5
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+\sigma^2 = \displaystyle\sum_{all \ x}^{}(x-\mu)^2P(x) = (1-3.5)^2(1/6) + (2-3.5)^2(1/6) + ... + (6-3.5)^2(1/6) = 2.92
+\end{aligned}
+$$
+
+
+
+
+$$
+\begin{aligned}
+\sigma = \sqrt{2.92} = 1.71
+\end{aligned}
+$$
+
+---
+
+# Sampling distributions
+
+<br>
+
+Now, what if we draw samples of size *n = 2*?
+
+--
+
+In other words, we throw .hi-blue[2 dice], and study the *mean* and *variance* from these throws.
+
+--
+
+By tossing two dice, we have .b[36] different possible samples of size 2.
+
+--
+
+Each of these 36 possible pairs will have .hi-slate[different means].
+
+--
+
+Therefore, the means are .hi[not] the same as the the ones in the probability distribution from rolling a single die.
+
+---
+
+# Sampling distributions
+
+```{r, echo=FALSE, dev = "svg", fig.height=5.5, message=FALSE}
+
+dice_rolls <- tibble(
+  mean = c(1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6),
+  prob_mean = c(1/36, 2/36, 3/36, 4/36, 5/36, 6/36, 5/36, 4/36, 3/36, 2/36, 1/36)
+)
+
+
+dice_rolls %>% 
+  ggplot(aes(x = mean, y = prob_mean)) +
+  geom_col(fill = "#607f52", color = "white", alpha = 0.6) +
+  labs(x = "Sample mean",
+       y = "Probability") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+---
+
+# Sampling distributions
+
+The Expected Value of the sample mean is the .hi[same] as with 1 dice roll.
+
+--
+
+The .hi-blue[variance], however, is different:
+
+
+$$
+\begin{aligned}
+\sigma^2_{\bar{x}} = \displaystyle\sum_{all \ \bar{x}}^{}(\bar{x}-\mu_{\bar{x}})^2P(\bar{x}) = (1-3.5)^2(1/36) + (1.5-3.5)^2(2/36) +... + (6-3.5)^2(1/6) = 1.46
+\end{aligned}
+$$
+
+--
+
+But they are related!
+
+  - $\sigma^2_{\bar{x}} = \sigma/2$
+  
+--
+
+If we repeat the same sampling process, but now *increasing* the sample size to, say, 5, 10, or 25 dice rolls, we  will .hi[still] observe the same sampling mean of 3.5.
+
+---
+
+# Sampling distributions
+
+The .hi[variance] of the sampling distribution of the sample mean will be the variance of *X*, divided by the sample size, *n*.
+
+
+
+$$
+\begin{aligned}
+\sigma^2_{\bar{x}} = \dfrac{\sigma^2}{n}
+\end{aligned}
+$$
+
+--
+
+Not surprisingly, the .hi-slate[standard deviation] will be
+
+$$
+\begin{aligned}
+\sigma_{\bar{x}} = \dfrac{\sigma}{\sqrt{n}}
+\end{aligned}
+$$
+
+--
+
+Moreover, as the .hi-blue[sample size increases], that is, as the number of dice rolls increases, the sampling distribution of $\bar{x}$ becomes .red[*increasingly bell-shaped*].
+
+--
+
+In other words, its bell curve becomes .hi-green[narrower] as the sample size is increased.
+
+
+---
+
+# Sampling distributions
+
+The latter phenomenon is summarized by the .hi-slate[Central Limit Theorem] (CLT).
+
+<br>
+
+--
+
+> The sampling distribution of the mean of a random sample drawn from any population is .hi-slate[approximately Normal] for a sufficiently large sample size. The larger the sample size, the more closely the sampling distribution of $\bar{X}$ will resemble a Normal distribution.
+
+--
+
+<br>
+
+In many practical situations, a sample size of .hi[30] may be sufficiently large to allow us to use the Normal distribution as an approximation for the sampling distribution of $\bar{X}$.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Properties of sampling means; Confidence intervals
+
+
+---
+exclude: true

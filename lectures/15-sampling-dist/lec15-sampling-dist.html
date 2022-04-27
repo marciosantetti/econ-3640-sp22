@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Sampling distributions]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec15-sampling-dist_files/header-attrs/header-attrs.js"></script>
+    <link href="lec15-sampling-dist_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec15-sampling-dist_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec15-sampling-dist_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Sampling distributions]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Keller (2009)`:
+
+  - Chapter .b[9], section 9.1.
+  
+
+  
+
+
+---
+
+# Motivation
+
+&lt;br&gt;&lt;br&gt;
+
+We will spend the remaining lectures on the .hi[*frequentist*] approach to statistical inference. 
+
+--
+
+Recall that the frequentist .hi-blue[interpretation] of probability relies on it coming out of .hi[repeated] experiments.
+
+--
+
+In this context, a fundamental element for understanding frequentist inference is .hi[sampling distributions].
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Sampling distributions
+
+---
+
+# Sampling distributions
+
+&lt;br&gt;
+
+There are .hi[2] ways to approach sampling distributions.
+
+--
+
+The .b[first] is to repeatedly draw .hi[samples of the same size] (*n*) from a .hi-blue[population] of interest (*N*), and calculate the statistic of interest.
+
+--
+
+  - However, it is almost impossible to access data for an entire population.
+  
+--
+
+The .b[second] is to use the laws of .hi[Expected Value and Variance], which we have already studied,  to derive sampling distributions.
+
+--
+
+  - More feasible!
+
+
+---
+
+# Sampling distributions
+
+Let us demonstrate the first approach, using the [`AmesHousing`](http://jse.amstat.org/v19n3/decock.pdf) data set.
+
+  - It includes data on .hi[all] residential home sales in Ames, Iowa, between 2006 and 2010.
+  
+  - Thus, these data may serve as a .hi-slate[populational] reference.
+  
+--
+
+&lt;br&gt;
+
+
+```r
+library(AmesHousing)   ## where the data come from
+library(janitor)       ## package for data cleaning.
+
+ames &lt;- ames_raw       ## picking one of the package's data sets.
+
+
+ames &lt;- ames %&gt;% 
+  clean_names()        ## using 'janitor' to clean the column names.
+```
+
+
+
+---
+
+# Sampling distributions
+
+
+```r
+ames %&gt;% 
+  select(gr_liv_area) %&gt;% 
+  head(6)      ## above ground living area (in square feet).
+```
+
+```
+#&gt; # A tibble: 6 × 1
+#&gt;   gr_liv_area
+#&gt;         &lt;int&gt;
+#&gt; 1        1656
+#&gt; 2         896
+#&gt; 3        1329
+#&gt; 4        2110
+#&gt; 5        1629
+#&gt; 6        1604
+```
+
+---
+
+# Sampling distributions
+
+&lt;img src="lec15-sampling-dist_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Sampling distributions
+
+Since we have the whole .hi-slate[population] data, we can compute population parameters, such as *&amp;mu;*, *&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;*, and *&amp;sigma;*:
+
+
+
+
+```r
+ames %&gt;% 
+  summarize(pop_mean = mean(gr_liv_area),
+            pop_variance = var(gr_liv_area),
+            pop_sd = sd(gr_liv_area))
+```
+
+```
+#&gt; # A tibble: 1 × 3
+#&gt;   pop_mean pop_variance pop_sd
+#&gt;      &lt;dbl&gt;        &lt;dbl&gt;  &lt;dbl&gt;
+#&gt; 1    1500.      255539.   506.
+```
+
+--
+
+&lt;br&gt;
+
+Now, let us repeatedly draw .hi[samples of the same size] from this population, and see how the value of *&amp;mu;* and *&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;* behave.
+
+
+
+
+---
+
+# Sampling distributions
+
+
+```r
+area &lt;- ames %&gt;% 
+  pull(gr_liv_area)  ## pulling the values for the variable of interest.
+```
+
+&lt;br&gt;
+
+
+
+```r
+# A "for" loop:
+
+sample_means50 &lt;- rep(NA, 5000)  ## creating an empty vector of 5000 values.
+
+for(i in 1:5000){                ## starting the loop (5,000 iterations).
+  
+  s50 &lt;- sample(area, 50)        ## drawing samples of size n = 50
+  
+  sample_means50[i] &lt;- mean(s50) ## filling the empty values with the sample means.
+  
+}
+```
+
+
+
+---
+
+# Sampling distributions
+
+&lt;img src="lec15-sampling-dist_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Sampling distributions
+
+Now, instead of samples of size *n = 50*, what about *n = 500*?
+
+--
+
+&lt;br&gt;
+
+
+```r
+sample_means500 &lt;- rep(NA, 5000) 
+
+for(i in 1:5000){   
+  
+  s500 &lt;- sample(area, 500)
+  
+  sample_means500[i] &lt;- mean(s500)
+  
+}
+```
+
+---
+
+# Sampling distributions
+
+&lt;img src="lec15-sampling-dist_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Sampling distributions
+
+Now, the two together...
+
+&lt;img src="lec15-sampling-dist_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Sampling distributions
+
+&lt;br&gt;
+
+Having access to the whole population, we may draw samples of the same size and .hi[repeatedly] compute .red[*sample statistics*] from these samples.
+
+--
+
+And as the sample size .hi-blue[increases], the .red[*variance*] (and standard deviation) is reduced.
+
+  - More precision!
+  
+--
+
+&lt;br&gt;
+
+But when we do not have the luxury of accessing the whole population, we may appeal to the laws of .red[*Expected Value and Variance*] we've already studied.
+
+---
+
+# Sampling distributions
+
+
+Let us start with a single .hi-blue[die roll].
+
+--
+
+The population is created by throwing a fair die .red[*infinitely*] many times, with the random variable *X* being the number of spots showing on any one throw.
+
+--
+.pull-left[
+
+What is the probability of each specific value of *X*, *P(x)*?
+
+]
+
+.pull-right[
+
+&lt;img src="lec15-sampling-dist_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+
+# Sampling distributions
+
+As we all know, the probability of a .b[1] is the same as the probability of a .b[6] from this single die roll.
+
+&lt;br&gt;
+
+--
+
+$$
+`\begin{aligned}
+\mu = \displaystyle\sum_{all \ x}^{}xP(x) = 1(1/6) + 2(1/6) + ... + 6(1/6) = 3.5
+\end{aligned}`
+$$
+
+$$
+`\begin{aligned}
+\sigma^2 = \displaystyle\sum_{all \ x}^{}(x-\mu)^2P(x) = (1-3.5)^2(1/6) + (2-3.5)^2(1/6) + ... + (6-3.5)^2(1/6) = 2.92
+\end{aligned}`
+$$
+
+
+
+
+$$
+`\begin{aligned}
+\sigma = \sqrt{2.92} = 1.71
+\end{aligned}`
+$$
+
+---
+
+# Sampling distributions
+
+&lt;br&gt;
+
+Now, what if we draw samples of size *n = 2*?
+
+--
+
+In other words, we throw .hi-blue[2 dice], and study the *mean* and *variance* from these throws.
+
+--
+
+By tossing two dice, we have .b[36] different possible samples of size 2.
+
+--
+
+Each of these 36 possible pairs will have .hi-slate[different means].
+
+--
+
+Therefore, the means are .hi[not] the same as the the ones in the probability distribution from rolling a single die.
+
+---
+
+# Sampling distributions
+
+&lt;img src="lec15-sampling-dist_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Sampling distributions
+
+The Expected Value of the sample mean is the .hi[same] as with 1 dice roll.
+
+--
+
+The .hi-blue[variance], however, is different:
+
+
+$$
+`\begin{aligned}
+\sigma^2_{\bar{x}} = \displaystyle\sum_{all \ \bar{x}}^{}(\bar{x}-\mu_{\bar{x}})^2P(\bar{x}) = (1-3.5)^2(1/36) + (1.5-3.5)^2(2/36) +... + (6-3.5)^2(1/6) = 1.46
+\end{aligned}`
+$$
+
+--
+
+But they are related!
+
+  - `\(\sigma^2_{\bar{x}} = \sigma/2\)`
+  
+--
+
+If we repeat the same sampling process, but now *increasing* the sample size to, say, 5, 10, or 25 dice rolls, we  will .hi[still] observe the same sampling mean of 3.5.
+
+---
+
+# Sampling distributions
+
+The .hi[variance] of the sampling distribution of the sample mean will be the variance of *X*, divided by the sample size, *n*.
+
+
+
+$$
+`\begin{aligned}
+\sigma^2_{\bar{x}} = \dfrac{\sigma^2}{n}
+\end{aligned}`
+$$
+
+--
+
+Not surprisingly, the .hi-slate[standard deviation] will be
+
+$$
+`\begin{aligned}
+\sigma_{\bar{x}} = \dfrac{\sigma}{\sqrt{n}}
+\end{aligned}`
+$$
+
+--
+
+Moreover, as the .hi-blue[sample size increases], that is, as the number of dice rolls increases, the sampling distribution of `\(\bar{x}\)` becomes .red[*increasingly bell-shaped*].
+
+--
+
+In other words, its bell curve becomes .hi-green[narrower] as the sample size is increased.
+
+
+---
+
+# Sampling distributions
+
+The latter phenomenon is summarized by the .hi-slate[Central Limit Theorem] (CLT).
+
+&lt;br&gt;
+
+--
+
+&gt; The sampling distribution of the mean of a random sample drawn from any population is .hi-slate[approximately Normal] for a sufficiently large sample size. The larger the sample size, the more closely the sampling distribution of `\(\bar{X}\)` will resemble a Normal distribution.
+
+--
+
+&lt;br&gt;
+
+In many practical situations, a sample size of .hi[30] may be sufficiently large to allow us to use the Normal distribution as an approximation for the sampling distribution of `\(\bar{X}\)`.
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Properties of sampling means; Confidence intervals
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

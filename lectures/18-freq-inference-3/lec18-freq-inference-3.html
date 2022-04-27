@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Frequentist Inference, pt. III]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec18-freq-inference-3_files/header-attrs/header-attrs.js"></script>
+    <link href="lec18-freq-inference-3_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec18-freq-inference-3_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec18-freq-inference-3_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Frequentist Inference, pt. III]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Keller (2009)`:
+
+  - Chapter .b[12], sections `12.1`.
+  
+
+  
+
+
+---
+
+# Motivation
+
+&lt;br&gt;&lt;br&gt;
+
+So far, we have assumed that the .hi[population standard deviation] (*&amp;sigma;*) was known when computing confidence intervals and hypothesis testing.
+
+--
+
+This assumption, however, is .hi-blue[unrealistic].
+
+--
+
+Now, we .hi-green[relax] such belief, and move on using a very similar approach.
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The Student *t* distribution
+
+
+---
+
+# The Student *t* distribution
+
+Recall the formula for the *z* test:
+
+$$
+`\begin{aligned}
+z = \dfrac{\bar{x} - \mu}{\sigma / \sqrt{n}}
+\end{aligned}`
+$$
+
+--
+
+Now that the population standard deviation is *unknown*, what is the .hi-blue[best move]?
+
+--
+
+&lt;br&gt;&lt;br&gt;
+
+.right[Replace it by its .hi-green[sample estimator], *s*!]
+
+--
+
+$$
+`\begin{aligned}
+t = \dfrac{\bar{x} - \mu}{s / \sqrt{n}}
+\end{aligned}`
+$$
+
+---
+
+# The Student *t* distribution
+
+Now, we do not know the population standard deviation anymore.
+
+--
+
+However, frequentist methods still assume that the population mean (*&amp;mu;*) is .hi-blue[normally distributed].
+
+--
+
+.pull-left[
+In 1908, William S. Gosset came up with the .hi[Student *t*] distribution, whose mean and variance are
+
+- `\(E(X) = 0\)`
+
+- `\(\text{Var}(X) = \dfrac{\nu}{\nu - 2}\)`
+
+where `\(\nu = n - 1\)`.
+
+]
+
+.pull-right[
+
+&lt;img src="gosset.jpeg", width = "50%"&gt;
+
+]
+
+---
+
+# The Student *t* distribution
+
+The *t* distribution has a ".red[*mound-shaped*]" density curve, while the Normal's is bell-shaped.
+
+&lt;img src="lec18-freq-inference-3_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Student *t* distribution
+
+Its only parameter is `\(\nu\)`, the .hi-blue[degrees of freedom] of the distribution:
+
+$$
+`\begin{aligned}
+X \sim t(\nu)
+\end{aligned}`
+$$
+
+--
+
+The larger the value of `\(\nu\)`, the more .hi-green[similar] the *t* distribution is to the Normal.
+
+--
+
+&lt;img src="lec18-freq-inference-3_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Student *t* distribution
+
+When *&amp;sigma;* is unknown, we can define the .hi[confidence interval] for the population mean (*&amp;mu;*) as:
+
+$$
+`\begin{aligned}
+\bar{x} \pm t_{\alpha/2, \ \nu} \bigg(\dfrac{s}{\sqrt{n}}\bigg)
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+Notice that, in addition to the significance level `\((\alpha)\)`, we also must take the number of degrees of freedom `\((\nu = n-1)\)` into account to find the .hi-blue[standard error] for `\(\bar{x}\)`.
+
+
+--
+
+&lt;br&gt;
+
+Furthermore, for .hi[hypothesis testing], the .red[*t-statistic*] is obtained with:
+
+
+$$
+`\begin{aligned}
+t = \dfrac{\bar{x} - \mu}{s / \sqrt{n}}
+\end{aligned}`
+$$
+
+
+---
+
+# The Student *t* distribution
+
+We .hi[cannot] use the sampling distribution of *&amp;mu;* anymore, since the population standard deviation is unknown.
+
+--
+
+Such assumption considers an .hi-green[infinitely large] sample, which is almost never the case in practice.
+
+--
+
+For .hi-blue[smaller] sample sizes, the *t* distribution is extremely useful, and its shape is conditional on this sample size.
+
+--
+
+&lt;br&gt;
+
+.right[But why `\(n-1\)` degrees of freedom?]
+
+---
+
+# The Student *t* distribution
+
+An example:
+
+Assuming that it can be profitable to recycle newspapers, a company’s financial analyst has computed that the firm would make a profit if the mean weekly newspaper collection from each household exceeded 2 lbs. His study collected data from a sample of 148 households. The calculated sample average weight was 2.18 lbs. 
+
+Do these data provide sufficient evidence to allow the analyst to conclude that a recycling plant would be profitable? Assume a significance level of 1%, and a sample variance of .962 lbs&lt;sup&gt;2&lt;/sup&gt;.
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Review &amp; practice problems
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

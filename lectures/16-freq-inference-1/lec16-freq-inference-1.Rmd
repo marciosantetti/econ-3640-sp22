@@ -1,0 +1,559 @@
+---
+title: ".b[Frequentist Inference, pt. I]"
+subtitle: ".b[ECON 3640--001]"
+author: "Marcio Santetti"
+date: "Spring 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'utah-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel, xaringanExtra, tidyverse, sjPlot, showtext, mathjaxr, ggforce, furrr, kableExtra, wooldridge, hrbrthemes, scales, ggeasy, patchwork)
+
+
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F,
+  dpi=300
+)
+
+theme_set(theme_ipsum_rc())
+
+```
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+<br><br>
+
+
+Notes based on `Keller (2009)`:
+
+  - Chapter .b[10], sections `10.1` and `10.2`.
+  
+
+  
+
+
+---
+
+# Motivation
+
+<br><br>
+
+When studying .b[*Bayesian*] inference, all our questions were answered through .hi[entire probability distributions].
+
+--
+
+In the case of .b[*frequentist*] inference, we appeal to the concept of .hi-blue[sampling distributions].
+
+--
+
+But how to .hi-green[link] sampling distributions to actual inference procedures?
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Point and Interval estimators
+
+---
+
+
+# Point and Interval estimators
+
+
+The goal of statistical inference is to approximate a .hi-blue[population parameter] through a .hi[sample statistic].
+
+--
+
+For instance, the .b[estimator] of the population mean (*&mu;*) is the sample mean, $\bar{x}$.
+
+--
+
+Once it is computed, the specific value of $\bar{x}$ is an .b[estimate] of the population mean.
+
+--
+
+.hi[Careful!] An .b[estimator] is a formula/procedure one follows to obtain a measure of a parameter of interest. An .b[estimate] is a specific value calculated using an estimator.
+
+--
+
+A sample statistic may be used to represent a population parameter in two ways:
+
+  1. Point estimator;
+  2. Interval estimator.
+  
+---
+
+# Point and Interval estimators
+
+A .hi[point] estimator draws inferences about a population by estimating the value of an unknown parameter using a .hi-slate[single] value or point.
+
+--
+
+In the first part of the course, we spent some time using such estimators.
+
+  - E.g., *sample mean, sample variance, sample standard deviation, sample median*....
+  
+--
+
+These estimators, however, are .hi-green[fragile].
+
+--
+
+Recall that *P(X = x) = 0* for continuous random variables!
+
+--
+
+Furthermore, how does .red[*varying the sample size*] reflects how good/bad a point estimator is?
+
+---
+
+# Point and Interval estimators
+
+.hi[Interval] estimators draw inferences about a population by estimating the value of an unknown parameter using an *interval.*
+
+--
+
+This way, representing a parameter of interest through an interval is .red[*better suited*] when we don't know the whole population.
+
+--
+
+And the sample size (*n*) .hi[does matter] here!
+
+---
+
+# Point and Interval estimators
+
+<br>
+
+The selection of the sample statistic to be used as an estimator, however, depends on the .hi[characteristics] of that statistic.
+
+--
+
+<br>
+
+These are:
+
+  1. Unbiasedness;
+  2. Consistency;
+  3. Efficiency.
+  
+---
+
+# Point and Interval estimators
+
+<br>
+
+An .b[unbiased] estimator of a population parameter is an estimator whose *expected value is equal to that parameter*.
+
+--
+
+Unbiasedness implies that if one takes an .hi[infinite] number of samples and calculate the value of the estimator in each sample, the .red[*average value*] of the estimators would *equal* the parameter.
+
+--
+
+<br>
+
+
+
+
+If there are two unbiased estimators of a parameter, the one whose variance is smaller is said to have .b[relative efficiency].
+
+---
+
+# Point and Interval estimators
+
+.center[<img src="p.png", width = "90%">]
+
+
+---
+
+# Point and Interval estimators
+
+.b[Intuition] behind unbiasedness:
+
+--
+
+  - If one were to take an .hi-blue[infinite] amount of samples from the population and compute the value of the estimator (mean, median, variance, standard deviation...) in each sample, the .hi[average] value would equal the parameter.
+  
+  - $E(\bar{X}) = \mu$.
+  
+--
+
+<br>
+
+A third desirable propery of an estimator is .b[consistency].
+
+--
+
+It simply implies that, for an unbiased estimator, the difference between the estimator and the parameter grows smaller .red[*as the sample size grows larger*].
+
+--
+
+  - Therefore, consistency is a "large sample" property.
+  
+---
+
+layout: false
+class: inverse, middle
+
+# Building interval estimators
+
+---
+
+# Building interval estimators
+
+Now that we know where .hi[sampling distributions] come from and the desired .hi-blue[properties] of an estimator, we may move on to one inferential tool within frequentist inference:
+
+--
+
+  - .hi-green[Confidence intervals]
+
+
+--
+
+<br>
+
+Assume the (unrealistic) scenario in which we are curious about a population's .hi[mean value] (*&mu;*), and its .hi-blue[standard deviation] (*&sigma;*) is known. 
+
+--
+
+So, the task is to draw a random sample *n* from the population *N* and obtain its sample mean, $\bar{x}$.
+
+--
+
+From the .hi-slate[Central Limit Theorem], if a random variable *X* is normally distributed, its mean $\bar{X}$ will .hi[also] be normally distributed (or at least approximately).
+
+
+---
+
+# Building interval estimators
+
+As we've already studied, the .hi[fundamental] parameters of the Normal distribution are the population .hi-blue[mean] and .hi-blue[standard deviation].
+
+--
+
+$$
+\begin{aligned}
+X \sim \mathcal{N}(\mu, \sigma)
+\end{aligned}
+$$
+
+--
+
+<br>
+
+```{r, echo=FALSE, dev = "svg", fig.height=3.5, fig.width=6}
+min <- -3.5
+max <- 3.5
+
+ggplot(data.frame(x = c(min, max)), aes(x = x)) +
+  xlim(c(min, max)) + ylim(c(0, 0.45)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), geom = "area", fill = "#8b9dc3", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), color = "#b092b1", size = 1, alpha = 0.5) +
+  labs(x = "x",
+       y = "f(x)") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+---
+
+# Building interval estimators
+
+Given that the Normal distribution is .hi-slate[symmetric] about its .hi[mean], one very useful transformation we can apply to a normally distributed random variable is .b[standardization].
+
+--
+
+This simply implies transforming a variable such that it follows a .hi[Standard Normal] distribution.
+
+--
+
+  - The Standard Normal distribution implies a mean of 0 and a standard deviation (variance) of 1.
+  
+  - $X \sim \mathcal{N}(0, 1)$
+  
+--
+
+<br>
+
+To .hi-blue[standardize] a random variable, we apply the following formula:
+
+$$
+\begin{aligned}
+z = \dfrac{x - \mu}{\sigma}
+\end{aligned}
+$$
+---
+
+# Building interval estimators
+
+A quick example:
+
+<br>
+
+Suppose the daily demand for gasoline at a station is a normally distributed random variable with a mean of 1,000 and a standard deviation of 100 gallons.
+
+The owner opened this station today and noted that there is exactly 1,100 gallons in storage. The next delivery will only happen tomorrow. She would like to know the probability that she will have enough regular gasoline to satisfy today’s demand.
+
+---
+
+# Building interval estimators
+
+Visually:
+
+
+```{r, echo=FALSE, dev = "svg", fig.height=5, fig.width=7}
+min2 <- 500
+max2 <- 1500
+
+ggplot(data.frame(x = c(min2, max2)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 1000, sd = 100), geom = "area", fill = "#8b9dc3", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 1000, sd = 100), size = 1.2, alpha = 0.8) +
+  scale_x_continuous(labels = comma) +
+  labs(x = "x",
+       y = "") +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+```
+
+---
+
+# Building interval estimators
+
+And the area we are interested in is:
+
+```{r, echo=FALSE, dev = "svg", fig.height=5, fig.width=7}
+
+ggplot(data.frame(x = c(min2, max2)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 1000, sd = 100), geom = "area", fill = "#8b9dc3", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 1000, sd = 100), size = 1.2, alpha = 0.8) +
+  scale_x_continuous(labels = comma) +
+  labs(x = "x",
+       y = "") +
+  geom_area(stat = "function", fun = dnorm, args = list(mean = 1000, sd = 100), 
+            fill = "#b70673", xlim = c(500, 1100), alpha = 0.4) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+```
+
+---
+
+# Building interval estimators
+
+Let us standardize our random variable *X*:
+
+$$
+\begin{aligned}
+z = \dfrac{x - \mu}{\sigma} = \dfrac{1,100 - 1000}{100} = 1.00
+\end{aligned}
+$$
+
+<br>
+
+--
+
+Now, the random variable *z* follows a Standard Normal distribution!
+
+--
+
+And we are able to ask *P(z < 1.00)*, instead of *P(X < 1,100)*.
+
+---
+
+# Building interval estimators
+
+Visually:
+
+```{r, echo=FALSE, dev = "svg", fig.height=5, fig.width=7}
+
+ggplot(data.frame(x = c(min, max)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), geom = "area", fill = "#8b9dc3", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), size = 1.2, alpha = 0.8) +
+  scale_x_continuous(labels = comma) +
+  labs(x = "x",
+       y = "") +
+  geom_area(stat = "function", fun = dnorm, args = list(mean = 0, sd = 1), 
+            fill = "#b70673", xlim = c(-3.5, 1), alpha = 0.4) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+```
+
+
+---
+
+# Building interval estimators
+
+The values of *z* specify the .hi[location] of the corresponding value of *X*, our random variable.
+
+--
+
+A value of *z = 1.00* corresponds to a value of *X* that is .hi-blue[1.00 standard deviation above the mean].
+
+--
+
+Another *advantage* of standardizing a random variable to a *z* value is that it automatically centers the population mean (*&mu;*) to .hi-blue[zero].
+
+--
+
+So what is this probability?
+
+```{r}
+pnorm(q = 1, mean = 0, sd = 1)
+```
+
+--
+
+Which is the same as
+
+```{r}
+pnorm(q = 1100, mean = 1000, sd = 100)
+```
+
+---
+
+# Building interval estimators
+
+Now, we are ready to build a .hi[confidence interval] for a .hi-blue[population mean] of interest.
+
+--
+
+Applying the standardization process to a sample mean $\bar{X}$, we have
+
+$$
+\begin{aligned}
+Z = \dfrac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+\end{aligned}
+$$
+
+--
+
+<br>
+
+
+And we want to get here:
+
+
+
+$$
+\begin{aligned}
+P(\bar{x} - z_{\dfrac{\alpha}{2}}\sigma/\sqrt{n} < \mu < \bar{x} + z_{\dfrac{\alpha}{2}}\sigma/\sqrt{n}) = 1 - \alpha
+\end{aligned}
+$$
+---
+
+# Building interval estimators
+
+Again:
+
+
+$$
+\begin{aligned}
+P(\bar{x} - z_{\dfrac{\alpha}{2}}\sigma/\sqrt{n} < \mu < \bar{x} + z_{\dfrac{\alpha}{2}}\sigma/\sqrt{n}) = 1 - \alpha
+\end{aligned}
+$$
+
+
+
+The **left-hand side** is a probability statement, which considers the probability with which the **population mean** $(\mu)$ lies between two values of the **sample mean**: one lower value, **corrected** downwards by  a **standard error** $(z_{\alpha/2})$, multiplied by the **sampling distribution**'s standard deviation $(\sigma/\sqrt{n})$; and one upper value, **corrected** upwards by the same factor. 
+
+In other words, the above says that, with **repeated sampling** from this population, the proportion of values of $\bar{X}$ for which the interval $[\bar{x} - z_{\alpha/2}\sigma/\sqrt{n}; \bar{x} + z_{\alpha/2}\sigma/\sqrt{n}]$ **includes** the population mean $\mu$ is **equal to** $1-\alpha$.
+
+
+---
+
+# Building interval estimators
+
+This form of probability statement is called the confidence interval estimator of $\mu$. 
+
+--
+
+The left part of the inequality on the left-hand side is known as the .hi[lower confidence limit] (LCL); while the right portion of the inequality is the .hi[upper confidence limit] (UCL). 
+
+--
+
+<br>
+
+The right-hand side, $1-\alpha$, is the .hi-blue[confidence level] assumed for the confidence interval. 
+
+--
+
+  - The latter is usually pre-specified, and represents the probability that the interval includes the actual value of $\mu$.
+  
+---
+
+# Building interval estimators
+
+An example:
+
+A computer store manager would like to estimate, with 95% of confidence, the optimum average inventory level. She also knows that the overall standard deviation is 75 computers. 
+
+She has used a random sample of 25 periods, calculating a sample mean of 370.16 computers.
+
+--
+
+What is the .hi[area] we are interested in?
+
+--
+
+```{r, echo=FALSE, dev = "svg", fig.height=3, fig.width=5}
+
+ggplot(data.frame(x = c(min, max)), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), geom = "area", fill = "#8b9dc3", alpha = 0.35) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), size = 1.2, alpha = 0.8) +
+  scale_x_continuous(labels = comma) +
+  labs(x = "x",
+       y = "") +
+  geom_area(stat = "function", fun = dnorm, args = list(mean = 0, sd = 1), 
+            fill = "#b70673", xlim = c(-1.64, 1.64), alpha = 0.4) +
+  theme(axis.text.x=element_blank()) +
+  easy_x_axis_title_size(13) +
+  easy_y_axis_title_size(13)
+
+
+```
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Hypothesis testing
+
+
+---
+exclude: true

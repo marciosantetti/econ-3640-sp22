@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[Frequentist Inference, pt. II]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marcio Santetti" />
+    <script src="lec17-freq-inference-2_files/header-attrs/header-attrs.js"></script>
+    <link href="lec17-freq-inference-2_files/remark-css/default.css" rel="stylesheet" />
+    <link href="lec17-freq-inference-2_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="lec17-freq-inference-2_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="utah-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[Frequentist Inference, pt. II]
+## .b[ECON 3640–001]
+### Marcio Santetti
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Motivation
+
+
+
+---
+
+# Housekeeping
+
+&lt;br&gt;&lt;br&gt;
+
+
+Notes based on `Keller (2009)`:
+
+  - Chapter .b[11], sections `11.1` and `11.2`.
+  
+
+  
+
+
+---
+
+# Motivation
+
+Last time, we were introduced to the concept of .hi[confidence intervals].
+
+--
+
+Given how fragile a .b[point] estimator is, producing inferences about a population parameter through an .b[interval] allows for a more flexible interpretation of a statistic of interest.
+
+--
+
+&lt;br&gt;
+
+Now, we move on to a .hi[second] inferential approach: 
+
+  - .hi-green[Hypothesis testing]
+  
+--
+
+This procedure serves for determining whether there is .red[*enough statistical evidence*] to confirm a belief/hypothesis about a parameter of interest.
+
+---
+
+
+
+layout: false
+class: inverse, middle
+
+# A *nonstatistical* application of Hypothesis Testing
+
+
+---
+
+# A *nonstatistical* application of Hypothesis Testing
+
+&lt;br&gt;&lt;br&gt;
+
+When a person is accused of a crime, they face a .hi-green[trial]. 
+
+--
+
+The prosecution presents the case, and a jury must make a decision, .hi-blue[based on the evidence] presented.
+
+--
+
+&lt;br&gt;
+
+In fact, what the jury conducts is a test of .b[different hypotheses]:
+
+--
+
+  - .red[*Prior hypothesis*]: the defendant is .hi-slate[not guilty].
+  
+  - .red[*Alternative hypothesis*]: the defendant is .hi-slate[guilty].
+
+---
+
+# A *nonstatistical* application of Hypothesis Testing
+
+&lt;br&gt;
+
+The jury .hi[does not] know which hypothesis is correct. 
+
+--
+
+Their base will be the .hi-green[evidence] presented by both prosecution and defense. 
+
+--
+
+In the end, there are only two possible decisions: 
+
+  - .b[Convict] or 
+  
+  - .b[Acquit].
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Back to Statistics
+
+
+---
+
+# Statistical hypothesis testing
+
+The *same reasoning* follows for Statistics:
+
+--
+
+  - The .b[prior hypothesis] is called the .hi[null hypothesis] (*H&lt;sub&gt;0&lt;/sub&gt;*);
+  
+  - The .b[alternative hypothesis] is called the research or .hi[alternative hypothesis] (*H&lt;sub&gt;1&lt;/sub&gt;* or *H&lt;sub&gt;a&lt;/sub&gt;*).
+  
+--
+
+Putting the *trial* example in statistical notation:
+  
+  -  *H&lt;sub&gt;0&lt;/sub&gt;*: the defendant is .b[not guilty].
+  
+  - *H&lt;sub&gt;a&lt;/sub&gt;*: the defendant is .b[guilty].
+  
+--
+
+The hypothesis of the defendant being guilty (*H&lt;sub&gt;a&lt;/sub&gt;*) is what we are .hi[actually] testing, since any defendant enters the trial as .red[*innocent*], until proven otherwise.
+
+--
+
+  - That is why this is our .hi-blue[alternative] hypothesis!
+
+---
+
+# Statistical hypothesis testing
+
+If the jury decides to .hi[convict], they are .hi-slate[rejecting] the *null* hypothesis in favor or the *alternative.*
+
+--
+
+In other words, there was .hi-green[enough evidence] to conclude that the defendant was *guilty.*
+
+--
+
+If the jury .hi-blue[acquits], they are .hi-slate[not rejecting] the *null* hypothesis.
+
+--
+
+That is, there was .hi-orange[not enough evidence] to conclude that the defendant was *guilty.*
+
+--
+
+  - .b[Note]: in Statistics, we do not say that we .hi[accept] the null hypothesis. This would mean that the defendant is *innocent*, but we are only able to say that they are not guilty.
+
+---
+
+layout: false
+class: inverse, middle
+
+
+# Type I and Type II errors
+
+---
+
+# Type I and Type II errors
+
+&lt;br&gt;
+
+There are .hi-slate[two] possible errors when working with Hypothesis Testing:
+
+--
+
+  - *Type I error*: when we .hi-blue[reject a true] null hypothesis (*H&lt;sub&gt;0&lt;/sub&gt;*);
+  
+  - *Type II error*: when we .hi-green[do not reject a false] alternative hypothesis (*H&lt;sub&gt;a&lt;/sub&gt;*).
+  
+--
+
+&lt;br&gt;
+
+How do these errors apply in the *trial* context?
+
+
+
+
+
+
+---
+
+# Type I and Type II errors
+
+&lt;br&gt;
+
+
+The .b[probability of a Type I error] is denoted by *&amp;alpha;*, the significance level of a statistical test. 
+
+--
+
+The .b[probability of a Type II error] is denoted by *&amp;beta;*.
+
+--
+
+
+Any attempt of reducing one probability will increase the odds of the other type of error.
+
+--
+
+
+&lt;br&gt;
+
+
+
+| **Decision**                | **H&lt;sub&gt;0&lt;/sub&gt; is true** | **H&lt;sub&gt;0&lt;/sub&gt; is false** |
+|-----------------------------|---------------------------|----------------------------|
+| Reject H&lt;sub&gt;0&lt;/sub&gt;        | Type I error              | Correct decision           |
+| Do not reject H&lt;sub&gt;0&lt;/sub&gt; | Correct decision          | Type II error              |
+
+
+
+---
+
+# A quick summary
+
+
+&lt;br&gt;&lt;br&gt;
+
+To summarize, a couple of remarks:
+
+&lt;br&gt;
+
+  - The testing procedure begins with the assumption that the null hypothesis (*H&lt;sub&gt;0&lt;/sub&gt;*) is .hi-blue[true];
+  
+  - The goal is to determine whether there is enough evidence to infer that the alternative hypothesis (*H&lt;sub&gt;a&lt;/sub&gt;*) is true.
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# Stating hypotheses
+
+---
+
+# Stating hypotheses
+
+The .hi[first step] when doing hypothesis testing is to .hi-blue[state] the *null* and *alternative* hypotheses, *H&lt;sub&gt;0&lt;/sub&gt;* and *H&lt;sub&gt;a&lt;/sub&gt;*, respectively.
+
+--
+
+Let us exercise that by practicing with an .b[example].
+
+--
+
+Recall the inventory example from the last lecture.
+
+--
+
+Now, suppose the manager does not want to estimate the exact (or closest) mean inventory level (*&amp;mu;*), but rather test whether this value is .hi[different from] 350 computers. 
+
+--
+
+  - Is there enough evidence to conclude that *&amp;mu;* is .hi-green[not equal to 350 computers]?
+  
+--
+
+As an important .hi-blue[first note], Hypothesis Testing always tests values for .hi[population parameters].
+
+--
+
+Then, the next step is to know .hi-orange[what] population parameter the problem at hand is referring to.
+
+---
+
+# Stating hypotheses
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+Now, consider the following .hi-slate[change] in the research question for this example:
+
+--
+
+  - Is there enough evidence to conclude that *&amp;mu;* is greater than 350?
+
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# The *z* test
+
+
+---
+
+# The *z* test
+
+After the hypotheses are properly stated, what do we do?
+
+--
+
+As a simplfying assumption, we will continue to assume that the population standard deviation (*&amp;sigma;*) is known, while *&amp;mu;* is not.
+
+--
+
+  - We will .hi-green[relax] this hypothesis soon.
+  
+--
+
+Another example:
+
+A manager is considering establishing a new billing system for customers. After some analyses, they determined that the new system will be cost-effective only if the mean monthly account is more than US$ 170.00. A random sample of 400 monthly accounts is drawn, for which the sample mean is US$ 178.00. The manager assumes that these accounts are normally distributed, with a standard deviation of US$ 65.00. Can the manager conclude from this that the new system will be cost-effective? Also, they assume a confidence level of 95%.
+
+
+
+
+---
+
+# The *z* test
+
+After stating the null and alternative hypotheses, we need to calculate a .hi[test statistic].
+
+--
+
+Recall the .hi-blue[standardization] method for a sample statistic:
+
+$$
+`\begin{aligned}
+z = \dfrac{\bar{x} - \mu}{\sigma / \sqrt{n}}
+\end{aligned}`
+$$
+
+--
+
+&lt;br&gt;
+
+For hypothesis testing purposes, the above is also known as a .hi-slate[*z* test].
+
+
+
+---
+
+# The *z* test
+
+After obtaining the *z* value, let us now make use of the confidence level (1 − *&amp;alpha;*) of 95% assumed by the manager.
+
+--
+
+This value will be of use to establish a .hi-slate[threshold (critical) value] in a Standard Normal curve:
+
+&lt;img src="lec17-freq-inference-2_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# The *z* test
+
+&lt;br&gt;
+
+The .hi[shaded area] is called the .b[rejection region].
+
+--
+
+If a *z* statistic falls .hi[within] the rejection region, our inference is to .hi-blue[reject the null hypothesis].
+
+--
+
+In case the *z* value falls .hi[outside] this region, then we .hi-blue[do not reject] the null hypothesis.
+
+--
+
+  - So what is our decision from the example?
+
+---
+
+layout: false
+class: inverse, middle
+
+# The p-value method
+
+
+---
+
+# The p-value method
+
+&lt;br&gt;
+
+We may also produce inferences using .hi[p-values] instead of critical values.
+
+--
+
+&gt; The *p-value* of a statistical test is the probability of observing a test statistic .red[*at least as extreme*] as the one which has been computed, .red[given that *H&lt;sub&gt;0&lt;/sub&gt;* is true].
+
+--
+
+&lt;br&gt;
+
+  - What is the p-value in our example?
+
+
+```r
+1 - pnorm(q = 2.46, mean = 0, sd = 1)
+```
+
+```
+#&gt; [1] 0.006946851
+```
+
+
+
+---
+
+# The p-value method
+
+A p-value of .0069 implies that there is a .69% probability of observing a sample mean at least as large as US$ 178 when the population mean is US$ 170.
+
+--
+
+In other words, this value says that we have a pretty good sample statistic for our Hypothesis Testing interests.
+
+--
+
+However, such interpretation is .b[almost never used] in practice when considering p-values.
+
+--
+
+&lt;br&gt;
+
+Instead, it is .red[*more convenient*] to compare p-values with the test's significance level (*&amp;alpha;*):
+
+  - If the p-value is .hi-blue[less] than the significance value, we .hi-slate[reject the null hypothesis];
+  
+  - If the p-value is .hi-blue[greater] than the significance value, we .hi-slate[do not reject the null hypothesis].
+
+---
+
+# The p-value method
+
+Consider, for example, a p-value of .b[.001].
+
+--
+
+This number says that we will only start not to reject the null when the significance level is .hi[lower] than .001.
+
+--
+
+  - Therefore, this means that it would be really .hi-blue[unlikely] not to reject the null hypothesis in such situation.
+  
+--
+
+We can consider the following .hi-blue[ranges] and .hi-blue[significance] features for p-values:
+
+  - `\(p &lt; .01\)`: .b[highly significant] test, *overwhelming* evidence to infer that *H&lt;sub&gt;a&lt;/sub&gt;* is true;
+  
+  - `\(.01 \leq p \leq .05\)`: .b[significant] test, *strong* evidence to infer that *H&lt;sub&gt;a&lt;/sub&gt;* is true;
+  
+  - `\(.05 &lt; p \leq .10\)`: .b[weakly significant] test;
+  
+  - `\(p&gt; .10\)`: .b[little or no] evidence that *H&lt;sub&gt;a&lt;/sub&gt;* is true.
+
+
+---
+
+
+layout: false
+class: inverse, middle
+
+# One- and two-tailed tests
+
+---
+
+# One- and two-tailed tests
+
+&lt;br&gt;
+
+As you may have already noticed, the typical Normal distribution density curve has two “tails.”
+
+--
+
+Depending on the sign present in the alternative hypothesis (*H&lt;sub&gt;a&lt;/sub&gt;*), our test may have .hi[one or two] rejection regions.
+
+--
+
+Whenever the sign in the alternative hypothesis is either “&lt;” or “&gt;,” we have a .b[one-tailed test].
+
+--
+
+  - For the former case, the rejection region lies on the *left* tail of the bell curve, whereas for the latter, the rejection region is located on the *right* tail.
+  
+
+
+
+---
+
+# One- and two-tailed tests
+
+&lt;br&gt;&lt;br&gt;
+
+A two-tailed test will take place whenever the .red[*not equal to*] sign `\((\neq)\)` is present in the alternative hypothesis.
+
+  - This happens because, assuming this sign, the value of our parameter may lie either on the *right* or on the *left* tail.
+  
+--
+
+For two-tailed test, we simply divide the significance level (*&amp;alpha;*) by 2.
+
+  - Just as with .hi-green[confidence intervals]!
+
+
+---
+
+layout: false
+class: inverse, middle
+
+# Next time: Inference when *&amp;sigma;* is unknown
+
+
+---
+exclude: true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
