@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[ECON 3640–001]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=".b[Marcio Santetti]   Spring 2022" />
+    <script src="ps4-sp22-solutions_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="ps4-sp22-solutions_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="ps4-sp22-solutions_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="ps4-sp22-solutions_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="a-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[ECON 3640–001]
+## .hi[Problem Set 4 – Solutions]
+### .b[Marcio Santetti] <br> Spring 2022
+
+---
+
+layout: true
+class: clear
+---
+
+
+
+## Problem 1
+
+&lt;br&gt;
+
+Using the `AmesHousing` package, do the following:
+
+
+```r
+library(tidyverse)
+library(AmesHousing)
+library(janitor)
+library(ggeasy)
+
+ames_data &lt;- ames_raw
+
+ames_data &lt;- ames_data %&gt;% 
+  clean_names()
+```
+
+
+
+&lt;br&gt;
+
+
+(a) Select the `lot_area` column, showing data on lot sizes (in square feet). Draw its histogram.
+
+.hi[ANSWER]:
+
+
+```r
+ames_data %&gt;% 
+  ggplot(aes(x = lot_area)) +
+  geom_histogram(color = "white", binwidth = 8000)
+```
+
+![](ps4-sp22-solutions_files/figure-html/unnamed-chunk-3-1.svg)&lt;!-- --&gt;
+
+
+(b) Given that this data set has information on **all** houses in Ames, Iowa between 2006 and 2010, we may assume that it brings the whole *population* data. Calculate the average lot size (*&amp;mu;*) for this population. 
+
+.hi[ANSWER]:
+
+
+```r
+ames_data %&gt;% 
+  summarize(mean_lot = mean(lot_area))
+```
+
+```
+## # A tibble: 1 × 1
+##   mean_lot
+##      &lt;dbl&gt;
+## 1   10148.
+```
+
+---
+class:clear
+
+
+(c) Now, run a sampling procedure (using a `for` loop), extracting 5,000 samples of size `n = 50` from the population data on lot areas. Compute the sample means `\(\bar{x}\)` of these samples and store them in an array called `samples_50`.
+
+.hi[ANSWER]:
+
+
+```r
+lot &lt;- ames_data %&gt;% 
+  pull(lot_area)    ## pulling the data for the lot_area variable.
+
+
+samples_50 &lt;- rep(NA, 5000)
+
+for(i in 1:5000){
+  
+  sampling_50 &lt;- sample(lot, size = 50)
+  
+  samples_50[i] &lt;- mean(sampling_50)
+  
+}
+```
+
+
+(d) Given that in part (c) you've computed a summary statistic from a population, plot a histogram of the sampling distribution of these `\(\bar{x}\)` values. **Hint**: transform your  `samples_50` array in a `tibble` first.
+
+.hi[ANSWER]:
+
+
+```r
+samples_50 &lt;- samples_50 %&gt;% 
+  as_tibble()
+
+
+samples_50 %&gt;% 
+  ggplot(aes(x = value)) +
+  geom_histogram(color = "white") +
+  labs(title  = "Sampling distribution of the sample mean (n = 50)",
+       x = "sample mean")
+```
+
+![](ps4-sp22-solutions_files/figure-html/unnamed-chunk-6-1.svg)&lt;!-- --&gt;
+
+---
+class:clear
+
+
+(e) Now, run the same procedure as in part (c), this time increasing the sample size to `n = 1,000`. Plot a histogram reflecting the sampling distribution of `\(\bar{x}\)`.
+
+.hi[ANSWER]:
+
+
+```r
+samples_1000 &lt;- rep(NA, 5000)
+
+for(i in 1:5000){
+  
+  sampling_1000 &lt;- sample(lot, size = 1000)
+  
+  samples_1000[i] &lt;- mean(sampling_1000)
+  
+}
+
+samples_1000 &lt;- samples_1000 %&gt;% 
+  as_tibble()
+
+
+samples_1000 %&gt;% 
+  ggplot(aes(x = value)) +
+  geom_histogram(color = "white") +
+  labs(title  = "Sampling distribution of the sample mean (n = 1,000)",
+       x = "sample mean")
+```
+
+![](ps4-sp22-solutions_files/figure-html/unnamed-chunk-7-1.svg)&lt;!-- --&gt;
+
+---
+class:clear
+
+(f) Compare the population mean (*&amp;mu;*) with the means of the two sampling distributions for `\(\bar{x}\)` you've computed in parts (c) and (e).
+
+.hi[ANSWER]:
+
+
+```r
+ames_data %&gt;% 
+  summarize(mean_lot = mean(lot_area))
+```
+
+```
+## # A tibble: 1 × 1
+##   mean_lot
+##      &lt;dbl&gt;
+## 1   10148.
+```
+
+```r
+samples_50 %&gt;% 
+  summarize(mean_sampling50 = mean(value))
+```
+
+```
+## # A tibble: 1 × 1
+##   mean_sampling50
+##             &lt;dbl&gt;
+## 1          10173.
+```
+
+```r
+samples_1000 %&gt;% 
+  summarize(mean_sampling1000 = mean(value))
+```
+
+```
+## # A tibble: 1 × 1
+##   mean_sampling1000
+##               &lt;dbl&gt;
+## 1            10148.
+```
+
+We can see that, as the sample size increases, the sampling distribution of the average lot area converges to the "true" population mean value `\(\mu\)`.
+
+---
+class:clear
+
+(g) Compare the population variance (*&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;*) with the variances of the two sampling distributions for `\(\bar{x}\)` you've computed in parts (c) and (e).
+
+.hi[ANSWER]:
+
+
+```r
+samples_50 %&gt;% 
+  summarize(var_sampling50 = var(value))
+```
+
+```
+## # A tibble: 1 × 1
+##   var_sampling50
+##            &lt;dbl&gt;
+## 1       1296148.
+```
+
+```r
+samples_1000 %&gt;% 
+  summarize(var_sampling1000 = var(value))
+```
+
+```
+## # A tibble: 1 × 1
+##   var_sampling1000
+##              &lt;dbl&gt;
+## 1           41691.
+```
+
+As expected, the variance of the sampling distribution with larger sample size is small, relative to the one with *n = 50*.
+
+---
+class:clear
+
+
+(h) Run the same procedure as you've done in parts (c)&amp;mdash;(g), this time with a different summary statistic: the population and sample **median**.
+
+.hi[ANSWER]:
+
+
+```r
+# Now, the median:
+
+ames_data %&gt;% 
+  summarize(median_lot = median(lot_area))
+```
+
+```
+## # A tibble: 1 × 1
+##   median_lot
+##        &lt;dbl&gt;
+## 1      9436.
+```
+
+
+
+```r
+#-- sampling n = 50:
+
+samples_50_median &lt;- rep(NA, 5000)
+
+for(i in 1:5000){
+  
+  sampling_50_median &lt;- sample(lot, size = 50)
+  
+  samples_50_median[i] &lt;- median(sampling_50_median)
+  
+}
+
+samples_50_median &lt;- samples_50_median %&gt;% 
+  as_tibble()
+
+
+#-- sampling n = 1,000
+
+samples_1000_median &lt;- rep(NA, 5000)
+
+for(i in 1:5000){
+  
+  sampling_1000_median &lt;- sample(lot, size = 1000)
+  
+  samples_1000_median[i] &lt;- median(sampling_1000_median)
+  
+}
+```
+
+---
+class:clear
+
+
+
+```r
+samples_1000_median &lt;- samples_1000_median %&gt;% 
+  as_tibble()
+
+
+ames_data %&gt;% 
+  summarize(median_lot = median(lot_area))
+```
+
+```
+## # A tibble: 1 × 1
+##   median_lot
+##        &lt;dbl&gt;
+## 1      9436.
+```
+
+```r
+samples_50_median %&gt;% 
+  summarize(median_samples50 = median(value))
+```
+
+```
+## # A tibble: 1 × 1
+##   median_samples50
+##              &lt;dbl&gt;
+## 1             9426
+```
+
+```r
+samples_1000_median %&gt;% 
+  summarize(median_samples1000 = median(value))
+```
+
+```
+## # A tibble: 1 × 1
+##   median_samples1000
+##                &lt;dbl&gt;
+## 1              9441.
+```
+
+&lt;br&gt;
+
+We observe a similar converging behavior for the sample median when the sampling procedure happens with a larger sample size.
+
+---
+class:clear
+
+## Problem 2
+
+&lt;br&gt;
+
+Answer the following questions using the `qnorm()` and `rnorm()` functions in `R`:
+
+(a) What is the total area to the **left** of  1 for a random variable `\(X \sim \mathcal{N}(2, 1)\)`? In other words, what is *P(X &lt; 1)*?
+
+.hi[ANSWER]:
+
+
+```r
+pnorm(q = 1, mean = 2, sd = 1)
+```
+
+```
+## [1] 0.1586553
+```
+
+
+(b) What is the quantile corresponding to a probability of 85% to its .b[left] for a random variable `\(X \sim \mathcal{N}(3, 1)\)`?
+
+.hi[ANSWER]:
+
+
+```r
+qnorm(p = 0.85, mean = 3, sd = 1)
+```
+
+```
+## [1] 4.036433
+```
+
+
+(c) For a Standard Normal distribution, what .b[quantile] corresponds to a probability of 2.5% to its left?
+
+.hi[ANSWER]:
+
+
+```r
+qnorm(p = 0.025, mean = 0, sd = 1)
+```
+
+```
+## [1] -1.959964
+```
+
+
+(d) For a Standard Normal distribution, what .b[quantile] corresponds to a probability of 5% to its left?
+
+.hi[ANSWER]:
+
+
+```r
+qnorm(p = 0.05, mean = 0, sd = 1)
+```
+
+```
+## [1] -1.644854
+```
+
+
+(e) For a Standard Normal distribution, what .b[quantile] corresponds to a probability of .5% to its left?
+
+.hi[ANSWER]:
+
+
+```r
+qnorm(p = 0.005, mean = 0, sd = 1)
+```
+
+```
+## [1] -2.575829
+```
+
+
+---
+class:clear
+
+## Problem 3
+
+&lt;br&gt;
+
+A statistician took a random sample of 50 observations from a population with a population standard deviation (*&amp;sigma;*) of 25 and computed the sample mean to be 100.
+
+(a) Estimate the population mean with 90% confidence.
+
+.hi[ANSWER]:
+
+$$
+`\begin{aligned}
+\text{CI} = \bar{x} \pm z_{\alpha/2}\bigg(\dfrac{\sigma}{\sqrt{n}}\bigg)
+\end{aligned}`
+$$
+What is the value of `\(z_{\alpha/2}\)` for a significance level `\((\alpha)\)` of 10%?
+
+
+```r
+qnorm(p = 0.10/2, mean = 0, sd = 1)
+```
+
+```
+## [1] -1.644854
+```
+
+Plugging in:
+
+$$
+`\begin{aligned}
+\text{CI} = \bar{x} \pm z_{\alpha/2}\bigg(\dfrac{\sigma}{\sqrt{n}}\bigg) = 100 \pm (-1.64) \bigg(25/\sqrt{50}\bigg) = [94.2; 105.8] 
+\end{aligned}`
+$$
+
+(b) Repeat part (a) using a 95% confidence level.
+
+.hi[ANSWER]:
+
+What is the value of `\(z_{\alpha/2}\)` for a significance level `\((\alpha)\)` of 5%?
+
+
+```r
+qnorm(p = 0.05/2, mean = 0, sd = 1)
+```
+
+```
+## [1] -1.959964
+```
+
+Using `R` as a calculator:
+
+
+```r
+# Lower confidence limit:
+
+100 + (-1.96) * ( 25 / sqrt(50) )
+```
+
+```
+## [1] 93.07035
+```
+
+```r
+# Upper confidence limit:
+
+100 - (-1.96) * ( 25 / sqrt(50) )
+```
+
+```
+## [1] 106.9296
+```
+
+So the confidence interval for the population mean at 95% is [93.07; 106.93].
+
+---
+class:clear
+
+(c) Repeat part (a) using a 99% confidence level.
+
+.hi[ANSWER]:
+
+What is the value of `\(z_{\alpha/2}\)` for a significance level `\((\alpha)\)` of 1%?
+
+
+```r
+qnorm(p = 0.01/2, mean = 0, sd = 1)
+```
+
+```
+## [1] -2.575829
+```
+
+
+```r
+# Lower confidence limit:
+
+100 + (-2.57) * ( 25 / sqrt(50) )
+```
+
+```
+## [1] 90.91368
+```
+
+```r
+# Upper confidence limit:
+
+100 - (-2.57) * ( 25 / sqrt(50) )
+```
+
+```
+## [1] 109.0863
+```
+
+So the confidence interval for the population mean at 99% is [90.91; 109.08].
+
+(d) Describe the effect on the confidence interval estimate of increasing the confidence level.
+
+.hi[ANSWER]:
+
+As the confidence (significance) level increases (decreases), the *range* of our confidence interval increases. In other words, the *variance* of our estimation increases the more confident we want to be regarding our confidence interval.
+
+
+## Problem 4
+
+&lt;br&gt;
+
+The mean of a random sample of 25 observations from a normal population with a standard deviation (*&amp;sigma;*) of 50 is 200.
+
+(a) Estimate the population mean with 95% confidence.
+
+.hi[ANSWER]:
+
+
+```r
+# Lower confidence limit:
+
+200 + (-1.96) * ( 50 / sqrt(25) )
+```
+
+```
+## [1] 180.4
+```
+
+```r
+# Upper confidence limit:
+
+200 - (-1.96) * ( 50 / sqrt(25) )
+```
+
+```
+## [1] 219.6
+```
+
+---
+class:clear
+
+
+(b) Repeat part (a) changing the population standard deviation to 25.
+
+.hi[ANSWER]:
+
+
+```r
+# Lower confidence limit:
+
+200 + (-1.96) * ( 25 / sqrt(25) )
+```
+
+```
+## [1] 190.2
+```
+
+```r
+# Upper confidence limit:
+
+200 - (-1.96) * ( 25 / sqrt(25) )
+```
+
+```
+## [1] 209.8
+```
+
+(c) Repeat part (a) changing the population standard deviation to 10.
+
+.hi[ANSWER]:
+
+
+```r
+# Lower confidence limit:
+
+200 + (-1.96) * ( 10 / sqrt(25) )
+```
+
+```
+## [1] 196.08
+```
+
+```r
+# Upper confidence limit:
+
+200 - (-1.96) * ( 10 / sqrt(25) )
+```
+
+```
+## [1] 203.92
+```
+
+(d) Describe what happens to the confidence interval estimate when the standard deviation is decreased.
+
+.hi[ANSWER]:
+
+When `\(\sigma\)` decreases, we can see that the confidence interval, all else constant, becomes more precise. In other words, as `\(\sigma\)` goes down (we decrease uncertainty/variability), the lower confidence limit goes up, while upper limits of our CI go down. 
+
+---
+class:clear
+
+## Problem 5
+
+&lt;br&gt;
+
+A random sample of 25 was drawn from a normal distribution with a standard deviation (*&amp;sigma;*) of 5. The sample mean is 80.
+
+(a) Determine the 95% confidence interval estimate of the population mean.
+
+.hi[ANSWER]:
+
+
+```r
+# Lower confidence limit:
+
+80 + (-1.96) * ( 5 / sqrt(25) )
+```
+
+```
+## [1] 78.04
+```
+
+```r
+# Upper confidence limit:
+
+80 - (-1.96) * ( 5 / sqrt(25) )
+```
+
+```
+## [1] 81.96
+```
+
+(b) Repeat part (a) with a sample size of 100.
+
+.hi[ANSWER]:
+
+
+```r
+# Lower confidence limit:
+
+80 + (-1.96) * ( 5 / sqrt(100) )
+```
+
+```
+## [1] 79.02
+```
+
+```r
+# Upper confidence limit:
+
+80 - (-1.96) * ( 5 / sqrt(100) )
+```
+
+```
+## [1] 80.98
+```
+
+---
+class:clear
+
+(c) Repeat part (a) with a sample size of 400.
+
+.hi[ANSWER]:
+
+
+```r
+# Lower confidence limit:
+
+80 + (-1.96) * ( 5 / sqrt(400) )
+```
+
+```
+## [1] 79.51
+```
+
+```r
+# Upper confidence limit:
+
+80 - (-1.96) * ( 5 / sqrt(400) )
+```
+
+```
+## [1] 80.49
+```
+
+(d) Describe what happens to the confidence interval estimate when the sample size increases.
+
+.hi[ANSWER]:
+
+All else constant, when the sample size (*n*) increases, the CI becomes more precise. This happens because the variance is inversely related to the sample size: as the latter increases, the former decreases.
+
+
+
+## Problem 6
+
+&lt;br&gt;
+
+The following data represent a random sample of 9 marks (out of 10) on a statistics quiz. Estimate the population mean with 90% confidence.
+
+$$
+`\begin{aligned}
+7 \ 9 \ 7 \ 5 \ 4 \ 8 \ 3 \ 10\  9
+\end{aligned}`
+$$
+
+.hi[ANSWER]:
+
+Now, we do not have the population standard deviation `\((\sigma)\)` as known. Thus we work with its sample estimator, `\(s\)`.
+
+Using `R`:
+
+
+```r
+data_7 &lt;- tibble(
+  marks = c(7, 9, 7, 5, 4, 8, 3, 10, 9)
+  )
+
+data_7 %&gt;% 
+  summarize(mean_marks = mean(marks),
+            sd_marks = sd(marks))
+```
+
+```
+## # A tibble: 1 × 2
+##   mean_marks sd_marks
+##        &lt;dbl&gt;    &lt;dbl&gt;
+## 1       6.89     2.42
+```
+
+---
+class:clear
+
+The sample mean `\((\bar{x})\)` is 6.89 points and the sample standard deviation `\((s)\)` is 2.42 points.
+
+Then, we proceed with a 90% confidence interval:
+
+$$
+`\begin{aligned}
+\text{CI} = \bar{x} \pm t_{\alpha/2, \ \nu}\bigg(\dfrac{s}{\sqrt{n}}\bigg)
+\end{aligned}`
+$$
+What is the value of `\(t_{\alpha/2, \ \nu}\)` for a significance level `\((\alpha)\)` of 10%?
+
+
+```r
+qt(p = 0.05, df = 9 - 1)  ## degrees of freedom (df) is the sample size (n) minus 1.
+```
+
+```
+## [1] -1.859548
+```
+
+
+$$
+`\begin{aligned}
+\text{CI} = \bar{x} \pm t_{\alpha/2, \ \nu}\bigg(\dfrac{s}{\sqrt{n}}\bigg) = 6.89 \pm (-1.85) \ \bigg(\dfrac{2.42}{\sqrt{9}}\bigg) = [5.39; 8.39]
+\end{aligned}`
+$$
+
+## Problem 7
+
+&lt;br&gt;
+
+For the following parts, calculate the value of the *test statistic*, set up the *rejection region*, determine the *p-value* and *interpret* the result.
+
+(a) `\(H_0\)`: `\(\mu = 1,000\)`; `\(H_a\)`: `\(\mu \neq 1,000\)`
+
+`\(\sigma = 200\)`, `\(n=100\)`, `\(\bar{x} = 980\)`, `\(\alpha = 0.05\)`
+
+.hi[ANSWER]:
+
+Test (*z*) statistic:
+
+$$
+`\begin{aligned}
+z = \dfrac{\bar{x} - \mu_{H_0}}{\sigma/\sqrt{n}} = \dfrac{980 - 1,000}{200/\sqrt{100}} = -1
+\end{aligned}`
+$$
+
+This is a *two-tailed test*, given the *sign* of the alternative hypothesis. Thus, to obtain the critical (threshold) value, we divide `\(\alpha\)` by 2.
+
+
+```r
+qnorm(p = 0.05/2, mean = 0, sd = 1)
+```
+
+```
+## [1] -1.959964
+```
+
+
+Visually:
+
+
+
+![](ps4-sp22-solutions_files/figure-html/unnamed-chunk-32-1.svg)&lt;!-- --&gt;
+
+
+---
+class:clear
+
+Our test statistic of -1 falls oustide the rejection regions. Therefore, we **do not reject the null hypothesis**. There is not enough evidence to decide in favor of the alternative hypothesis, *H&lt;sub&gt;a&lt;/sub&gt;*.
+
+Using the p-value method for a two-tailed test:
+
+$$
+`\begin{aligned}
+\text{p-value} = P(Z &lt; -1) + P(Z &gt; 1)
+\end{aligned}`
+$$
+
+
+```r
+pnorm(q = -1, mean = 0, sd = 1) + 1 - pnorm(q = 1, mean = 0, sd = 1)
+```
+
+```
+## [1] 0.3173105
+```
+
+
+This p-value is greater than the significance level. Thus, we do not reject the null hypothesis using either method.
+
+
+(b) `\(H_0\)`: `\(\mu = 50\)`; `\(H_a\)`: `\(\mu &gt; 50\)`
+
+`\(\sigma = 5\)`, `\(n=9\)`, `\(\bar{x} = 51\)`, `\(\alpha = 0.03\)`
+
+.hi[ANSWER]:
+
+Test statistic:
+
+$$
+`\begin{aligned}
+z = \dfrac{\bar{x} - \mu_{H_0}}{\sigma/\sqrt{n}} = \dfrac{51 - 50}{5/\sqrt{9}} = 0.6
+\end{aligned}`
+$$
+
+Given the value of `\(\alpha\)` and since this is a one-tailed test, our critical value is:
+
+
+```r
+qnorm(p = 0.03, mean = 0, sd = 1, lower.tail = FALSE)
+```
+
+```
+## [1] 1.880794
+```
+
+Visually:
+
+![](ps4-sp22-solutions_files/figure-html/unnamed-chunk-35-1.svg)&lt;!-- --&gt;
+
+
+Our test statistic falls oustide the rejection region. Thus, we also do not reject the null hypothesis.
+
+Using the p-value method:
+
+
+```r
+1 - pnorm(q = 1.88, mean = 0, sd = 1)  ## use the "1 - " since this is a right-tailed test.
+```
+
+```
+## [1] 0.03005404
+```
+
+This p-value is greater than the significance level, so we do not reject the null hypothesis, regardless of the method.
+
+
+---
+class:clear
+
+
+## Problem 8
+
+&lt;br&gt;
+
+Many Alpine ski centers base their projections of revenues and profits on the assumption that the average Alpine skier skis exactly four times per year. To investigate the validity of this assumption, a random sample of 63 skiers is drawn and each is asked to report the number of times he or she skied the previous year. If we assume that the standard deviation (*&amp;sigma;*) is 2, can we infer at the 10% significance level that the assumption is wrong? Assume the sample mean to be 5.3 times per year.
+
+.hi[ANSWER]:
+
+Let's first *state the null and alternative hypotheses*:
+
+*H&lt;sub&gt;0&lt;/sub&gt;*: *&amp;mu;* = 4 &lt;br&gt;
+*H&lt;sub&gt;a&lt;/sub&gt;*: *&amp;mu;* &amp;ne; 4
+
+Then, we compute the test statistic:
+
+$$
+`\begin{aligned}
+z = \dfrac{\bar{x} - \mu_{H_0}}{\sigma/\sqrt{n}} = \dfrac{5.3 - 4}{2/\sqrt{63}} = 5.159
+\end{aligned}`
+$$
+
+Given that our level of significance is 10% and we have a two-tailed test, the critical values are:
+
+
+```r
+qnorm(p = 0.05, mean = 0, sd = 1)
+```
+
+```
+## [1] -1.644854
+```
+
+
+```r
+qnorm(p = 0.05, mean = 0, sd = 1, lower.tail = FALSE)
+```
+
+```
+## [1] 1.644854
+```
+
+
+Our test statistic of 5.159 is way greater than the right-tail critical value of 1.64. Thus, by the rejection region method, we **reject** the null hypothesis in favor of the alternative. 
+
+Using the p-value method:
+
+
+```r
+pnorm(q = - 5.159, mean = 0, sd = 1) + 1 - pnorm(q = 5.159, mean = 0, sd = 1)
+```
+
+```
+## [1] 2.482723e-07
+```
+
+The p-value is way lower tha the significance level. So, also using the p-value method, we reject the null hypothesis. Therefore, the assumption that the average Alpine skier skis exactly four times per year is incorrect.
+
+---
+class:clear
+
+
+## Problem 9
+
+&lt;br&gt;
+
+University bookstores order books that instructors adopt for their courses. The number of copies ordered matches the projected demand. However, at the end of the semester, the bookstore has too many copies on hand and must return them to the publisher. A bookstore has a policy that the proportion of books returned should be kept as small as possible. The average is supposed to be less than 10%. To see whether the policy is working, a random sample of book titles was drawn, and the fraction of the total originally ordered that are returned is recorded and listed here. Can we infer at the 10% significance level that the mean proportion of returns is less than 10%?
+
+.center[
+4 15 11 7 5 9 4 3 5 8
+]
+
+.hi[ANSWER]:
+
+Let's first *state the null and alternative hypotheses*:
+
+*H&lt;sub&gt;0&lt;/sub&gt;*: *&amp;mu;* = 10 &lt;br&gt;
+*H&lt;sub&gt;a&lt;/sub&gt;*: *&amp;mu;* &lt; 10
+
+We don't know the population standard deviation `\((\sigma)\)` here. So, we need to compute both the sample mean and sample standard deviation.
+
+
+```r
+books &lt;- tibble(
+  prop = c(4, 15, 11, 7, 5, 9, 4, 3, 5, 8)
+)
+
+books %&gt;% 
+  summarize(mean_prop = mean(prop),
+            sd_prop = sd(prop))
+```
+
+```
+## # A tibble: 1 × 2
+##   mean_prop sd_prop
+##       &lt;dbl&gt;   &lt;dbl&gt;
+## 1       7.1    3.75
+```
+
+
+Then, we compute the test statistic:
+
+$$
+`\begin{aligned}
+t = \dfrac{\bar{x} - \mu_{H_0}}{s/\sqrt{n}} = \dfrac{7.1 - 10}{3.75/\sqrt{10}} = -2.445
+\end{aligned}`
+$$
+
+We have `\(n-1 = 9\)` degrees of freedom. So the critical value is:
+
+
+```r
+qt(p = 0.10, df = 9)
+```
+
+```
+## [1] -1.383029
+```
+
+Our test statistic lies within the rejection region. Thus, we **reject the null hypothesis** in favor of the alternative. So we can conclude that the bookstore's policy is working.
+
+---
+class:clear
+
+Using the p-value method:
+
+
+```r
+pt(q = -2.445, df = 9)
+```
+
+```
+## [1] 0.01852972
+```
+
+
+This p-value is way lower than the significance level of 10%. Thus, using this method we also reject the null hypothesis.
+
+
+
+## Problem 10
+
+&lt;br&gt;
+
+Companies that sell groceries over the Internet are called e-grocers. Customers enter their orders, pay by credit card, and receive delivery by truck. A potential e-grocer analyzed the market and determined that the average order would have to exceed $85 if the e-grocer were to be profitable. To determine whether an e-grocery would be profitable in one large city, she offered the service and recorded the size of the order for a random sample of customers. Can we infer from these data that an e-grocery will be profitable in this city?
+
+.center[
+100 120 75 40 89 51 200 96 31
+
+]
+
+.hi[ANSWER]:
+
+Let's first *state the null and alternative hypotheses*:
+
+*H&lt;sub&gt;0&lt;/sub&gt;*: *&amp;mu;* = $85 &lt;br&gt;
+*H&lt;sub&gt;a&lt;/sub&gt;*: *&amp;mu;* &gt; $85
+
+
+
+```r
+grocers &lt;- tibble(
+  order = c(100, 120, 75, 40, 89, 51, 200, 96, 31)
+)
+
+grocers %&gt;% 
+  summarize(mean_order = mean(order),
+            sd_order = sd(order))
+```
+
+```
+## # A tibble: 1 × 2
+##   mean_order sd_order
+##        &lt;dbl&gt;    &lt;dbl&gt;
+## 1       89.1     51.1
+```
+
+Computing the test statistic:
+
+
+```r
+# t-test using R as calculator:
+
+(89.1 - 85) / (51.1 / sqrt(9))
+```
+
+```
+## [1] 0.2407045
+```
+
+
+---
+class:clear
+
+Now, the critical value:
+
+
+```r
+qt(p = .05, df = 9 - 1, lower.tail = FALSE)  ## assuming 5% of significance.
+```
+
+```
+## [1] 1.859548
+```
+
+
+Our test statistic is not included in the rejection region. Therefore, we **do not reject the null hypothesis**. In summary, the e-grocery will not be profitable in this city, given the sample data available.
+
+
+Using the p-value method:
+
+
+
+```r
+1 - pt(q = 1.85, df = 9 - 1)
+```
+
+```
+## [1] 0.05073832
+```
+
+This p-value is greater than our assumed significance level of 5%. Thus, this method also does not recommend rejecting the null hypothesis.
+
+---
+exclude:true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "8.5:11",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

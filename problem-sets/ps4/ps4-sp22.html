@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>.b[ECON 3640–001]</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=".b[Marcio Santetti]   Spring 2022" />
+    <script src="ps4-sp22_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="ps4-sp22_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="ps4-sp22_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="ps4-sp22_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="a-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# .b[ECON 3640–001]
+## .hi[Problem Set 4]
+### .b[Marcio Santetti] <br> Spring 2022
+
+---
+
+layout: true
+class: clear
+---
+
+## Problem 1
+
+&lt;br&gt;
+
+Using the `AmesHousing` package, do the following:
+
+
+```r
+library(tidyverse)
+library(AmesHousing)
+library(janitor)
+
+
+ames_data &lt;- ames_raw
+
+ames_data &lt;- ames_data %&gt;% 
+  clean_names()
+```
+
+&lt;br&gt;
+
+
+(a) Select the `lot_area` column, showing data on lot sizes (in square feet). Draw its histogram.
+
+(b) Given that this data set has information on **all** houses in Ames, Iowa between 2006 and 2010, we may assume that it brings the whole *population* data. Calculate the average lot size (*&amp;mu;*) for this population. 
+
+(c) Now, run a sampling procedure (using a `for` loop), extracting 5,000 samples of size `n = 50` from the population data on lot areas. Compute the sample means `\(\bar{x}\)` of these samples and store them in an array called `samples_50`.
+
+(d) Given that in part (c) you've computed a summary statistic from a population, plot a histogram of the sampling distribution of these `\(\bar{x}\)` values. **Hint**: transform your  `samples_50` array in a `tibble` first.
+
+(e) Now, run the same procedure as in part (c), this time increasing the sample size to `n = 1,000`. Plot a histogram reflecting the sampling distribution of `\(\bar{x}\)`.
+
+(f) Compare the population mean (*&amp;mu;*) with the means of the two sampling distributions for `\(\bar{x}\)` you've computed in parts (c) and (e).
+
+(g) Compare the population variance (*&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;*) with the variances of the two sampling distributions for `\(\bar{x}\)` you've computed in parts (c) and (e).
+
+(h) Run the same procedure as you've done in parts (c)&amp;mdash;(g), this time with a different summary statistic: the population and sample **median**.
+
+
+---
+class:clear
+
+## Problem 2
+
+&lt;br&gt;
+
+Answer the following questions using the `qnorm()` and `rnorm()` functions in `R`:
+
+(a) What is the total area to the **left** of  1 for a random variable `\(X \sim \mathcal{N}(2, 1)\)`? In other words, what is *P(X &lt; 1)*?
+
+(b) What is the quantile corresponding to a probability of 85% to its .b[left] for a random variable `\(X \sim \mathcal{N}(3, 1)\)`?
+
+(c) For a Standard Normal distribution, what .b[quantile] corresponds to a probability of 2.5% to its left?
+
+(d) For a Standard Normal distribution, what .b[quantile] corresponds to a probability of 5% to its left?
+
+(e) For a Standard Normal distribution, what .b[quantile] corresponds to a probability of .5% to its left?
+
+
+&lt;br&gt;
+
+## Problem 3
+
+&lt;br&gt;
+
+A statistician took a random sample of 50 observations from a population with a population standard deviation (*&amp;sigma;*) of 25 and computed the sample mean to be 100.
+
+(a) Estimate the population mean with 90% confidence.
+
+(b) Repeat part (a) using a 95% confidence level.
+
+(c) Repeat part (a) using a 99% confidence level.
+
+(d) Describe the effect on the confidence interval estimate of increasing the confidence level.
+
+
+&lt;br&gt;
+
+## Problem 4
+
+&lt;br&gt;
+
+The mean of a random sample of 25 observations from a normal population with a standard deviation (*&amp;sigma;*) of 50 is 200.
+
+(a) Estimate the population mean with 95% confidence.
+
+(b) Repeat part (a) changing the population standard deviation to 25.
+
+(c) Repeat part (a) changing the population standard deviation to 10.
+
+(d) Describe what happens to the confidence interval estimate when the standard deviation is decreased.
+
+---
+class:clear
+
+## Problem 5
+
+&lt;br&gt;
+
+A random sample of 25 was drawn from a normal distribution with a standard deviation (*&amp;sigma;*) of 5. The sample mean is 80.
+
+(a) Determine the 95% confidence interval estimate of the population mean.
+
+(b) Repeat part (a) with a sample size of 100.
+
+(c) Repeat part (a) with a sample size of 400.
+
+(d) Describe what happens to the confidence interval estimate when the sample size increases.
+
+
+
+
+
+## Problem 6
+
+&lt;br&gt;
+
+The following data represent a random sample of 9 marks (out of 10) on a statistics quiz. Estimate the population mean with 90% confidence.
+
+$$
+`\begin{aligned}
+7 \ 9 \ 7 \ 5 \ 4 \ 8 \ 3 \ 10\  9
+\end{aligned}`
+$$
+
+
+## Problem 7
+
+&lt;br&gt;
+
+For the following parts, calculate the value of the *test statistic*, set up the *rejection region*, determine the *p-value* and *interpret* the result.
+
+(a) `\(H_0\)`: `\(\mu = 1,000\)`; `\(H_a\)`: `\(\mu \neq 1,000\)`
+
+`\(\sigma = 200\)`, `\(n=100\)`, `\(\bar{x} = 980\)`, `\(\alpha = 0.05\)`
+
+(b) `\(H_0\)`: `\(\mu = 50\)`; `\(H_a\)`: `\(\mu &gt; 50\)`
+
+`\(\sigma = 5\)`, `\(n=9\)`, `\(\bar{x} = 51\)`, `\(\alpha = 0.03\)`
+
+
+## Problem 8
+
+&lt;br&gt;
+
+Many Alpine ski centers base their projections of revenues and profits on the assumption that the average Alpine skier skis exactly four times per year. To investigate the validity of this assumption, a random sample of 63 skiers is drawn and each is asked to report the number of times he or she skied the previous year. If we assume that the standard deviation (*&amp;sigma;*) is 2, can we infer at the 10% significance level that the assumption is wrong? Assume the sample mean to be 5.3 times per year.
+
+---
+class:clear
+
+
+## Problem 9
+
+&lt;br&gt;
+
+University bookstores order books that instructors adopt for their courses. The number of copies ordered matches the projected demand. However, at the end of the semester, the bookstore has too many copies on hand and must return them to the publisher. A bookstore has a policy that the proportion of books returned should be kept as small as possible. The average is supposed to be less than 10%. To see whether the policy is working, a random sample of book titles was drawn, and the fraction of the total originally ordered that are returned is recorded and listed here. Can we infer at the 10% significance level that the mean proportion of returns is less than 10%?
+
+.center[
+4 15 11 7 5 9 4 3 5 8
+]
+
+
+## Problem 10
+
+&lt;br&gt;
+
+Companies that sell groceries over the Internet are called e-grocers. Customers enter their orders, pay by credit card, and receive delivery by truck. A potential e-grocer analyzed the market and determined that the average order would have to exceed $85 if the e-grocer were to be profitable. To determine whether an e-grocery would be profitable in one large city, she offered the service and recorded the size of the order for a random sample of customers. Can we infer from these data that an e-grocery will be profitable in this city?
+
+
+---
+exclude:true
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "8.5:11",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
