@@ -81,15 +81,15 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
 **Lecture 16: Frequentist Inference II (Point and Interval Estimators)**
 
-  - Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/16-freq-inference-1/lec16-freq-inference-1.html)
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/16-freq-inference-1/lec16-freq-inference-1.html)
 
 **Lecture 17: Frequentist Inference III (Hypothesis testing when population SD is known)**
 
-  - Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/17-feq-inference-2/lec17-freq-inference-2.html)
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/17-feq-inference-2/lec17-freq-inference-2.html)
 
 **Lecture 18: Frequentist Inference IV (Hypothesis testing when population SD is unknown)**
 
-  - Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/18-freq-inference-3/lec18-freq-inference-3.html)
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/18-freq-inference-3/lec18-freq-inference-3.html)
 
 ## R Code
 
