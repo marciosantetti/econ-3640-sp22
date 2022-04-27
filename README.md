@@ -67,6 +67,30 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 
   - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/12-inference-2/lec12-inference-2.html)
 
+**Lecture 13: Statistical Inference III (Gamma-Poisson, Normal-Normal Models)**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/13-inference-3/lec13-inference-3.html)
+
+**Lecture 14: Statistical Inference IV (Grid approximation and MCMC estimation)**
+
+  - [Slides (html)](https://raw.githubusercontent.com/marciosantetti/econ-3640-sp22/main/lectures/14-inference-4/lec14-inference-4.html)
+
+**Lecture 15: Frequentist Inference I (Sampling distributions)**
+
+  - [Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/15-sampling-dist/lec15-sampling-dist.html)
+
+**Lecture 16: Frequentist Inference II (Point and Interval Estimators)**
+
+  - Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/16-freq-inference-1/lec16-freq-inference-1.html)
+
+**Lecture 17: Frequentist Inference III (Hypothesis testing when population SD is known)**
+
+  - Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/17-feq-inference-2/lec17-freq-inference-2.html)
+
+**Lecture 18: Frequentist Inference IV (Hypothesis testing when population SD is unknown)**
+
+  - Slides (html)](https://raw.githack.com/marciosantetti/econ-3640-sp22/main/lectures/18-freq-inference-3/lec18-freq-inference-3.html)
+
 ## R Code
 
 1. [Descriptive Statistics (data wrangling & plotting)](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/01-descriptive-stats/01-descriptive-stats.R)
@@ -76,4 +100,6 @@ Note: Slides created with the `xaringan` *R* package, with templates mainly insp
 3. [Probability in practice - discrete Rvs and distributions](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/03-probability/03-probability-discrete.R)
 
 4. [Probability in practice - continuous Rvs and distributions](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/03-probability/04-probability-continuous.R)
+
+5. [Bayesian Inference - grid approximation and `rstan`](https://github.com/marciosantetti/econ-3640-sp22/blob/main/r-scripts/04-bayesian-inference/05-bayesian-inference.R)
 
